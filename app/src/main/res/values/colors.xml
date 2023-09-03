@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#5B68FF</color>
+    <color name="blueBackground">#141A1F</color>
+    <color name="blackBackground">#000000</color>
+    <color name="lightBlueBackground">#144366</color>
+
+    <color name="blueCardBackground">#212833</color>
+    <color name="lightBlueCardBackground">#1271BA</color>
+
+    <color name="textColorLightGray">#B2B7BD</color>
+    <color name="textColorGray">#656C78</color>
+    <color name="textColorGreen">#4BC389</color>
+    <color name="textColorYellow">#FFBD3D</color>
+    <color name="textWhite">#FFFFFF</color>
+
+    <color name="error">#B00020</color>
+</resources>

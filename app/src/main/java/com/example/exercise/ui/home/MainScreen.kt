@@ -3,7 +3,6 @@ package com.example.exercise.ui.home
 import android.annotation.SuppressLint
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
-import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
@@ -17,15 +16,17 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.viewModelScope
+import androidx.paging.compose.collectAsLazyPagingItems
 import com.example.exercise.R
 import com.example.exercise.ui.common.ErrorView
+import com.example.exercise.ui.common.KoinPreview
 import com.example.exercise.ui.common.LoadingView
 import com.example.exercise.ui.images.ImagesActivity
-import com.example.exercise.ui.utils.providedViewModel
+import org.koin.androidx.compose.koinViewModel
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
-fun MainScreen(viewModel: MainViewModel = providedViewModel()) {
+fun MainScreen(viewModel: MainViewModel = koinViewModel()) {
     val state by viewModel.state.collectAsState(viewModel.viewModelScope.coroutineContext)
     val context = LocalContext.current
     val lifecycleOwner = LocalLifecycleOwner.current
@@ -34,7 +35,7 @@ fun MainScreen(viewModel: MainViewModel = providedViewModel()) {
         val observer = LifecycleEventObserver { _, event ->
             when (event) {
                 Lifecycle.Event.ON_RESUME -> {
-                    viewModel.fetchDates()
+                    viewModel.syncDates()
                 }
 
                 else -> Unit
@@ -55,9 +56,9 @@ fun MainScreen(viewModel: MainViewModel = providedViewModel()) {
     ) {
         Column {
             when (val st = state) {
-                is MainState.Ready -> DatesListView(st)
+                is MainState.Ready -> DatesListContent(st, viewModel)
                 is MainState.Error -> ErrorView {
-                    viewModel.fetchDates()
+                    viewModel.syncDates()
                 }
 
                 is MainState.Redirect -> when (val d = st.destination) {
@@ -73,9 +74,7 @@ fun MainScreen(viewModel: MainViewModel = providedViewModel()) {
 @Preview(showSystemUi = true)
 @Composable
 fun MainScreenPreview() {
-    MaterialTheme {
-        MainScreen(
-            MainViewModel()
-        )
+    KoinPreview {
+        MainScreen(koinViewModel())
     }
 }

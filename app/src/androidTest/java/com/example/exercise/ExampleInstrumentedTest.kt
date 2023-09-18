@@ -2,7 +2,6 @@ package com.example.exercise
 
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.lifecycle.viewModelScope
-import com.example.exercise.models.api.tools.CacheStrategy
 import com.example.exercise.tools.ExtendedDateValueMocks
 import com.example.exercise.tools.assertTextIsDisplayed
 import com.example.exercise.tools.mockFresco
@@ -32,7 +31,7 @@ class ExampleInstrumentedTest {
 
         every { state } returns MutableStateFlow<MainState>(
             MainState.Ready(
-                ExtendedDateValueMocks.dates, cacheStrategy = CacheStrategy.NETWORK
+                ExtendedDateValueMocks.dates
             )
         )
     }

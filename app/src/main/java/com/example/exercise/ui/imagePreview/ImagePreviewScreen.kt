@@ -9,27 +9,22 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.FabPosition
 import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.Icon
-import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewModelScope
-import com.example.exercise.MainApplication
 import com.example.exercise.R
-import com.example.exercise.models.businessObjects.ImageValue
 import com.example.exercise.ui.common.LoadingView
-import com.example.exercise.ui.utils.providedViewModel
+import org.koin.androidx.compose.koinViewModel
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
-fun ImagePreviewScreen(viewModel: ImagePreviewViewModel = providedViewModel()) {
+fun ImagePreviewScreen(viewModel: ImagePreviewViewModel = koinViewModel()) {
     val state by viewModel.state.collectAsState(viewModel.viewModelScope.coroutineContext)
 
     Scaffold(
@@ -49,8 +44,7 @@ fun ImagePreviewScreen(viewModel: ImagePreviewViewModel = providedViewModel()) {
                     )
                 }
             }
-        }, floatingActionButtonPosition = FabPosition.End,
-        modifier = Modifier
+        }, floatingActionButtonPosition = FabPosition.End, modifier = Modifier
             .background(
                 colorResource(id = R.color.blackBackground)
             )
@@ -64,26 +58,9 @@ fun ImagePreviewScreen(viewModel: ImagePreviewViewModel = providedViewModel()) {
                 .fillMaxSize()
         ) {
             when (val st = state) {
-                is ImagePreviewState.Ready -> ImagePreviewView(st)
+                is ImagePreviewState.Ready -> ImagePreviewContent(st, viewModel)
                 else -> LoadingView()
             }
         }
-    }
-}
-
-@Preview(showSystemUi = true)
-@Composable
-fun ImagePreviewScreenPreview() {
-    MainApplication.initializeLibrary(LocalContext.current)
-
-    MaterialTheme {
-        ImagePreviewScreen(
-            ImagePreviewViewModel(
-                ImagePreviewState.Ready(
-                    imageValue = ImageValue.Samples.simpleImageValeSample,
-                    showDetails = false
-                )
-            )
-        )
     }
 }

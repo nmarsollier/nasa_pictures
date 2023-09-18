@@ -1,9 +1,9 @@
 package com.example.exercise.models.database.config
 
+import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import com.example.exercise.MainApplication
 import com.example.exercise.models.database.dates.DatesEntity
 import com.example.exercise.models.database.dates.DatesEntityDao
 import com.example.exercise.models.database.image.ImageEntity
@@ -18,12 +18,10 @@ abstract class ExampleDatabase : RoomDatabase() {
     abstract fun datesDao(): DatesEntityDao
 }
 
-object Database {
-    fun getRoomDatabase(): ExampleDatabase {
-        return INSTANCE ?: Room.databaseBuilder(
-            MainApplication.context, ExampleDatabase::class.java, DATABASE_NAME
-        ).build().also {
-            INSTANCE = it
-        }
+fun getRoomDatabase(androidContext: Context): ExampleDatabase {
+    return INSTANCE ?: Room.databaseBuilder(
+        androidContext, ExampleDatabase::class.java, DATABASE_NAME
+    ).build().also {
+        INSTANCE = it
     }
 }

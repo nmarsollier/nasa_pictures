@@ -6,5 +6,5 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class DateValue(
-    @SerializedName("date") var date: String,
+    @SerializedName("date") val date: String,
 ) : Parcelable

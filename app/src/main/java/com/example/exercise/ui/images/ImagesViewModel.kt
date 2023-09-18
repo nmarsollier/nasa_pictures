@@ -1,13 +1,13 @@
 package com.example.exercise.ui.images
 
 import androidx.lifecycle.viewModelScope
-import com.example.exercise.models.api.tools.CacheStrategy
 import com.example.exercise.models.api.tools.Result
 import com.example.exercise.models.businessObjects.ExtendedDateValue
 import com.example.exercise.models.businessObjects.ImageValue
 import com.example.exercise.models.useCases.FetchImagesUseCase
 import com.example.exercise.ui.utils.BaseViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
@@ -24,13 +24,22 @@ sealed class ImagesState {
     data class Redirect(val destination: Destination) : ImagesState()
 
     data class Ready(
-        val images: List<ImageValue>, val cacheStrategy: CacheStrategy
+        val images: List<ImageValue>
     ) : ImagesState()
 }
 
-class ImagesViewModel(initialState: ImagesState = ImagesState.Loading) :
-    BaseViewModel<ImagesState>(initialState) {
-    fun fetchImages(date: ExtendedDateValue?) = viewModelScope.launch(Dispatchers.IO) {
+interface ImagesReducer {
+    fun redirect(destination: Destination)
+    fun fetchImages(date: ExtendedDateValue?): Job
+
+    companion object
+}
+
+class ImagesViewModel(
+    private val fetchImagesUseCase: FetchImagesUseCase
+) :
+    BaseViewModel<ImagesState>(ImagesState.Loading), ImagesReducer {
+    override fun fetchImages(date: ExtendedDateValue?) = viewModelScope.launch(Dispatchers.IO) {
         mutableState.update { ImagesState.Loading }
 
         val queryDate = date?.date ?: run {
@@ -38,17 +47,19 @@ class ImagesViewModel(initialState: ImagesState = ImagesState.Loading) :
             return@launch
         }
 
-        FetchImagesUseCase.fetchImages(queryDate).collect {
-            when (val result = it) {
-                is Result.Error -> mutableState.update { ImagesState.Error }
-                is Result.Success -> mutableState.update {
-                    ImagesState.Ready(result.data, result.cacheStrategy)
+        viewModelScope.launch(Dispatchers.IO) {
+            fetchImagesUseCase.fetchImages(queryDate).let {
+                when (val result = it) {
+                    is Result.Error -> mutableState.update { ImagesState.Error }
+                    is Result.Success -> mutableState.update {
+                        ImagesState.Ready(result.data)
+                    }
                 }
             }
         }
     }
 
-    fun redirect(destination: Destination) {
+    override fun redirect(destination: Destination) {
         mutableState.update {
             ImagesState.Redirect(destination)
         }

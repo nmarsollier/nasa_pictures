@@ -11,7 +11,7 @@ private val dateFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy")
 
 @Parcelize
 data class ExtendedDateValue(
-    var date: String,
+    val date: String,
     var count: Int = 0,
     var caches: Int = 0
 ) : Parcelable {
@@ -31,22 +31,5 @@ data class ExtendedDateValue(
     val isLoading: Boolean
         get() = count == 0 || count != caches
 
-    object Samples {
-        val partialLoadedExtendedDateValueSample
-            get() = ExtendedDateValue("2023-08-14", 3, 2)
-
-        val fullyLoadedExtendedDateValueSample
-            get() = ExtendedDateValue("2023-08-14", 2, 2)
-
-        val unloadedLoadedExtendedDateValueSample
-            get() = ExtendedDateValue("2023-08-14", 0, 0)
-
-        val combinedListExtendedDateValueSample
-            get() = listOf(
-                ExtendedDateValue("2023-08-14", 16, 0),
-                ExtendedDateValue("2023-08-13", 0, 0),
-                ExtendedDateValue("2023-08-12", 5, 5),
-                ExtendedDateValue("2023-08-11", 5, 3)
-            )
-    }
+    companion object
 }

@@ -25,16 +25,18 @@ import com.example.exercise.ui.common.EmptyView
 import com.example.exercise.ui.common.ErrorView
 import com.example.exercise.ui.common.LoadingView
 import com.example.exercise.ui.imagePreview.ImagePreviewActivity
-import com.example.exercise.ui.utils.providedViewModel
+import com.example.exercise.ui.utils.Samples
+import org.koin.androidx.compose.koinViewModel
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
 fun ImagesScreen(
     date: ExtendedDateValue,
-    viewModel: ImagesViewModel = providedViewModel(),
-    dateViewModel: ImagesDateViewModel = providedViewModel()
+    viewModel: ImagesViewModel = koinViewModel(),
+    dateViewModel: ImagesDateViewModel = koinViewModel()
 ) {
     val state by viewModel.state.collectAsState(viewModel.viewModelScope.coroutineContext)
+    val datesState by dateViewModel.state.collectAsState(viewModel.viewModelScope.coroutineContext)
 
     val lifecycleOwner = LocalLifecycleOwner.current
 
@@ -74,7 +76,7 @@ fun ImagesScreen(
                     if (st.images.isEmpty()) {
                         EmptyView()
                     } else {
-                        ImagesListView(st)
+                        ImagesListPreview(st, viewModel, datesState, dateViewModel)
                     }
                 }
 
@@ -98,7 +100,8 @@ fun ImagesScreen(
 fun MainScreenPreview() {
     MaterialTheme {
         ImagesScreen(
-            ExtendedDateValue.Samples.fullyLoadedExtendedDateValueSample, ImagesViewModel()
+            ExtendedDateValue.Samples.fullyLoadedExtendedDateValueSample,
+            koinViewModel()
         )
     }
 }

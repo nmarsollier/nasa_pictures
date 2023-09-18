@@ -4,33 +4,28 @@ import android.annotation.SuppressLint
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.colorResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.viewModelScope
-import com.example.exercise.MainApplication
 import com.example.exercise.R
 import com.example.exercise.models.businessObjects.ExtendedDateValue
 import com.example.exercise.ui.common.EmptyView
 import com.example.exercise.ui.common.LoadingView
-import com.example.exercise.ui.utils.providedViewModel
+import org.koin.androidx.compose.koinViewModel
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
 fun AnimatedPreviewScreen(
-    date: ExtendedDateValue, viewModel: AnimatedPreviewViewModel = providedViewModel()
+    date: ExtendedDateValue, viewModel: AnimatedPreviewViewModel = koinViewModel()
 ) {
     val state by viewModel.state.collectAsState(viewModel.viewModelScope.coroutineContext)
-
 
     val lifecycleOwner = LocalLifecycleOwner.current
 
@@ -60,21 +55,10 @@ fun AnimatedPreviewScreen(
             .fillMaxSize()
     ) {
         when (val st = state) {
-            is AnimatedPreviewState.Ready -> AnimatedPreviewView(st)
+            is AnimatedPreviewState.Ready -> AnimatedPreviewContent(st)
             AnimatedPreviewState.Error -> EmptyView()
             else -> LoadingView()
         }
     }
 }
 
-@Preview(showSystemUi = true)
-@Composable
-fun ImagePreviewScreenPreview() {
-    MainApplication.initializeLibrary(LocalContext.current)
-
-    MaterialTheme {
-        AnimatedPreviewScreen(
-            ExtendedDateValue.Samples.fullyLoadedExtendedDateValueSample, AnimatedPreviewViewModel()
-        )
-    }
-}

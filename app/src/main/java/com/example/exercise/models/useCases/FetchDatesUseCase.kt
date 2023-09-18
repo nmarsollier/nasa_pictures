@@ -1,69 +1,77 @@
 package com.example.exercise.models.useCases
 
 import com.example.exercise.models.api.dates.DatesApiClient
-import com.example.exercise.models.api.tools.CacheStrategy
 import com.example.exercise.models.api.tools.Result
 import com.example.exercise.models.businessObjects.DateValue
 import com.example.exercise.models.businessObjects.ExtendedDateValue
 import com.example.exercise.models.database.dates.DateRepository
 import com.example.exercise.models.database.dates.DatesEntity
-import com.example.exercise.ui.utils.toDatesData
+import com.example.exercise.models.database.image.FrescoUtils
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.MainScope
-import kotlinx.coroutines.channels.awaitClose
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.channelFlow
-import kotlinx.coroutines.flow.take
 import kotlinx.coroutines.launch
+import java.time.LocalDate
+import kotlin.coroutines.resume
+import kotlin.coroutines.suspendCoroutine
 
+class FetchDatesUseCase(
+    private val datesClient: DatesApiClient,
+    private val dateRepository: DateRepository,
+    private val frescoUtils: FrescoUtils
+) {
+    suspend fun syncDates() = suspendCoroutine {
+        MainScope().launch(Dispatchers.IO) {
+            val dates = listDatesFromDatabase() as Result.Success
 
-object FetchDatesUseCase {
-    private val datesClient = DatesApiClient()
-
-    fun listDates(): Flow<Result<ExtendedDateValue>> = channelFlow {
-        var sendError = true
-        DateRepository.findAll().take(1).collect {
-            it?.takeIf { it.isNotEmpty() }?.let {
-                sendError = false
-                send(
-                    Result.Success(
-                        CacheStrategy.DB,
-                        it.map { date -> DateValue(date.date) }
-                            .map { date -> date.toDatesData() }
-                            .sortedByDescending { it.date }
-                    )
-                )
+            if (dates.data.isEmpty() || dates.data.first().parsedDate.isBefore(LocalDate.now())) {
+                when (syncRemoteDates()) {
+                    is Result.Error -> it.resume(false)
+                    is Result.Success -> it.resume(true)
+                }
+            } else {
+                it.resume(false)
             }
         }
-
-        datesClient.listDates().take(1).collect {
-            when (val result = it) {
-                is Result.Error -> {
-                    if (sendError) {
-                        send(Result.Error(result.e))
-                    }
-                }
-
-                is Result.Success -> {
-                    updateLocalDatabase(result.data)
-                    send(
-                        Result.Success(
-                            CacheStrategy.NETWORK,
-                            result.data
-                                .map { date -> date.toDatesData() }
-                                .sortedByDescending { it.date }
-                        )
-                    )
-                }
-            }
-            close()
-        }
-        awaitClose()
     }
 
-    private fun updateLocalDatabase(data: List<DateValue>) = MainScope().launch(Dispatchers.IO) {
+    private suspend fun listDatesFromDatabase() =
+        suspendCoroutine<Result<ExtendedDateValue>> { suspend ->
+            MainScope().launch(Dispatchers.IO) {
+                dateRepository.findAll(1)?.takeIf { it.isNotEmpty() }?.let { dates ->
+                    suspend.resume(
+                        Result.Success(
+                            dates.map { date -> DateValue(date.date) }
+                                .map { date -> frescoUtils.toDatesData(date) }
+                                .sortedByDescending { it.date })
+                    )
+                } ?: kotlin.run { suspend.resume(Result.Success(emptyList())) }
+            }
+        }
+
+    suspend fun syncRemoteDates(): Result<ExtendedDateValue> = suspendCoroutine { suspend ->
+        MainScope().launch(Dispatchers.IO) {
+            datesClient.listDates().let {
+                when (val result = it) {
+                    is Result.Error -> {
+                        suspend.resume(Result.Error(result.e))
+                    }
+
+                    is Result.Success -> {
+                        updateLocalDatabase(result.data)
+                        suspend.resume(Result.Success(result.data.map {
+                            frescoUtils.toDatesData(
+                                DateValue(it.date)
+                            )
+                        }))
+                    }
+                }
+            }
+        }
+    }
+
+    private fun updateLocalDatabase(data: List<DateValue>) {
         data.forEach {
-            DateRepository.insert(DatesEntity(it.date))
+            dateRepository.insert(DatesEntity(it.date))
         }
     }
 }

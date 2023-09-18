@@ -1,20 +1,14 @@
 package com.example.exercise.models.database.dates
 
-import com.example.exercise.models.database.config.Database
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.MainScope
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.channelFlow
-import kotlinx.coroutines.launch
+import com.example.exercise.models.database.config.ExampleDatabase
 
-object DateRepository {
-    fun findAll(): Flow<List<DatesEntity>?> = channelFlow {
-        send(Database.getRoomDatabase().datesDao().findAll())
-    }
+class DateRepository(
+    private val database: ExampleDatabase
+) {
+    fun findAll(page: Int): List<DatesEntity>? =
+        database.datesDao().findAll(page, page * 30)
 
-    fun insert(date: DatesEntity) = MainScope().launch(Dispatchers.IO) {
-        Database.getRoomDatabase().datesDao().let {
-            it.insert(date)
-        }
+    fun insert(date: DatesEntity) = database.datesDao().let {
+        it.insert(date)
     }
 }

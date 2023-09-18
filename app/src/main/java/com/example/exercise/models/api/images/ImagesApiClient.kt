@@ -1,30 +1,28 @@
 package com.example.exercise.models.api.images
 
-import androidx.annotation.VisibleForTesting
-import com.example.exercise.models.api.tools.CacheStrategy
 import com.example.exercise.models.api.tools.Result
-import com.example.exercise.models.api.tools.RetrofitClient
 import com.example.exercise.models.businessObjects.ImageValue
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.channelFlow
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.launch
+import retrofit2.Retrofit
+import kotlin.coroutines.resume
+import kotlin.coroutines.suspendCoroutine
 
-class ImagesApiClient {
-    private var service: ImagesApi =
-        RetrofitClient.retrofit(urlBaseOverride ?: "https://epic.gsfc.nasa.gov")
-            .create(ImagesApi::class.java)
+class ImagesApiClient(
+    retrofitClient: Retrofit
+) {
+    private val service: ImagesApi = retrofitClient.create(ImagesApi::class.java)
 
-    fun listImages(date: String): Flow<Result<ImageValue>> = channelFlow {
+    suspend fun listImages(date: String): Result<ImageValue> = suspendCoroutine {
         try {
-            send(
-                Result.Success(CacheStrategy.NETWORK, service.listImages(date))
-            )
+            MainScope().launch(Dispatchers.IO) {
+                it.resume(
+                    Result.Success(service.listImages(date))
+                )
+            }
         } catch (e: Exception) {
-            send(Result.Error(e))
+            it.resume(Result.Error(e))
         }
-    }
-
-    companion object {
-        @VisibleForTesting
-        var urlBaseOverride: String? = null
     }
 }

@@ -1,21 +1,30 @@
 package com.example.exercise
 
 import android.app.Application
-import android.content.Context
-import com.example.exercise.ui.utils.FrescoUtils
+import com.example.exercise.models.api.koinApiModule
+import com.example.exercise.models.database.image.FrescoUtils
+import com.example.exercise.models.database.koinDatabaseModule
+import com.example.exercise.models.useCases.koinUseCaseModule
+import com.example.exercise.ui.koinViewModelModule
+import org.koin.android.ext.koin.androidContext
+import org.koin.android.ext.koin.androidLogger
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.get
+import org.koin.core.context.startKoin
 
-class MainApplication : Application() {
+class MainApplication : Application(), KoinComponent {
     override fun onCreate() {
         super.onCreate()
-        initializeLibrary(applicationContext)
-    }
 
-    companion object {
-        lateinit var context: Context
+        startKoin {
+            androidLogger()
 
-        fun initializeLibrary(ctx: Context) {
-            context = ctx
-            FrescoUtils.initFresco(ctx)
+            androidContext(this@MainApplication)
+
+            modules(koinApiModule, koinDatabaseModule, koinUseCaseModule, koinViewModelModule)
         }
+
+        val fresco: FrescoUtils = get()
+        fresco.initFresco(this)
     }
 }

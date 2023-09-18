@@ -8,20 +8,18 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.width
-import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
-import com.example.exercise.MainApplication
 import com.example.exercise.R
+import com.example.exercise.ui.common.KoinPreview
 
 @Composable
-fun AnimatedPreviewView(state: AnimatedPreviewState.Ready) {
+fun AnimatedPreviewContent(state: AnimatedPreviewState.Ready) {
     Box(
         contentAlignment = Alignment.Center,
         modifier = Modifier
@@ -45,11 +43,9 @@ fun AnimatedPreviewView(state: AnimatedPreviewState.Ready) {
 @Preview(showSystemUi = true)
 @Composable
 fun OptionsViewPreview() {
-    MainApplication.initializeLibrary(LocalContext.current)
-
-    MaterialTheme {
+    KoinPreview {
         Column {
-            AnimatedPreviewView(
+            AnimatedPreviewContent(
                 AnimatedPreviewState.Ready(
                     animation = AnimationDrawable()
                 )

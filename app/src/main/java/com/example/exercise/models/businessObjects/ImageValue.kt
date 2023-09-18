@@ -1,48 +1,37 @@
 package com.example.exercise.models.businessObjects
 
 import com.example.exercise.models.database.image.ImageEntity
+import com.example.exercise.ui.utils.toDateTimeString
+import com.example.exercise.ui.utils.toDayString
+import com.example.exercise.ui.utils.toHourMinuteString
+import com.example.exercise.ui.utils.toLocalDateTime
+import com.example.exercise.ui.utils.toMonthString
 import com.google.gson.annotations.SerializedName
-import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
-
-private val dayFormatter = DateTimeFormatter.ofPattern("dd")
-private val monthFormatter = DateTimeFormatter.ofPattern("MM")
-private val dateTimeParser = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
-private val dateHourFormatter = DateTimeFormatter.ofPattern("HH:mm")
-private val dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
 
 data class CoordinatesValue(
-    @SerializedName("lat") var lat: Double,
-    @SerializedName("lon") var lon: Double,
+    @SerializedName("lat") val lat: Double,
+    @SerializedName("lon") val lon: Double,
 )
 
 data class ImageValue(
-    @SerializedName("identifier") var identifier: String,
-    @SerializedName("date") var date: String,
-    @SerializedName("image") var image: String,
-    @SerializedName("centroid_coordinates") var coordinates: CoordinatesValue,
+    @SerializedName("identifier") val identifier: String,
+    @SerializedName("date") val date: String,
+    @SerializedName("image") val image: String,
+    @SerializedName("centroid_coordinates") val coordinates: CoordinatesValue,
 ) {
     val downloadUrl: String
         get() {
-            val currentDate = LocalDateTime.parse(date, dateTimeParser)
-            return "https://epic.gsfc.nasa.gov/archive/enhanced/${currentDate.year}/${
-                monthFormatter.format(
-                    currentDate
-                )
-            }/${dayFormatter.format(currentDate)}/png/${image}.png"
+            val currentDate = date.toLocalDateTime
+            return "https://epic.gsfc.nasa.gov/archive/enhanced/${currentDate.year}/" +
+                    "${currentDate.toMonthString}/" +
+                    "${currentDate.toDayString}/png/${image}.png"
         }
-
-    val formattedDateTime: LocalDateTime
-        get() = LocalDateTime.parse(date, dateTimeParser)
 
     val formattedDateOnly: String
-        get() {
-            return dateFormatter.format(formattedDateTime)
-        }
+        get() = date.toLocalDateTime.toDateTimeString
 
-    val formattedDayHour: String
-        get() = dateHourFormatter.format(formattedDateTime)
-
+    val formattedHourMinute: String
+        get() = date.toLocalDateTime.toHourMinuteString
 
     fun toImageEntity(): ImageEntity {
         return ImageEntity(
@@ -66,4 +55,3 @@ data class ImageValue(
             )
     }
 }
-

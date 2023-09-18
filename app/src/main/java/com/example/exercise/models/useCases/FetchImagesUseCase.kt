@@ -1,57 +1,64 @@
 package com.example.exercise.models.useCases
 
 import com.example.exercise.models.api.images.ImagesApiClient
-import com.example.exercise.models.api.tools.CacheStrategy
 import com.example.exercise.models.api.tools.Result
 import com.example.exercise.models.businessObjects.ImageValue
 import com.example.exercise.models.database.image.ImageRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.MainScope
-import kotlinx.coroutines.channels.awaitClose
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.channelFlow
-import kotlinx.coroutines.flow.take
 import kotlinx.coroutines.launch
+import kotlin.coroutines.resume
+import kotlin.coroutines.suspendCoroutine
 
-object FetchImagesUseCase {
-    private val imagesClient = ImagesApiClient()
+class FetchImagesUseCase(
+    private val imagesClient: ImagesApiClient,
+    private val imageRepository: ImageRepository,
+) {
 
-    fun fetchImages(queryDate: String): Flow<Result<ImageValue>> = channelFlow {
-        var sendError = true
-        ImageRepository.findByDate(queryDate).take(1).collect {
-            it?.takeIf { it.isNotEmpty() }?.let {
-                sendError = false
-                send(Result.Success(CacheStrategy.DB, it.map { it.toImage() }))
-                System.out.println("TEST Repository result ${it}")
+    suspend fun fetchImages(queryDate: String): Result<ImageValue> = suspendCoroutine { suspend ->
+        MainScope().launch(Dispatchers.IO) {
+            fetchImagesFromDatabase(queryDate).takeIf { it.isNotEmpty() }?.let {
+                suspend.resume(Result.Success(it))
+                return@launch
+            }
+
+            syncRemoteImages(queryDate).let {
+                suspend.resume(Result.Success(it))
+                return@launch
             }
         }
-
-        imagesClient.listImages(queryDate).take(1).collect {
-            when (val result = it) {
-                is Result.Error -> {
-                    if (sendError) {
-                        send(result)
-                    }
-                }
-
-                is Result.Success -> {
-                    updateLocalDatabase(result)
-                    System.out.println("TEST Netowrk result ${it}")
-                    send(result)
-                }
-            }
-            close()
-        }
-        awaitClose()
     }
 
-    private fun updateLocalDatabase(
-        result: Result.Success<ImageValue>
-    ) = MainScope().launch(
-        Dispatchers.IO
-    ) {
+    private suspend fun fetchImagesFromDatabase(queryDate: String): List<ImageValue> =
+        suspendCoroutine { suspend ->
+            MainScope().launch(Dispatchers.IO) {
+                imageRepository.findByDate(queryDate)?.takeIf { it.isNotEmpty() }?.let { images ->
+                    suspend.resume(images.map { image -> image.toImage() })
+                } ?: suspend.resume(emptyList())
+            }
+        }
+
+    private suspend fun syncRemoteImages(queryDate: String): List<ImageValue> =
+        suspendCoroutine { suspend ->
+            MainScope().launch(Dispatchers.IO) {
+                imagesClient.listImages(queryDate).let {
+                    when (val result = it) {
+                        is Result.Error -> {
+                            suspend.resume(emptyList())
+                        }
+
+                        is Result.Success -> {
+                            updateLocalDatabase(result)
+                            suspend.resume(result.data)
+                        }
+                    }
+                }
+            }
+        }
+
+    private suspend fun updateLocalDatabase(result: Result.Success<ImageValue>) {
         result.data.forEach {
-            ImageRepository.insert(it.toImageEntity())
+            imageRepository.insert(it.toImageEntity())
         }
     }
 }

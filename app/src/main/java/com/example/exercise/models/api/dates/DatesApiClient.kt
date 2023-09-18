@@ -1,30 +1,28 @@
 package com.example.exercise.models.api.dates
 
-import androidx.annotation.VisibleForTesting
-import com.example.exercise.models.api.tools.CacheStrategy
 import com.example.exercise.models.api.tools.Result
-import com.example.exercise.models.api.tools.RetrofitClient
 import com.example.exercise.models.businessObjects.DateValue
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.channelFlow
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.launch
+import retrofit2.Retrofit
+import kotlin.coroutines.resume
+import kotlin.coroutines.suspendCoroutine
 
-class DatesApiClient {
-    private var service: DatesApi =
-        RetrofitClient.retrofit(urlBaseOverride ?: "https://epic.gsfc.nasa.gov/")
-            .create(DatesApi::class.java)
+class DatesApiClient(
+    retrofitClient: Retrofit
+) {
+    private val service: DatesApi = retrofitClient.create(DatesApi::class.java)
 
-    fun listDates(): Flow<Result<DateValue>> = channelFlow {
+    suspend fun listDates(): Result<DateValue> = suspendCoroutine {
         try {
-            send(
-                Result.Success(CacheStrategy.NETWORK, service.listDates())
-            )
+            MainScope().launch(Dispatchers.IO) {
+                it.resume(
+                    Result.Success(service.listDates())
+                )
+            }
         } catch (e: Exception) {
-            send(Result.Error(e))
+            it.resume(Result.Error(e))
         }
-    }
-
-    companion object {
-        @VisibleForTesting
-        var urlBaseOverride: String? = null
     }
 }

@@ -13,23 +13,20 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
-import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
-import com.example.exercise.MainApplication
 import com.example.exercise.R
-import com.example.exercise.models.businessObjects.ExtendedDateValue
 import com.example.exercise.models.businessObjects.ImageValue
+import com.example.exercise.ui.common.KoinPreview
 import com.example.exercise.ui.utils.CircleProgressBarDrawable
-import com.example.exercise.ui.utils.providedViewModel
+import com.example.exercise.ui.utils.Samples
 import com.facebook.drawee.backends.pipeline.Fresco
 import com.facebook.drawee.controller.ControllerListener
 import com.facebook.drawee.view.SimpleDraweeView
@@ -40,15 +37,15 @@ import com.facebook.imagepipeline.request.ImageRequestBuilder
 @ExperimentalFoundationApi
 fun ImageItemView(
     image: ImageValue,
-    imageViewModel: ImagesViewModel = providedViewModel(),
-    viewModel: ImagesDateViewModel = providedViewModel()
+    imageReducer: ImagesReducer,
+    dateReducer: ImagesDateReducer
 ) {
     Card(shape = RoundedCornerShape(10.dp),
         backgroundColor = (colorResource(id = R.color.blackBackground)),
         modifier = Modifier
             .size(165.dp)
             .combinedClickable(onClick = {})
-            .clickable { imageViewModel.redirect(Destination.Preview(image)) }) {
+            .clickable { imageReducer.redirect(Destination.Preview(image)) }) {
 
         AndroidView(modifier = Modifier
             .padding(16.dp)
@@ -59,7 +56,7 @@ fun ImageItemView(
             },
             update = { view ->
                 loadImage(view, image) {
-                    viewModel.updateDate()
+                    dateReducer.updateDate()
                 }
             })
 
@@ -73,7 +70,7 @@ fun ImageItemView(
                 color = colorResource(id = R.color.textWhite)
             )
             Text(
-                text = "${stringResource(R.string.captured)} ${image.formattedDayHour}hs",
+                text = "${stringResource(R.string.captured)} ${image.formattedHourMinute}hs",
                 fontSize = 10.sp,
                 color = colorResource(id = R.color.textWhite)
             )
@@ -91,26 +88,6 @@ private fun loadImage(view: SimpleDraweeView, image: ImageValue, onImageLoadCall
     ).setControllerListener(onLoaded { onImageLoadCallback() }).build()
 }
 
-@ExperimentalFoundationApi
-@Preview(showSystemUi = true)
-@Composable
-fun ImageItemViewPreview() {
-    MainApplication.initializeLibrary(LocalContext.current)
-
-    MaterialTheme {
-        Column {
-            ImageItemView(
-                ImageValue.Samples.simpleImageValeSample, ImagesViewModel(), ImagesDateViewModel(
-                    ImagesDateState.Ready(
-                        date = ExtendedDateValue.Samples.fullyLoadedExtendedDateValueSample
-                    )
-                )
-            )
-        }
-    }
-}
-
-
 fun onLoaded(callback: () -> Unit) = object : ControllerListener<Any> {
     override fun onSubmit(id: String?, callerContext: Any?) = Unit
 
@@ -126,5 +103,20 @@ fun onLoaded(callback: () -> Unit) = object : ControllerListener<Any> {
         id: String?, imageInfo: Any?, animatable: Animatable?
     ) {
         callback()
+    }
+}
+
+@ExperimentalFoundationApi
+@Preview(showSystemUi = true)
+@Composable
+fun ImageItemViewPreview() {
+    KoinPreview {
+        Column {
+            ImageItemView(
+                ImageValue.Samples.simpleImageValeSample,
+                ImagesReducer.Samples.empty,
+                ImagesDateReducer.Samples.empty
+            )
+        }
     }
 }

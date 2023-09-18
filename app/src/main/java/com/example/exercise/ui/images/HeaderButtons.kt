@@ -18,8 +18,6 @@ import androidx.compose.material.Card
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
@@ -30,23 +28,20 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewModelScope
 import com.example.exercise.R
 import com.example.exercise.models.businessObjects.ExtendedDateValue
-import com.example.exercise.ui.utils.providedViewModel
+import com.example.exercise.ui.utils.Samples
 
 @Composable
 @ExperimentalFoundationApi
 fun HeaderButtonButton(
-    imagesViewModel: ImagesViewModel = providedViewModel(),
-    dateViewModel: ImagesDateViewModel = providedViewModel()
+    state: ImagesDateState,
+    imagesReducer: ImagesReducer
 ) {
-    val state by dateViewModel.state.collectAsState(dateViewModel.viewModelScope.coroutineContext)
-
-    when (val st = state) {
+    when (state) {
         ImagesDateState.Loading -> LoadingItemsButton()
-        is ImagesDateState.Ready -> if (st.date?.isLoading == false) {
-            PlayImagesButton(st.date, imagesViewModel)
+        is ImagesDateState.Ready -> if (state.date?.isLoading == false) {
+            PlayImagesButton(state.date, imagesReducer)
         } else {
             LoadingItemsButton()
         }
@@ -88,7 +83,7 @@ fun LoadingItemsButton() {
 
 @Composable
 @ExperimentalFoundationApi
-fun PlayImagesButton(dates: ExtendedDateValue, imagesViewModel: ImagesViewModel) {
+fun PlayImagesButton(dates: ExtendedDateValue, imagesReducer: ImagesReducer) {
     val context = LocalContext.current
 
     Card(shape = RoundedCornerShape(10.dp),
@@ -96,7 +91,7 @@ fun PlayImagesButton(dates: ExtendedDateValue, imagesViewModel: ImagesViewModel)
         modifier = Modifier
             .padding(start = 16.dp, top = 16.dp, end = 16.dp)
             .height(48.dp)
-            .clickable { imagesViewModel.redirect(Destination.Animate(dates)) }
+            .clickable { imagesReducer.redirect(Destination.Animate(dates)) }
             .fillMaxWidth()) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
@@ -120,23 +115,19 @@ fun LoadingItemsViewPreview() {
             LoadingItemsButton()
             PlayImagesButton(
                 ExtendedDateValue.Samples.fullyLoadedExtendedDateValueSample,
-                ImagesViewModel()
+                ImagesReducer.Samples.empty
             )
             HeaderButtonButton(
-                ImagesViewModel(),
-                ImagesDateViewModel(
-                    ImagesDateState.Ready(
-                        date = ExtendedDateValue.Samples.partialLoadedExtendedDateValueSample
-                    )
-                )
+                ImagesDateState.Ready(
+                    date = ExtendedDateValue.Samples.partialLoadedExtendedDateValueSample
+                ),
+                ImagesReducer.Samples.empty
             )
             HeaderButtonButton(
-                ImagesViewModel(),
-                ImagesDateViewModel(
-                    ImagesDateState.Ready(
-                        date = ExtendedDateValue.Samples.fullyLoadedExtendedDateValueSample
-                    )
-                )
+                ImagesDateState.Ready(
+                    date = ExtendedDateValue.Samples.fullyLoadedExtendedDateValueSample
+                ),
+                ImagesReducer.Samples.empty
             )
         }
     }

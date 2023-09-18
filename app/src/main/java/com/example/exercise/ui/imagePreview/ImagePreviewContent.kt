@@ -13,12 +13,10 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -27,16 +25,19 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
-import com.example.exercise.MainApplication
 import com.example.exercise.R
 import com.example.exercise.models.businessObjects.ImageValue
-import com.example.exercise.ui.utils.providedViewModel
+import com.example.exercise.ui.common.KoinPreview
+import com.example.exercise.ui.utils.Samples
 import com.facebook.drawee.backends.pipeline.Fresco
 import com.facebook.imagepipeline.request.ImageRequestBuilder
 import com.facebook.samples.zoomable.ZoomableDraweeView
 
 @Composable
-fun ImagePreviewView(image: ImagePreviewState.Ready) {
+fun ImagePreviewContent(
+    image: ImagePreviewState.Ready,
+    reducer: ImagesPreviewReducer
+) {
     Box(
         contentAlignment = Alignment.Center,
         modifier = Modifier
@@ -63,14 +64,14 @@ fun ImagePreviewView(image: ImagePreviewState.Ready) {
                     .fillMaxWidth()
                     .background(colorResource(id = R.color.blueBackground))
             ) {
-                imageSheet(image = image.imageValue)
+                imageSheet(image = image.imageValue, reducer)
             }
         }
     }
 }
 
 @Composable
-fun imageSheet(image: ImageValue, viewModel: ImagePreviewViewModel = providedViewModel()) {
+fun imageSheet(image: ImageValue, reducer: ImagesPreviewReducer) {
 
     Column(
         modifier = Modifier
@@ -90,7 +91,7 @@ fun imageSheet(image: ImageValue, viewModel: ImagePreviewViewModel = providedVie
             Image(
                 painterResource(id = android.R.drawable.ic_menu_close_clear_cancel),
                 contentDescription = null,
-                modifier = Modifier.clickable { viewModel.toggleDetails() }
+                modifier = Modifier.clickable { reducer.toggleDetails() }
             )
         }
         Text(
@@ -120,7 +121,7 @@ fun imageSheet(image: ImageValue, viewModel: ImagePreviewViewModel = providedVie
                     color = colorResource(id = R.color.textColorLightGray)
                 )
                 Text(
-                    text = image.formattedDayHour,
+                    text = image.formattedHourMinute,
                     fontSize = 14.sp,
                     fontWeight = FontWeight.Bold,
                     color = colorResource(id = R.color.textWhite),
@@ -173,15 +174,14 @@ private fun loadImage(view: ZoomableDraweeView, image: ImageValue) {
 @Preview(showSystemUi = true)
 @Composable
 fun OptionsViewPreview() {
-    MainApplication.initializeLibrary(LocalContext.current)
-
-    MaterialTheme {
+    KoinPreview {
         Column {
-            ImagePreviewView(
+            ImagePreviewContent(
                 ImagePreviewState.Ready(
                     imageValue = ImageValue.Samples.simpleImageValeSample,
                     showDetails = false
-                )
+                ),
+                ImagesPreviewReducer.Samples.empty
             )
         }
     }

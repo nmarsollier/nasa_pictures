@@ -14,7 +14,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
-import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -27,18 +26,19 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.exercise.R
 import com.example.exercise.models.businessObjects.ExtendedDateValue
-import com.example.exercise.ui.utils.providedViewModel
+import com.example.exercise.ui.common.KoinPreview
+import com.example.exercise.ui.utils.Samples
 
 @Composable
 @ExperimentalFoundationApi
-fun DateItemView(date: ExtendedDateValue, viewModel: MainViewModel = providedViewModel()) {
+fun DateItemView(date: ExtendedDateValue, reducer: MainReducer) {
     Card(shape = RoundedCornerShape(10.dp),
         backgroundColor = (colorResource(id = R.color.blueCardBackground)),
         modifier = Modifier
             .padding(start = 16.dp, end = 16.dp, top = 10.dp)
             .fillMaxWidth()
             .combinedClickable(onClick = {})
-            .clickable { viewModel.redirect(Destination.Images(date)) }) {
+            .clickable { reducer.redirect(Destination.Images(date)) }) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier
@@ -106,11 +106,20 @@ fun text(date: ExtendedDateValue): String {
 @Preview(showSystemUi = true)
 @Composable
 fun DateItemViewPreview() {
-    MaterialTheme {
+    KoinPreview {
         Column {
-            DateItemView(ExtendedDateValue.Samples.partialLoadedExtendedDateValueSample)
-            DateItemView(ExtendedDateValue.Samples.fullyLoadedExtendedDateValueSample)
-            DateItemView(ExtendedDateValue.Samples.unloadedLoadedExtendedDateValueSample)
+            DateItemView(
+                ExtendedDateValue.Samples.partialLoadedExtendedDateValueSample,
+                MainReducer.Samples.empty
+            )
+            DateItemView(
+                ExtendedDateValue.Samples.fullyLoadedExtendedDateValueSample,
+                MainReducer.Samples.empty
+            )
+            DateItemView(
+                ExtendedDateValue.Samples.unloadedLoadedExtendedDateValueSample,
+                MainReducer.Samples.empty
+            )
         }
     }
 }

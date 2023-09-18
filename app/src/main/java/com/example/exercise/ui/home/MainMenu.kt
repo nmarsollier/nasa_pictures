@@ -28,7 +28,8 @@ fun MainMenu(
                         colorResource(id = R.color.blueBackground)
                     )
                 )
-            ).padding(top = 24.dp),
+            )
+            .padding(top = 24.dp),
         elevation = 0.dp,
         title = { Text(stringResource(R.string.app_name)) },
         backgroundColor = Color.Transparent,

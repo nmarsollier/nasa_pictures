@@ -7,9 +7,9 @@ import androidx.room.Query
 
 @Dao
 interface DatesEntityDao {
-    @Query("SELECT * FROM dates ORDER BY date DESC LIMIT :limit OFFSET :page")
-    fun findAll(page: Int, limit: Int): List<DatesEntity>?
+    @Query("SELECT * FROM dates ORDER BY date DESC LIMIT :limit OFFSET :from ")
+    fun findAll(from: Int, limit: Int): List<DatesEntity>?
 
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insert(date: DatesEntity)
 }

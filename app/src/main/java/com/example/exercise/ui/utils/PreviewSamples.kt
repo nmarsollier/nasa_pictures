@@ -44,7 +44,7 @@ interface MainReducerSamples {
 val MainReducer.Companion.Samples
     get() = object : MainReducerSamples {
         override val empty = object : MainReducer {
-            override fun fetchDates() = MainScope().launch {
+            override fun syncDates() = MainScope().launch {
             }
 
             override fun redirect(destination: Destination) = Unit

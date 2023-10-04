@@ -4,8 +4,9 @@ import com.example.exercise.models.api.dates.DatesApiClient
 import com.example.exercise.models.api.tools.Result
 import com.example.exercise.models.businessObjects.DateValue
 import com.example.exercise.models.businessObjects.ExtendedDateValue
-import com.example.exercise.models.database.dates.DateRepository
+import com.example.exercise.models.database.config.ExampleDatabase
 import com.example.exercise.models.database.dates.DatesEntity
+import com.example.exercise.models.database.dates.DatesEntityDao
 import com.example.exercise.models.database.image.FrescoUtils
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.MainScope
@@ -16,12 +17,14 @@ import kotlin.coroutines.suspendCoroutine
 
 class FetchDatesUseCase(
     private val datesClient: DatesApiClient,
-    private val dateRepository: DateRepository,
+    database: ExampleDatabase,
     private val frescoUtils: FrescoUtils
 ) {
+    private val dateDao = database.datesDao()
+
     suspend fun syncDates() = suspendCoroutine {
         MainScope().launch(Dispatchers.IO) {
-            val dates = listDatesFromDatabase() as Result.Success
+            val dates = lastDateFromDatabase() as Result.Success
 
             if (dates.data.isEmpty() || dates.data.first().parsedDate.isBefore(LocalDate.now())) {
                 when (syncRemoteDates()) {
@@ -34,15 +37,14 @@ class FetchDatesUseCase(
         }
     }
 
-    private suspend fun listDatesFromDatabase() =
+    private suspend fun lastDateFromDatabase() =
         suspendCoroutine<Result<ExtendedDateValue>> { suspend ->
             MainScope().launch(Dispatchers.IO) {
-                dateRepository.findAll(1)?.takeIf { it.isNotEmpty() }?.let { dates ->
+                dateDao.findLast()?.let { date ->
                     suspend.resume(
                         Result.Success(
-                            dates.map { date -> DateValue(date.date) }
-                                .map { date -> frescoUtils.toDatesData(date) }
-                                .sortedByDescending { it.date })
+                            listOf(frescoUtils.toDatesData(DateValue(date.date)))
+                        )
                     )
                 } ?: kotlin.run { suspend.resume(Result.Success(emptyList())) }
             }
@@ -71,7 +73,7 @@ class FetchDatesUseCase(
 
     private fun updateLocalDatabase(data: List<DateValue>) {
         data.forEach {
-            dateRepository.insert(DatesEntity(it.date))
+            dateDao.insert(DatesEntity(it.date))
         }
     }
 }

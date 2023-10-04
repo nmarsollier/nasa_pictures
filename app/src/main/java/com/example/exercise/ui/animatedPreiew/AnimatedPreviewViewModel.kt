@@ -44,31 +44,19 @@ class AnimatedPreviewViewModel(
 ) : BaseViewModel<AnimatedPreviewState>(AnimatedPreviewState.Loading), AnimatedPreviewReducer {
 
     override fun fetchImages(dateValue: ExtendedDateValue) = viewModelScope.launch(Dispatchers.IO) {
-        loadImages(dateValue).let { images ->
-            if (images.isEmpty()) {
-                mutableState.update {
-                    AnimatedPreviewState.Error
-                }
-            } else {
-                mutableState.update {
-                    AnimatedPreviewState.Ready(animation(images))
-                }
-            }
-        }
+        loadImages(dateValue).asState().sendToState()
     }
 
     private suspend fun loadImages(dateValue: ExtendedDateValue) =
         suspendCoroutine<List<ImageValue>> {
             viewModelScope.launch(Dispatchers.IO) {
-                fetchImagesUseCase.fetchImages(dateValue.date).let { result ->
-                    when (result) {
-                        is Result.Error -> {
-                            it.resume(emptyList())
-                        }
+                when (val result = fetchImagesUseCase.fetchImages(dateValue.date)) {
+                    is Result.Error -> {
+                        it.resume(emptyList())
+                    }
 
-                        is Result.Success -> {
-                            it.resume(result.data)
-                        }
+                    is Result.Success -> {
+                        it.resume(result.data)
                     }
                 }
             }
@@ -101,5 +89,13 @@ class AnimatedPreviewViewModel(
                 }
             }, CallerThreadExecutor.getInstance()
         )
+    }
+
+    private suspend fun List<ImageValue>.asState(): AnimatedPreviewState {
+        return if (this.isEmpty()) {
+            AnimatedPreviewState.Error
+        } else {
+            AnimatedPreviewState.Ready(animation(this))
+        }
     }
 }

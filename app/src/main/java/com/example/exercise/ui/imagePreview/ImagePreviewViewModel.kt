@@ -23,19 +23,15 @@ interface ImagesPreviewReducer {
 class ImagePreviewViewModel :
     BaseViewModel<ImagePreviewState>(ImagePreviewState.Loading), ImagesPreviewReducer {
     override fun init(imageValue: ImageValue) {
-        mutableState.update {
-            ImagePreviewState.Ready(
-                imageValue = imageValue,
-                showDetails = false
-            )
-        }
+        ImagePreviewState.Ready(
+            imageValue = imageValue,
+            showDetails = false
+        ).sendToState()
     }
 
     override fun toggleDetails() {
         (state.value as? ImagePreviewState.Ready)?.let { st ->
-            mutableState.update {
-                st.copy(showDetails = !st.showDetails)
-            }
+            st.copy(showDetails = !st.showDetails).sendToState()
         }
     }
 }

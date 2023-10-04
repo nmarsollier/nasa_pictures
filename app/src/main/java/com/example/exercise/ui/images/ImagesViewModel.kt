@@ -8,7 +8,6 @@ import com.example.exercise.models.useCases.FetchImagesUseCase
 import com.example.exercise.ui.utils.BaseViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 sealed class Destination {
@@ -40,28 +39,24 @@ class ImagesViewModel(
 ) :
     BaseViewModel<ImagesState>(ImagesState.Loading), ImagesReducer {
     override fun fetchImages(date: ExtendedDateValue?) = viewModelScope.launch(Dispatchers.IO) {
-        mutableState.update { ImagesState.Loading }
+        ImagesState.Loading.sendToState()
 
         val queryDate = date?.date ?: run {
-            mutableState.update { ImagesState.Error }
+            ImagesState.Error.sendToState()
             return@launch
         }
 
         viewModelScope.launch(Dispatchers.IO) {
             fetchImagesUseCase.fetchImages(queryDate).let {
                 when (val result = it) {
-                    is Result.Error -> mutableState.update { ImagesState.Error }
-                    is Result.Success -> mutableState.update {
-                        ImagesState.Ready(result.data)
-                    }
+                    is Result.Error -> ImagesState.Error.sendToState()
+                    is Result.Success -> ImagesState.Ready(result.data).sendToState()
                 }
             }
         }
     }
 
     override fun redirect(destination: Destination) {
-        mutableState.update {
-            ImagesState.Redirect(destination)
-        }
+        ImagesState.Redirect(destination).sendToState()
     }
 }

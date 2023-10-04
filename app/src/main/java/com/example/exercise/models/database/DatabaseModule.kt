@@ -1,7 +1,7 @@
 package com.example.exercise.models.database
 
 import com.example.exercise.models.database.config.getRoomDatabase
-import com.example.exercise.models.database.dates.DateRepository
+import com.example.exercise.models.database.dates.DatesEntityDao
 import com.example.exercise.models.database.image.FrescoUtils
 import com.example.exercise.models.database.image.ImageRepository
 import org.koin.android.ext.koin.androidContext
@@ -14,7 +14,6 @@ val koinDatabaseModule = module {
         getRoomDatabase(androidContext())
     }
 
-    factoryOf(::DateRepository)
     factoryOf(::ImageRepository)
     singleOf(::FrescoUtils)
 }

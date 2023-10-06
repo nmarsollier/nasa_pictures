@@ -8,19 +8,19 @@ import androidx.core.graphics.scale
 import androidx.lifecycle.viewModelScope
 import com.example.exercise.models.api.tools.Result
 import com.example.exercise.models.businessObjects.ExtendedDateValue
-import com.example.exercise.models.businessObjects.ImageValue
+import com.example.exercise.models.api.images.ImageValue
 import com.example.exercise.models.database.image.FrescoUtils
 import com.example.exercise.models.useCases.FetchImagesUseCase
 import com.example.exercise.ui.utils.BaseViewModel
 import com.facebook.common.executors.CallerThreadExecutor
 import com.facebook.common.references.CloseableReference
 import com.facebook.datasource.DataSource
+import com.facebook.imagepipeline.core.ImagePipeline
 import com.facebook.imagepipeline.datasource.BaseBitmapDataSubscriber
 import com.facebook.imagepipeline.image.CloseableImage
 import com.facebook.imagepipeline.request.ImageRequestBuilder
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
@@ -40,7 +40,8 @@ interface AnimatedPreviewReducer {
 }
 
 class AnimatedPreviewViewModel(
-    private val fetchImagesUseCase: FetchImagesUseCase, private val frescoUtils: FrescoUtils
+    private val fetchImagesUseCase: FetchImagesUseCase,
+    private val fresco: ImagePipeline
 ) : BaseViewModel<AnimatedPreviewState>(AnimatedPreviewState.Loading), AnimatedPreviewReducer {
 
     override fun fetchImages(dateValue: ExtendedDateValue) = viewModelScope.launch(Dispatchers.IO) {
@@ -78,7 +79,7 @@ class AnimatedPreviewViewModel(
 
     private suspend fun getBitmapFromUri(imageUri: Uri) = suspendCoroutine { suspend ->
         val imageRequest = ImageRequestBuilder.newBuilderWithSource(imageUri).build()
-        frescoUtils.fresco.fetchDecodedImage(imageRequest, this).subscribe(
+        fresco.fetchDecodedImage(imageRequest, this).subscribe(
             object : BaseBitmapDataSubscriber() {
                 override fun onNewResultImpl(bitmap: Bitmap?) {
                     suspend.resume(bitmap?.scale(400, 400))

@@ -2,7 +2,7 @@ package com.example.exercise.tools
 
 import android.graphics.drawable.AnimationDrawable
 import android.net.Uri
-import com.example.exercise.models.businessObjects.DateValue
+import com.example.exercise.models.api.dates.DateValue
 import com.example.exercise.models.businessObjects.ExtendedDateValue
 import com.example.exercise.models.database.image.FrescoUtils
 import com.facebook.common.references.CloseableReference

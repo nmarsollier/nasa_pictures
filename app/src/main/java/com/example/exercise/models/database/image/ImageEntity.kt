@@ -4,8 +4,8 @@ import android.os.Parcelable
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.example.exercise.models.businessObjects.CoordinatesValue
-import com.example.exercise.models.businessObjects.ImageValue
+import com.example.exercise.models.api.images.CoordinatesValue
+import com.example.exercise.models.api.images.ImageValue
 import kotlinx.parcelize.Parcelize
 
 @Parcelize

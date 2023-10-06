@@ -1,8 +1,7 @@
 package com.example.exercise.ui.imagePreview
 
-import com.example.exercise.models.businessObjects.ImageValue
+import com.example.exercise.models.api.images.ImageValue
 import com.example.exercise.ui.utils.BaseViewModel
-import kotlinx.coroutines.flow.update
 
 sealed class ImagePreviewState {
     data object Loading : ImagePreviewState()

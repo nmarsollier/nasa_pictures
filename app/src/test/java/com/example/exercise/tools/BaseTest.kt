@@ -1,7 +1,7 @@
 package com.example.exercise.tools
 
-import com.example.exercise.models.api.dates.DatesApiClient
-import com.example.exercise.models.api.images.ImagesApiClient
+import com.example.exercise.models.api.dates.DatesApi
+import com.example.exercise.models.api.images.ImagesApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.setMain
@@ -17,13 +17,13 @@ open class BaseTest {
     }
 
     val datesApiMock = ApiMockMapClass(
-        urlOverride = { DatesApiClient.urlBaseOverride = it }, maps = mapOf(
+        urlOverride = { DatesApi.urlBaseOverride = it }, maps = mapOf(
             "api/enhanced/all" to "dates.json"
         )
     )
 
     val imagesApiMock = ApiMockMapClass(
-        urlOverride = { ImagesApiClient.urlBaseOverride = it }, maps = mapOf(
+        urlOverride = { ImagesApi.urlBaseOverride = it }, maps = mapOf(
             "/api/enhanced/date/2023-08-22" to "images_2023-08-22.json",
             "/api/enhanced/date/2023-08-21" to "images_2023-08-21.json",
             "/api/enhanced/date/2023-08-20" to "images_2023-08-20.json",

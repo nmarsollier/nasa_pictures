@@ -1,8 +1,8 @@
 package com.example.exercise.models.useCases
 
-import com.example.exercise.models.api.images.ImagesApiClient
+import com.example.exercise.models.api.images.ImagesApi
 import com.example.exercise.models.api.tools.Result
-import com.example.exercise.models.businessObjects.ImageValue
+import com.example.exercise.models.api.images.ImageValue
 import com.example.exercise.models.database.image.ImageRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.MainScope
@@ -11,7 +11,7 @@ import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
 class FetchImagesUseCase(
-    private val imagesClient: ImagesApiClient,
+    private val imagesApi: ImagesApi,
     private val imageRepository: ImageRepository,
 ) {
 
@@ -32,16 +32,18 @@ class FetchImagesUseCase(
     private suspend fun fetchImagesFromDatabase(queryDate: String): List<ImageValue> =
         suspendCoroutine { suspend ->
             MainScope().launch(Dispatchers.IO) {
-                imageRepository.findByDate(queryDate)?.takeIf { it.isNotEmpty() }?.let { images ->
-                    suspend.resume(images.map { image -> image.toImage() })
-                } ?: suspend.resume(emptyList())
+                imageRepository.findByDate(queryDate)
+                    ?.takeIf { it.isNotEmpty() }
+                    ?.map { image -> image.toImage() }
+                    ?.let { suspend.resume(it) }
+                    ?: suspend.resume(emptyList())
             }
         }
 
     private suspend fun syncRemoteImages(queryDate: String): List<ImageValue> =
         suspendCoroutine { suspend ->
             MainScope().launch(Dispatchers.IO) {
-                imagesClient.listImages(queryDate).let {
+                imagesApi.fetchImages(queryDate).let {
                     when (val result = it) {
                         is Result.Error -> {
                             suspend.resume(emptyList())

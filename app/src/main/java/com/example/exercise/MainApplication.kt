@@ -23,8 +23,5 @@ class MainApplication : Application(), KoinComponent {
 
             modules(koinApiModule, koinDatabaseModule, koinUseCaseModule, koinViewModelModule)
         }
-
-        val fresco: FrescoUtils = get()
-        fresco.initFresco(this)
     }
 }

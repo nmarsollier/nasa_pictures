@@ -1,4 +1,4 @@
-package com.example.exercise.models.businessObjects
+package com.example.exercise.models.api.images
 
 import com.example.exercise.models.database.image.ImageEntity
 import com.example.exercise.ui.utils.toDateTimeString

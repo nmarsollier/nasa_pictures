@@ -3,7 +3,7 @@ package com.example.exercise.ui.images
 import androidx.lifecycle.viewModelScope
 import com.example.exercise.models.api.tools.Result
 import com.example.exercise.models.businessObjects.ExtendedDateValue
-import com.example.exercise.models.businessObjects.ImageValue
+import com.example.exercise.models.api.images.ImageValue
 import com.example.exercise.models.useCases.FetchImagesUseCase
 import com.example.exercise.ui.utils.BaseViewModel
 import kotlinx.coroutines.Dispatchers
@@ -49,10 +49,10 @@ class ImagesViewModel(
         viewModelScope.launch(Dispatchers.IO) {
             fetchImagesUseCase.fetchImages(queryDate).let {
                 when (val result = it) {
-                    is Result.Error -> ImagesState.Error.sendToState()
-                    is Result.Success -> ImagesState.Ready(result.data).sendToState()
+                    is Result.Error -> ImagesState.Error
+                    is Result.Success -> ImagesState.Ready(result.data)
                 }
-            }
+            }.sendToState()
         }
     }
 

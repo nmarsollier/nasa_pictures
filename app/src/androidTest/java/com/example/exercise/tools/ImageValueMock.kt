@@ -1,6 +1,6 @@
 package com.example.exercise.tools
 
-import com.example.exercise.models.businessObjects.ImageValue
+import com.example.exercise.models.api.images.ImageValue
 import com.example.exercise.ui.utils.jsonToObject
 
 object ImageValueMock {

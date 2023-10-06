@@ -17,7 +17,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.exercise.R
 import com.example.exercise.models.businessObjects.ExtendedDateValue
-import com.example.exercise.models.businessObjects.ImageValue
+import com.example.exercise.models.api.images.ImageValue
 import com.example.exercise.ui.common.KoinPreview
 import com.example.exercise.ui.utils.Samples
 

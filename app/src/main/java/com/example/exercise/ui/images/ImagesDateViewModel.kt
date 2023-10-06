@@ -1,9 +1,8 @@
 package com.example.exercise.ui.images
 
 import androidx.lifecycle.viewModelScope
+import com.example.exercise.models.api.dates.refresh
 import com.example.exercise.models.businessObjects.ExtendedDateValue
-import com.example.exercise.models.businessObjects.asDateValue
-import com.example.exercise.models.businessObjects.asExtendedDateValue
 import com.example.exercise.models.database.image.FrescoUtils
 import com.example.exercise.ui.utils.BaseViewModel
 import kotlinx.coroutines.Dispatchers
@@ -35,8 +34,8 @@ class ImagesDateViewModel(
 
     override fun updateDate() = MainScope().launch(Dispatchers.IO) {
         (state.value as? ImagesDateState.Ready)
-            ?.date?.date?.asDateValue
-            ?.asExtendedDateValue(frescoUtils)
+            ?.date
+            ?.refresh(frescoUtils)
             ?.asReadyState
             ?.sendToState()
     }

@@ -2,7 +2,7 @@ package com.example.exercise.models.database.image
 
 import android.content.Context
 import android.net.Uri
-import com.example.exercise.models.businessObjects.DateValue
+import com.example.exercise.models.api.dates.DateValue
 import com.example.exercise.models.businessObjects.ExtendedDateValue
 import com.facebook.cache.disk.DiskCacheConfig
 import com.facebook.common.util.ByteConstants
@@ -16,26 +16,10 @@ import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
 class FrescoUtils(
-    private val context: Context,
-    private val imageRepository: ImageRepository
+    private val imageRepository: ImageRepository,
+    private val fresco: ImagePipeline
 ) {
-    val fresco: ImagePipeline by lazy {
-        Fresco.getImagePipeline()
-    }
-
-    fun initFresco(context: Context) {
-        Fresco.initialize(
-            context,
-            ImagePipelineConfig.newBuilder(context).setDownsampleEnabled(true)
-                .setMainDiskCacheConfig(
-                    DiskCacheConfig.newBuilder(context)
-                        .setMaxCacheSize(100L * ByteConstants.MB)
-                        .build()
-                ).setDiskCacheEnabled(true).build()
-        )
-    }
-
-    suspend fun toDatesData(value: DateValue): ExtendedDateValue {
+    suspend fun toExtendedData(value: DateValue): ExtendedDateValue {
         val date = value.date
         return suspendCoroutine {
             MainScope().launch(Dispatchers.IO) {

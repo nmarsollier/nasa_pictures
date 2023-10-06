@@ -1,7 +1,7 @@
 package com.example.exercise
 
 import app.cash.turbine.test
-import com.example.exercise.models.businessObjects.ImageValue
+import com.example.exercise.models.api.images.ImageValue
 import com.example.exercise.tools.BaseTest
 import com.example.exercise.ui.imagePreview.ImagePreviewState
 import com.example.exercise.ui.imagePreview.ImagePreviewViewModel

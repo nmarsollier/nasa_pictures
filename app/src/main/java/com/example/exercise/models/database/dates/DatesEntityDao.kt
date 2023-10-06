@@ -4,6 +4,8 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import com.example.exercise.models.api.dates.DateValue
+import com.example.exercise.models.api.dates.asDateEntity
 
 @Dao
 interface DatesEntityDao {
@@ -15,4 +17,12 @@ interface DatesEntityDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insert(date: DatesEntity)
+}
+
+fun DatesEntity.storeIn(dao: DatesEntityDao) = dao.insert(this)
+
+fun List<DatesEntity>.storeIn(dao: DatesEntityDao) {
+    this.forEach {
+        it.storeIn(dao)
+    }
 }

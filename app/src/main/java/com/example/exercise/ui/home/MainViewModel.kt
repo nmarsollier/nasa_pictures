@@ -6,10 +6,9 @@ import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
-import com.example.exercise.models.businessObjects.DateValue
 import com.example.exercise.models.businessObjects.ExtendedDateValue
-import com.example.exercise.models.businessObjects.asDateValue
-import com.example.exercise.models.businessObjects.asExtendedDateValue
+import com.example.exercise.models.api.dates.asDateValue
+import com.example.exercise.models.api.dates.asExtendedDateValue
 import com.example.exercise.models.database.config.ExampleDatabase
 import com.example.exercise.models.database.dates.DatesEntity
 import com.example.exercise.models.database.dates.DatesEntityDao
@@ -21,7 +20,6 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
@@ -63,7 +61,11 @@ class MainViewModel(
     }.flow
 
     override fun syncDates() = viewModelScope.launch(Dispatchers.IO) {
-        MainState.Ready(pager).sendToState()
+        if (dateDao.findLast() != null) {
+            MainState.Ready(pager).sendToState()
+        } else {
+            MainState.Loading.sendToState()
+        }
 
         coroutineScope {
             fetchDatesUseCase.syncDates()

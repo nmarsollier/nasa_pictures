@@ -1,8 +1,8 @@
 package com.example.exercise
 
 import app.cash.turbine.test
-import com.example.exercise.models.api.dates.DatesApiClient
-import com.example.exercise.models.api.images.ImagesApiClient
+import com.example.exercise.models.api.dates.DatesApi
+import com.example.exercise.models.api.images.ImagesApi
 import com.example.exercise.models.api.tools.CacheStrategy
 import com.example.exercise.tools.BaseTest
 import com.example.exercise.tools.ExtendedDateValueMocks
@@ -21,10 +21,10 @@ class MainViewModelTest : BaseTest() {
         val model = MainViewModel()
 
         imagesApiMock.mockForUnitTest {
-            ImagesApiClient.urlBaseOverride != null
+            ImagesApi.urlBaseOverride != null
         }
         datesApiMock.mockForUnitTest {
-            DatesApiClient.urlBaseOverride != null
+            DatesApi.urlBaseOverride != null
         }
 
         model.state.test {

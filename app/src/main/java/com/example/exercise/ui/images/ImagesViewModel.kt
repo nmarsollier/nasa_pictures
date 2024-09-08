@@ -4,40 +4,45 @@ import androidx.lifecycle.viewModelScope
 import com.example.exercise.models.api.images.ImageValue
 import com.example.exercise.models.extendedDate.ExtendedDateValue
 import com.example.exercise.models.useCases.FetchImagesUseCase
-import com.example.exercise.ui.utils.BaseViewModel
+import com.example.exercise.ui.common.vm.StateViewModel
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 
-sealed class Destination {
-    data class Preview(val image: ImageValue) : Destination()
-    data class Animate(val date: ExtendedDateValue) : Destination()
+sealed interface ImagesEvent {
+    data class GoPreview(val image: ImageValue) : ImagesEvent
+    data class GoAnimate(val date: ExtendedDateValue) : ImagesEvent
 }
 
-sealed class ImagesState {
-    data object Loading : ImagesState()
+sealed interface ImagesState {
+    data object Loading : ImagesState
 
-    data object Error : ImagesState()
-
-    data class Redirect(val destination: Destination) : ImagesState()
+    data object Error : ImagesState
 
     data class Ready(
         val images: List<ImageValue>
-    ) : ImagesState()
+    ) : ImagesState
 }
 
-interface ImagesReducer {
-    fun redirect(destination: Destination)
-    fun fetchImages(date: ExtendedDateValue?): Job
-
-    companion object
+sealed interface ImagesAction {
+    data class FetchImages(val date: ExtendedDateValue?) : ImagesAction
+    data class GoPreview(val image: ImageValue) : ImagesAction
+    data class GoAnimate(val date: ExtendedDateValue) : ImagesAction
 }
 
 class ImagesViewModel(
     private val fetchImagesUseCase: FetchImagesUseCase
 ) :
-    BaseViewModel<ImagesState>(ImagesState.Loading), ImagesReducer {
-    override fun fetchImages(date: ExtendedDateValue?) = viewModelScope.launch(Dispatchers.IO) {
+    StateViewModel<ImagesState, ImagesEvent, ImagesAction>(ImagesState.Loading) {
+
+    override fun reduce(action: ImagesAction) {
+        when (action) {
+            is ImagesAction.FetchImages -> fetchImages(action.date)
+            is ImagesAction.GoPreview -> ImagesEvent.GoPreview(action.image).sendToEvent()
+            is ImagesAction.GoAnimate -> ImagesEvent.GoAnimate(action.date).sendToEvent()
+        }
+    }
+
+    fun fetchImages(date: ExtendedDateValue?) = viewModelScope.launch(Dispatchers.IO) {
         ImagesState.Loading.sendToState()
 
         val queryDate = date?.date ?: run {
@@ -50,9 +55,5 @@ class ImagesViewModel(
         } catch (e: Exception) {
             ImagesState.Error
         }.sendToState()
-    }
-
-    override fun redirect(destination: Destination) {
-        ImagesState.Redirect(destination).sendToState()
     }
 }

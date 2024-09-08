@@ -27,8 +27,7 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
 import com.example.exercise.R
 import com.example.exercise.models.api.images.ImageValue
-import com.example.exercise.ui.common.KoinPreview
-import com.example.exercise.ui.utils.Samples
+import com.example.exercise.ui.common.ui.KoinPreview
 import com.facebook.drawee.backends.pipeline.Fresco
 import com.facebook.imagepipeline.request.ImageRequestBuilder
 import com.facebook.samples.zoomable.ZoomableDraweeView
@@ -36,7 +35,7 @@ import com.facebook.samples.zoomable.ZoomableDraweeView
 @Composable
 fun ImagePreviewContent(
     image: ImagePreviewState.Ready,
-    reducer: ImagesPreviewReducer
+    reduce: (ImagePreviewAction) -> Unit
 ) {
     Box(
         contentAlignment = Alignment.Center,
@@ -64,14 +63,14 @@ fun ImagePreviewContent(
                     .fillMaxWidth()
                     .background(colorResource(id = R.color.blueBackground))
             ) {
-                imageSheet(image = image.imageValue, reducer)
+                ImageSheet(image = image.imageValue, reduce)
             }
         }
     }
 }
 
 @Composable
-fun imageSheet(image: ImageValue, reducer: ImagesPreviewReducer) {
+fun ImageSheet(image: ImageValue, reduce: (ImagePreviewAction) -> Unit) {
 
     Column(
         modifier = Modifier
@@ -91,7 +90,7 @@ fun imageSheet(image: ImageValue, reducer: ImagesPreviewReducer) {
             Image(
                 painterResource(id = android.R.drawable.ic_menu_close_clear_cancel),
                 contentDescription = null,
-                modifier = Modifier.clickable { reducer.toggleDetails() }
+                modifier = Modifier.clickable { reduce(ImagePreviewAction.ToggleDetails) }
             )
         }
         Text(
@@ -180,9 +179,8 @@ fun OptionsViewPreview() {
                 ImagePreviewState.Ready(
                     imageValue = ImageValue.Samples.simpleImageValeSample,
                     showDetails = false
-                ),
-                ImagesPreviewReducer.Samples.empty
-            )
+                )
+            ) { }
         }
     }
 }

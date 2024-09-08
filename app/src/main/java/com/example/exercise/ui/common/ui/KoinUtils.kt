@@ -1,4 +1,4 @@
-package com.example.exercise.ui.common
+package com.example.exercise.ui.common.ui
 
 import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable

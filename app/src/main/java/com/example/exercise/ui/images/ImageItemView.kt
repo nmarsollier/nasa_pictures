@@ -24,9 +24,8 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
 import com.example.exercise.R
 import com.example.exercise.models.api.images.ImageValue
-import com.example.exercise.ui.common.KoinPreview
+import com.example.exercise.ui.common.ui.KoinPreview
 import com.example.exercise.ui.utils.CircleProgressBarDrawable
-import com.example.exercise.ui.utils.Samples
 import com.facebook.drawee.backends.pipeline.Fresco
 import com.facebook.drawee.controller.ControllerListener
 import com.facebook.drawee.view.SimpleDraweeView
@@ -37,15 +36,15 @@ import com.facebook.imagepipeline.request.ImageRequestBuilder
 @ExperimentalFoundationApi
 fun ImageItemView(
     image: ImageValue,
-    imageReducer: ImagesReducer,
-    dateReducer: ImagesDateReducer
+    imageReduce: (ImagesAction) -> Unit,
+    dateReduce: (ImagesDateAction) -> Unit
 ) {
     Card(shape = RoundedCornerShape(10.dp),
         backgroundColor = (colorResource(id = R.color.blackBackground)),
         modifier = Modifier
             .size(165.dp)
             .combinedClickable(onClick = {})
-            .clickable { imageReducer.redirect(Destination.Preview(image)) }) {
+            .clickable { imageReduce(ImagesAction.GoPreview(image)) }) {
 
         AndroidView(modifier = Modifier
             .padding(16.dp)
@@ -56,7 +55,7 @@ fun ImageItemView(
             },
             update = { view ->
                 loadImage(view, image) {
-                    dateReducer.updateDate()
+                    dateReduce(ImagesDateAction.UpdateDate(null))
                 }
             })
 
@@ -114,8 +113,8 @@ fun ImageItemViewPreview() {
         Column {
             ImageItemView(
                 ImageValue.Samples.simpleImageValeSample,
-                ImagesReducer.Samples.empty,
-                ImagesDateReducer.Samples.empty
+                {},
+                { }
             )
         }
     }

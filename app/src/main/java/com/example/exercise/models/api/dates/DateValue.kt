@@ -1,8 +1,8 @@
 package com.example.exercise.models.api.dates
 
 import android.os.Parcelable
-import com.example.exercise.models.extendedDate.ExtendedDateValue
 import com.example.exercise.models.database.dates.DatesEntity
+import com.example.exercise.models.extendedDate.ExtendedDateValue
 import com.example.exercise.models.extendedDate.FrescoUtils
 import com.google.gson.annotations.SerializedName
 import kotlinx.parcelize.Parcelize

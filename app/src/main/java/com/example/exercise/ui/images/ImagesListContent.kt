@@ -18,17 +18,17 @@ import androidx.compose.ui.unit.dp
 import com.example.exercise.R
 import com.example.exercise.models.api.images.ImageValue
 import com.example.exercise.models.extendedDate.ExtendedDateValue
-import com.example.exercise.ui.common.KoinPreview
+import com.example.exercise.ui.common.ui.KoinPreview
 import com.example.exercise.ui.utils.Samples
 
 @OptIn(ExperimentalFoundationApi::class)
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
-fun ImagesListPreview(
+fun ImagesListContent(
     state: ImagesState.Ready,
-    imagesReducer: ImagesReducer,
+    imagesReducer: (event: ImagesAction) -> Unit,
     datesState: ImagesDateState,
-    datesReducer: ImagesDateReducer,
+    datesReducer: (event: ImagesDateAction) -> Unit,
 ) {
     Column(
         modifier = Modifier.background(colorResource(id = R.color.blueBackground))
@@ -38,7 +38,7 @@ fun ImagesListPreview(
         LazyVerticalGrid(
             columns = GridCells.Fixed(2),
             modifier = Modifier.fillMaxSize(),
-            contentPadding = PaddingValues(16.dp),
+            contentPadding = PaddingValues(start = 16.dp, top = 16.dp, end = 16.dp, bottom = 64.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp),
             horizontalArrangement = Arrangement.spacedBy(16.dp),
         ) {
@@ -53,17 +53,17 @@ fun ImagesListPreview(
 @Composable
 fun ImagesListViewPreview() {
     KoinPreview {
-        ImagesListPreview(
+        ImagesListContent(
             ImagesState.Ready(
                 images = listOf(
                     ImageValue.Samples.simpleImageValeSample
                 )
             ),
-            ImagesReducer.Samples.empty,
+            {},
             ImagesDateState.Ready(
                 ExtendedDateValue.Samples.fullyLoadedExtendedDateValueSample
             ),
-            ImagesDateReducer.Samples.empty
+            { }
         )
     }
 }

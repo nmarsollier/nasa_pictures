@@ -18,9 +18,9 @@ import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.viewModelScope
 import com.example.exercise.R
-import com.example.exercise.ui.common.ErrorView
-import com.example.exercise.ui.common.KoinPreview
-import com.example.exercise.ui.common.LoadingView
+import com.example.exercise.ui.common.ui.ErrorView
+import com.example.exercise.ui.common.ui.KoinPreview
+import com.example.exercise.ui.common.ui.LoadingView
 import com.example.exercise.ui.images.ImagesActivity
 import org.koin.androidx.compose.koinViewModel
 
@@ -30,8 +30,29 @@ fun MainScreen(viewModel: MainViewModel = koinViewModel()) {
     val state by viewModel.state.collectAsState(viewModel.viewModelScope.coroutineContext)
     val context = LocalContext.current
 
+    // No queda otra si queremos que se actualice cuando
+    // vuelve de la pantalla de imágenes
+    val lifecycleOwner = LocalLifecycleOwner.current
+    DisposableEffect(lifecycleOwner) {
+        val observer = LifecycleEventObserver { _, event ->
+            if (event == Lifecycle.Event.ON_RESUME) {
+                viewModel.reduce(MainAction.SyncDates)
+            }
+        }
+        lifecycleOwner.lifecycle.addObserver(observer)
+        onDispose {
+            lifecycleOwner.lifecycle.removeObserver(observer)
+        }
+    }
+
     LaunchedEffect(Unit) {
-        viewModel.syncDates()
+        viewModel.event.collect { event ->
+            when (val e = event) {
+                is MainEvent.GoImages -> {
+                    ImagesActivity.startActivity(context, e.date)
+                }
+            }
+        }
     }
 
     Scaffold(
@@ -41,13 +62,9 @@ fun MainScreen(viewModel: MainViewModel = koinViewModel()) {
     ) {
         Column {
             when (val st = state) {
-                is MainState.Ready -> DatesListContent(st, viewModel)
+                is MainState.Ready -> DatesListContent(st, viewModel::reduce)
                 is MainState.Error -> ErrorView {
-                    viewModel.syncDates()
-                }
-
-                is MainState.Redirect -> when (val d = st.destination) {
-                    is Destination.Images -> ImagesActivity.startActivity(context, d.date)
+                    viewModel.reduce(MainAction.SyncDates)
                 }
 
                 else -> LoadingView()

@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -15,16 +14,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.LifecycleEventObserver
-import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.viewModelScope
 import com.example.exercise.R
 import com.example.exercise.models.extendedDate.ExtendedDateValue
 import com.example.exercise.ui.animatedPreiew.AnimatedPreviewActivity
-import com.example.exercise.ui.common.EmptyView
-import com.example.exercise.ui.common.ErrorView
-import com.example.exercise.ui.common.LoadingView
+import com.example.exercise.ui.common.ui.EmptyView
+import com.example.exercise.ui.common.ui.ErrorView
+import com.example.exercise.ui.common.ui.LoadingView
 import com.example.exercise.ui.imagePreview.ImagePreviewActivity
 import com.example.exercise.ui.utils.Samples
 import org.koin.androidx.compose.koinViewModel
@@ -45,6 +41,18 @@ fun ImagesScreen(
     }
 
     val context = LocalContext.current
+    LaunchedEffect(Unit) {
+        viewModel.event.collect { event ->
+            when (event) {
+                is ImagesEvent.GoAnimate -> AnimatedPreviewActivity.startActivity(
+                    context,
+                    event.date
+                )
+
+                is ImagesEvent.GoPreview -> ImagePreviewActivity.startActivity(context, event.image)
+            }
+        }
+    }
 
     Scaffold(topBar = {
         ImagesMenu(date)
@@ -61,17 +69,12 @@ fun ImagesScreen(
                     if (st.images.isEmpty()) {
                         EmptyView()
                     } else {
-                        ImagesListPreview(st, viewModel, datesState, dateViewModel)
+                        ImagesListContent(st, viewModel::reduce, datesState, dateViewModel::reduce)
                     }
                 }
 
                 is ImagesState.Error -> ErrorView {
                     viewModel.fetchImages(date)
-                }
-
-                is ImagesState.Redirect -> when (val d = st.destination) {
-                    is Destination.Animate -> AnimatedPreviewActivity.startActivity(context, d.date)
-                    is Destination.Preview -> ImagePreviewActivity.startActivity(context, d.image)
                 }
 
                 else -> LoadingView()

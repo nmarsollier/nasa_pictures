@@ -1,4 +1,4 @@
-package com.example.exercise.ui.common
+package com.example.exercise.ui.common.ui
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -37,7 +37,7 @@ fun EmptyView() {
 
 @Preview(showSystemUi = true)
 @Composable
-fun EmptyViewreview() {
+fun EmptyViewPreview() {
     EmptyView()
 }
 

@@ -8,15 +8,14 @@ import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.example.exercise.models.api.dates.asDateValue
 import com.example.exercise.models.api.dates.asExtendedDateValue
-import com.example.exercise.models.extendedDate.ExtendedDateValue
 import com.example.exercise.models.database.config.LocalDatabase
 import com.example.exercise.models.database.dates.DatesEntity
 import com.example.exercise.models.database.dates.DatesEntityDao
+import com.example.exercise.models.extendedDate.ExtendedDateValue
 import com.example.exercise.models.extendedDate.FrescoUtils
 import com.example.exercise.models.useCases.FetchDatesUseCase
-import com.example.exercise.ui.utils.BaseViewModel
+import com.example.exercise.ui.common.vm.StateViewModel
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.Flow
@@ -24,59 +23,60 @@ import kotlinx.coroutines.launch
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
-private const val PAGE_SIZE = 30;
-
-sealed class Destination {
-    data class Images(val date: ExtendedDateValue) : Destination()
+sealed interface MainEvent {
+    data class GoImages(val date: ExtendedDateValue) : MainEvent
 }
 
-sealed class MainState {
-    data object Loading : MainState()
+sealed interface MainState {
+    data object Loading : MainState
 
-    data object Error : MainState()
-
-    data class Redirect(val destination: Destination) : MainState()
+    data object Error : MainState
 
     data class Ready(
         val pager: Flow<PagingData<ExtendedDateValue>>
-    ) : MainState()
+    ) : MainState
 }
 
-interface MainReducer {
-    fun syncDates(): Job
-    fun redirect(destination: Destination)
-
-    companion object
+sealed interface MainAction {
+    data object SyncDates : MainAction
+    data class GoImages(val date: ExtendedDateValue) : MainAction
 }
 
 class MainViewModel(
     private val fetchDatesUseCase: FetchDatesUseCase,
     database: LocalDatabase,
     private val frescoUtils: FrescoUtils
-) : BaseViewModel<MainState>(MainState.Loading), MainReducer {
+) : StateViewModel<MainState, MainEvent, MainAction>(MainState.Loading) {
     private val dateDao = database.datesDao()
 
-    private val pager = Pager(PagingConfig(pageSize = 30)) {
-        DatesPaging(dateDao, frescoUtils)
-    }.flow
+    private fun createPager(): Flow<PagingData<ExtendedDateValue>> {
+        return Pager(PagingConfig(pageSize = 30)) {
+            DatesPaging(dateDao, frescoUtils)
+        }.flow
+    }
 
-    override fun syncDates() = viewModelScope.launch(Dispatchers.IO) {
+    override fun reduce(action: MainAction) {
+        when (action) {
+            MainAction.SyncDates -> syncDates()
+            is MainAction.GoImages -> MainEvent.GoImages(action.date).sendToEvent()
+        }
+    }
+
+    private fun syncDates() = viewModelScope.launch(Dispatchers.IO) {
         if (dateDao.findLast() != null) {
-            MainState.Ready(pager).sendToState()
+            MainState.Ready(createPager()).sendToState()
         } else {
             MainState.Loading.sendToState()
         }
 
         coroutineScope {
             fetchDatesUseCase.syncDates()
-            MainState.Ready(pager).sendToState()
+            MainState.Ready(createPager()).sendToState()
         }
     }
-
-    override fun redirect(destination: Destination) {
-        MainState.Redirect(destination).sendToState()
-    }
 }
+
+private const val PAGE_SIZE = 30;
 
 class DatesPaging(
     private val dateRepository: DatesEntityDao, private val frescoUtils: FrescoUtils

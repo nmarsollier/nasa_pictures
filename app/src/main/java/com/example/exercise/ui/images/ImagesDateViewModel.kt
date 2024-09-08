@@ -4,35 +4,43 @@ import androidx.lifecycle.viewModelScope
 import com.example.exercise.models.api.dates.refresh
 import com.example.exercise.models.extendedDate.ExtendedDateValue
 import com.example.exercise.models.extendedDate.FrescoUtils
-import com.example.exercise.ui.utils.BaseViewModel
+import com.example.exercise.ui.common.vm.StateViewModel
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
 
-sealed class ImagesDateState {
-    data object Loading : ImagesDateState()
+sealed interface ImagesDateState {
+    data object Loading : ImagesDateState
 
     data class Ready(
         val date: ExtendedDateValue?
-    ) : ImagesDateState()
+    ) : ImagesDateState
 }
 
-interface ImagesDateReducer {
-    fun updateDate(date: ExtendedDateValue?): Job
-    fun updateDate(): Job
+sealed interface ImagesDateEvent {
+}
 
-    companion object
+sealed interface ImagesDateAction {
+    data class UpdateDate(val date: ExtendedDateValue?) : ImagesDateAction
 }
 
 class ImagesDateViewModel(
     private val frescoUtils: FrescoUtils
-) : BaseViewModel<ImagesDateState>(ImagesDateState.Loading), ImagesDateReducer {
-    override fun updateDate(date: ExtendedDateValue?) = viewModelScope.launch(Dispatchers.IO) {
+) : StateViewModel<ImagesDateState, ImagesDateEvent, ImagesDateAction>(ImagesDateState.Loading) {
+
+    override fun reduce(action: ImagesDateAction) {
+        when (action) {
+            is ImagesDateAction.UpdateDate -> {
+                action.date?.let { updateDate(action.date) } ?: run { updateDate() }
+            }
+        }
+    }
+
+    fun updateDate(date: ExtendedDateValue?) = viewModelScope.launch(Dispatchers.IO) {
         date.asReadyState.sendToState()
     }
 
-    override fun updateDate() = MainScope().launch(Dispatchers.IO) {
+    fun updateDate() = MainScope().launch(Dispatchers.IO) {
         (state.value as? ImagesDateState.Ready)
             ?.date
             ?.refresh(frescoUtils)

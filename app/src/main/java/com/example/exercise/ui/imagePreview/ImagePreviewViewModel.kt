@@ -1,36 +1,46 @@
 package com.example.exercise.ui.imagePreview
 
 import com.example.exercise.models.api.images.ImageValue
-import com.example.exercise.ui.utils.BaseViewModel
+import com.example.exercise.ui.common.vm.StateViewModel
 
-sealed class ImagePreviewState {
-    data object Loading : ImagePreviewState()
+sealed interface ImagePreviewState {
+    data object Loading : ImagePreviewState
 
     data class Ready(
         val imageValue: ImageValue,
         val showDetails: Boolean = false
-    ) : ImagePreviewState()
+    ) : ImagePreviewState
 }
 
-interface ImagesPreviewReducer {
-    fun init(imageValue: ImageValue)
-    fun toggleDetails()
+sealed interface ImagePreviewEvent {
+}
 
-    companion object
+sealed interface ImagePreviewAction {
+    data class Init(val imageValue: ImageValue) : ImagePreviewAction
+    data object ToggleDetails : ImagePreviewAction
 }
 
 class ImagePreviewViewModel :
-    BaseViewModel<ImagePreviewState>(ImagePreviewState.Loading), ImagesPreviewReducer {
-    override fun init(imageValue: ImageValue) {
+    StateViewModel<ImagePreviewState, ImagePreviewEvent, ImagePreviewAction>(ImagePreviewState.Loading) {
+
+    override fun reduce(action: ImagePreviewAction) {
+        when (action) {
+            is ImagePreviewAction.Init -> init(action.imageValue)
+            ImagePreviewAction.ToggleDetails -> toggleDetails()
+        }
+    }
+
+    fun init(imageValue: ImageValue) {
         ImagePreviewState.Ready(
             imageValue = imageValue,
             showDetails = false
         ).sendToState()
     }
 
-    override fun toggleDetails() {
+    fun toggleDetails() {
         (state.value as? ImagePreviewState.Ready)?.let { st ->
             st.copy(showDetails = !st.showDetails).sendToState()
         }
     }
+
 }

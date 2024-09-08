@@ -26,19 +26,19 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.exercise.R
 import com.example.exercise.models.extendedDate.ExtendedDateValue
-import com.example.exercise.ui.common.KoinPreview
+import com.example.exercise.ui.common.ui.KoinPreview
 import com.example.exercise.ui.utils.Samples
 
 @Composable
 @ExperimentalFoundationApi
-fun DateItemView(date: ExtendedDateValue, reducer: MainReducer) {
+fun DateItemView(date: ExtendedDateValue, reduce: (MainAction) -> Unit) {
     Card(shape = RoundedCornerShape(10.dp),
         backgroundColor = (colorResource(id = R.color.blueCardBackground)),
         modifier = Modifier
             .padding(start = 16.dp, end = 16.dp, top = 10.dp)
             .fillMaxWidth()
             .combinedClickable(onClick = {})
-            .clickable { reducer.redirect(Destination.Images(date)) }) {
+            .clickable { reduce(MainAction.GoImages(date)) }) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier
@@ -110,15 +110,15 @@ fun DateItemViewPreview() {
         Column {
             DateItemView(
                 ExtendedDateValue.Samples.partialLoadedExtendedDateValueSample,
-                MainReducer.Samples.empty
+                {}
             )
             DateItemView(
                 ExtendedDateValue.Samples.fullyLoadedExtendedDateValueSample,
-                MainReducer.Samples.empty
+                {}
             )
             DateItemView(
                 ExtendedDateValue.Samples.unloadedLoadedExtendedDateValueSample,
-                MainReducer.Samples.empty
+                {}
             )
         }
     }

@@ -19,7 +19,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewModelScope
 import com.example.exercise.R
-import com.example.exercise.ui.common.LoadingView
+import com.example.exercise.ui.common.ui.LoadingView
 import org.koin.androidx.compose.koinViewModel
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
@@ -58,7 +58,7 @@ fun ImagePreviewScreen(viewModel: ImagePreviewViewModel = koinViewModel()) {
                 .fillMaxSize()
         ) {
             when (val st = state) {
-                is ImagePreviewState.Ready -> ImagePreviewContent(st, viewModel)
+                is ImagePreviewState.Ready -> ImagePreviewContent(st, viewModel::reduce)
                 else -> LoadingView()
             }
         }

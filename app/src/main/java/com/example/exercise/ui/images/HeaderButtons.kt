@@ -21,7 +21,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -36,7 +35,7 @@ import com.example.exercise.ui.utils.Samples
 @ExperimentalFoundationApi
 fun HeaderButtonButton(
     state: ImagesDateState,
-    imagesReducer: ImagesReducer
+    imagesReducer: (a: ImagesAction) -> Unit
 ) {
     when (state) {
         ImagesDateState.Loading -> LoadingItemsButton()
@@ -83,15 +82,16 @@ fun LoadingItemsButton() {
 
 @Composable
 @ExperimentalFoundationApi
-fun PlayImagesButton(dates: ExtendedDateValue, imagesReducer: ImagesReducer) {
-    val context = LocalContext.current
-
+fun PlayImagesButton(
+    dates: ExtendedDateValue,
+    reduce: (a: ImagesAction) -> Unit
+) {
     Card(shape = RoundedCornerShape(10.dp),
         backgroundColor = (colorResource(id = R.color.lightBlueCardBackground)),
         modifier = Modifier
             .padding(start = 16.dp, top = 16.dp, end = 16.dp)
             .height(48.dp)
-            .clickable { imagesReducer.redirect(Destination.Animate(dates)) }
+            .clickable { reduce(ImagesAction.GoAnimate(dates)) }
             .fillMaxWidth()) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
@@ -114,21 +114,18 @@ fun LoadingItemsViewPreview() {
         Column {
             LoadingItemsButton()
             PlayImagesButton(
-                ExtendedDateValue.Samples.fullyLoadedExtendedDateValueSample,
-                ImagesReducer.Samples.empty
-            )
+                ExtendedDateValue.Samples.fullyLoadedExtendedDateValueSample
+            ) {}
             HeaderButtonButton(
                 ImagesDateState.Ready(
                     date = ExtendedDateValue.Samples.partialLoadedExtendedDateValueSample
-                ),
-                ImagesReducer.Samples.empty
-            )
+                )
+            ) { }
             HeaderButtonButton(
                 ImagesDateState.Ready(
                     date = ExtendedDateValue.Samples.fullyLoadedExtendedDateValueSample
-                ),
-                ImagesReducer.Samples.empty
-            )
+                )
+            ) { }
         }
     }
 }

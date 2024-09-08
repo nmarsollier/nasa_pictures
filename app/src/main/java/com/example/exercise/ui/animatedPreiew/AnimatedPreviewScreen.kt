@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.width
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -20,15 +19,12 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.LifecycleEventObserver
-import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.viewModelScope
 import com.example.exercise.R
 import com.example.exercise.models.extendedDate.ExtendedDateValue
-import com.example.exercise.ui.common.EmptyView
-import com.example.exercise.ui.common.KoinPreview
-import com.example.exercise.ui.common.LoadingView
+import com.example.exercise.ui.common.ui.EmptyView
+import com.example.exercise.ui.common.ui.KoinPreview
+import com.example.exercise.ui.common.ui.LoadingView
 import org.koin.androidx.compose.koinViewModel
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
@@ -39,7 +35,7 @@ fun AnimatedPreviewScreen(
     val state by viewModel.state.collectAsState(viewModel.viewModelScope.coroutineContext)
 
     LaunchedEffect(Unit) {
-        viewModel.fetchImages(date)
+        viewModel.reduce(AnimatedPreviewAction.FetchImages(date))
     }
 
     Column(

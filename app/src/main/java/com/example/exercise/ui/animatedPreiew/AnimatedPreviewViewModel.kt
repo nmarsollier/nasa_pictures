@@ -9,7 +9,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.exercise.models.api.images.ImageValue
 import com.example.exercise.models.extendedDate.ExtendedDateValue
 import com.example.exercise.models.useCases.FetchImagesUseCase
-import com.example.exercise.ui.utils.BaseViewModel
+import com.example.exercise.ui.common.vm.StateViewModel
 import com.facebook.common.executors.CallerThreadExecutor
 import com.facebook.common.references.CloseableReference
 import com.facebook.datasource.DataSource
@@ -18,38 +18,46 @@ import com.facebook.imagepipeline.datasource.BaseBitmapDataSubscriber
 import com.facebook.imagepipeline.image.CloseableImage
 import com.facebook.imagepipeline.request.ImageRequestBuilder
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
-sealed class AnimatedPreviewState {
-    data object Loading : AnimatedPreviewState()
+sealed interface AnimatedPreviewState {
+    data object Loading : AnimatedPreviewState
 
-    data object Error : AnimatedPreviewState()
+    data object Error : AnimatedPreviewState
 
     data class Ready(
         val animation: AnimationDrawable
-    ) : AnimatedPreviewState()
+    ) : AnimatedPreviewState
 }
 
-interface AnimatedPreviewReducer {
-    fun fetchImages(dateValue: ExtendedDateValue): Job
+sealed interface AnimatedPreviewAction {
+    data class FetchImages(val date: ExtendedDateValue) : AnimatedPreviewAction
+}
+
+sealed interface AnimatedPreviewEvent {
 }
 
 class AnimatedPreviewViewModel(
     private val fetchImagesUseCase: FetchImagesUseCase,
     private val fresco: ImagePipeline
-) : BaseViewModel<AnimatedPreviewState>(AnimatedPreviewState.Loading), AnimatedPreviewReducer {
+) : StateViewModel<AnimatedPreviewState, AnimatedPreviewEvent, AnimatedPreviewAction>(
+    AnimatedPreviewState.Loading
+) {
 
-    override fun fetchImages(dateValue: ExtendedDateValue) = viewModelScope.launch(Dispatchers.IO) {
-        loadImages(dateValue).asState().sendToState()
+    override fun reduce(action: AnimatedPreviewAction) {
+        when (action) {
+            is AnimatedPreviewAction.FetchImages -> fetchImages(action.date)
+        }
     }
 
-    private suspend fun loadImages(dateValue: ExtendedDateValue) = try {
-        fetchImagesUseCase.fetchImages(dateValue.date)
-    } catch (e: Exception) {
-        emptyList()
+    private fun fetchImages(dateValue: ExtendedDateValue) = viewModelScope.launch(Dispatchers.IO) {
+        try {
+            fetchImagesUseCase.fetchImages(dateValue.date)
+        } catch (e: Exception) {
+            emptyList()
+        }.asState().sendToState()
     }
 
     private suspend fun animation(images: List<ImageValue>) = suspendCoroutine { suspend ->

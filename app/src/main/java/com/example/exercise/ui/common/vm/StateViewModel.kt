@@ -11,28 +11,22 @@ package com.example.exercise.ui.common.vm
  */
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 
 abstract class StateViewModel<S : Any, E : Any, A : Any>(
     initialState: S,
 ) : ViewModel() {
     // UI state
-    private val mutableState: MutableStateFlow<S> by lazy {
-        MutableStateFlow(initialState)
+    private val mutableState by lazy {
+        MutableStateFlow<S>(initialState)
     }
-    val state: StateFlow<S> by lazy {
-        mutableState.asStateFlow()
-    }
+    val state by lazy { mutableState }
 
     // Events
-    private val eventChannel = Channel<E>()
-    val event: Flow<E> by lazy { eventChannel.receiveAsFlow() }
+    private val mutableEvent by lazy { MutableSharedFlow<E>(replay = 0) }
+    val event by lazy { mutableEvent }
 
     // sets the state object as current state
     fun S.sendToState() {
@@ -46,7 +40,7 @@ abstract class StateViewModel<S : Any, E : Any, A : Any>(
     fun E.sendToEvent() {
         val thisEvent = this
         viewModelScope.launch {
-            eventChannel.send(thisEvent)
+            mutableEvent.emit(thisEvent)
         }
     }
 

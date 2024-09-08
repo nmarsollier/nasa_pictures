@@ -6,10 +6,8 @@ import android.graphics.drawable.BitmapDrawable
 import android.net.Uri
 import androidx.core.graphics.scale
 import androidx.lifecycle.viewModelScope
-import com.example.exercise.models.api.tools.Result
-import com.example.exercise.models.businessObjects.ExtendedDateValue
 import com.example.exercise.models.api.images.ImageValue
-import com.example.exercise.models.database.image.FrescoUtils
+import com.example.exercise.models.extendedDate.ExtendedDateValue
 import com.example.exercise.models.useCases.FetchImagesUseCase
 import com.example.exercise.ui.utils.BaseViewModel
 import com.facebook.common.executors.CallerThreadExecutor
@@ -48,20 +46,11 @@ class AnimatedPreviewViewModel(
         loadImages(dateValue).asState().sendToState()
     }
 
-    private suspend fun loadImages(dateValue: ExtendedDateValue) =
-        suspendCoroutine<List<ImageValue>> {
-            viewModelScope.launch(Dispatchers.IO) {
-                when (val result = fetchImagesUseCase.fetchImages(dateValue.date)) {
-                    is Result.Error -> {
-                        it.resume(emptyList())
-                    }
-
-                    is Result.Success -> {
-                        it.resume(result.data)
-                    }
-                }
-            }
-        }
+    private suspend fun loadImages(dateValue: ExtendedDateValue) = try {
+        fetchImagesUseCase.fetchImages(dateValue.date)
+    } catch (e: Exception) {
+        emptyList()
+    }
 
     private suspend fun animation(images: List<ImageValue>) = suspendCoroutine { suspend ->
         val animationDrawable = AnimationDrawable()

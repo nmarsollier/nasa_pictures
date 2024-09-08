@@ -6,13 +6,13 @@ import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
-import com.example.exercise.models.businessObjects.ExtendedDateValue
 import com.example.exercise.models.api.dates.asDateValue
 import com.example.exercise.models.api.dates.asExtendedDateValue
-import com.example.exercise.models.database.config.ExampleDatabase
+import com.example.exercise.models.extendedDate.ExtendedDateValue
+import com.example.exercise.models.database.config.LocalDatabase
 import com.example.exercise.models.database.dates.DatesEntity
 import com.example.exercise.models.database.dates.DatesEntityDao
-import com.example.exercise.models.database.image.FrescoUtils
+import com.example.exercise.models.extendedDate.FrescoUtils
 import com.example.exercise.models.useCases.FetchDatesUseCase
 import com.example.exercise.ui.utils.BaseViewModel
 import kotlinx.coroutines.Dispatchers
@@ -51,7 +51,7 @@ interface MainReducer {
 
 class MainViewModel(
     private val fetchDatesUseCase: FetchDatesUseCase,
-    database: ExampleDatabase,
+    database: LocalDatabase,
     private val frescoUtils: FrescoUtils
 ) : BaseViewModel<MainState>(MainState.Loading), MainReducer {
     private val dateDao = database.datesDao()

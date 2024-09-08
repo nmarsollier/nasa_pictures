@@ -1,6 +1,6 @@
 package com.example.exercise.tools
 
-import com.example.exercise.models.businessObjects.ExtendedDateValue
+import com.example.exercise.models.extendedDate.ExtendedDateValue
 
 class ExtendedDateValueMocks {
     companion object {

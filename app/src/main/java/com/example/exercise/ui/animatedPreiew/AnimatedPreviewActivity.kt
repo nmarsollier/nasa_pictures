@@ -7,11 +7,11 @@ import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.view.WindowCompat
-import com.example.exercise.models.businessObjects.ExtendedDateValue
+import com.example.exercise.models.extendedDate.ExtendedDateValue
 import com.example.exercise.ui.utils.jsonToObject
 import com.example.exercise.ui.utils.toJson
 
-private val DATE = "DATE"
+private const val DATE = "DATE"
 
 class AnimatedPreviewActivity : AppCompatActivity() {
     private val imageValueParam: ExtendedDateValue?

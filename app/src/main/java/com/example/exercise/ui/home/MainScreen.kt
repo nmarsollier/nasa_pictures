@@ -6,17 +6,17 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
+import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.viewModelScope
-import androidx.paging.compose.collectAsLazyPagingItems
 import com.example.exercise.R
 import com.example.exercise.ui.common.ErrorView
 import com.example.exercise.ui.common.KoinPreview
@@ -29,24 +29,9 @@ import org.koin.androidx.compose.koinViewModel
 fun MainScreen(viewModel: MainViewModel = koinViewModel()) {
     val state by viewModel.state.collectAsState(viewModel.viewModelScope.coroutineContext)
     val context = LocalContext.current
-    val lifecycleOwner = LocalLifecycleOwner.current
 
-    DisposableEffect(lifecycleOwner) {
-        val observer = LifecycleEventObserver { _, event ->
-            when (event) {
-                Lifecycle.Event.ON_RESUME -> {
-                    viewModel.syncDates()
-                }
-
-                else -> Unit
-            }
-        }.also {
-            lifecycleOwner.lifecycle.addObserver(it)
-        }
-
-        onDispose {
-            lifecycleOwner.lifecycle.removeObserver(observer)
-        }
+    LaunchedEffect(Unit) {
+        viewModel.syncDates()
     }
 
     Scaffold(

@@ -1,6 +1,7 @@
-package com.example.exercise.models.businessObjects
+package com.example.exercise.models.extendedDate
 
 import android.os.Parcelable
+
 import kotlinx.parcelize.Parcelize
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
@@ -8,6 +9,7 @@ import java.time.format.DateTimeFormatter
 private val dayFormatter = DateTimeFormatter.ofPattern("EEEE")
 private val dateParser = DateTimeFormatter.ofPattern("yyyy-MM-dd")
 private val dateFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy")
+
 
 @Parcelize
 data class ExtendedDateValue(

@@ -1,7 +1,7 @@
 package com.example.exercise
 
 import app.cash.turbine.test
-import com.example.exercise.models.businessObjects.ExtendedDateValue
+import com.example.exercise.models.extendedDate.ExtendedDateValue
 import com.example.exercise.tools.BaseTest
 import com.example.exercise.ui.images.ImagesDateState
 import com.example.exercise.ui.images.ImagesDateViewModel

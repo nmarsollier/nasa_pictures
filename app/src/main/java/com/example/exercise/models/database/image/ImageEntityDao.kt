@@ -4,12 +4,21 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import com.example.exercise.models.api.images.ImageValue
 
 @Dao
 interface ImageEntityDao {
     @Query("SELECT * FROM images WHERE day=:date ORDER BY date")
-    fun findByDate(date: String): List<ImageEntity>?
+    suspend fun findByDate(date: String): List<ImageEntity>?
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insert(image: ImageEntity)
+    suspend fun insert(image: ImageEntity)
+}
+
+suspend fun ImageEntity.storeIn(dao: ImageEntityDao) = dao.insert(this)
+
+suspend fun List<ImageValue>.storeIn(dao: ImageEntityDao) {
+    this.forEach {
+        it.toImageEntity().storeIn(dao)
+    }
 }

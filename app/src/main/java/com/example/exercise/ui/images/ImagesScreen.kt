@@ -8,18 +8,19 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
+import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.viewModelScope
 import com.example.exercise.R
-import com.example.exercise.models.businessObjects.ExtendedDateValue
+import com.example.exercise.models.extendedDate.ExtendedDateValue
 import com.example.exercise.ui.animatedPreiew.AnimatedPreviewActivity
 import com.example.exercise.ui.common.EmptyView
 import com.example.exercise.ui.common.ErrorView
@@ -38,25 +39,9 @@ fun ImagesScreen(
     val state by viewModel.state.collectAsState(viewModel.viewModelScope.coroutineContext)
     val datesState by dateViewModel.state.collectAsState(viewModel.viewModelScope.coroutineContext)
 
-    val lifecycleOwner = LocalLifecycleOwner.current
-
-    DisposableEffect(lifecycleOwner) {
-        val observer = LifecycleEventObserver { _, event ->
-            when (event) {
-                Lifecycle.Event.ON_RESUME -> {
-                    dateViewModel.updateDate(date)
-                    viewModel.fetchImages(date)
-                }
-
-                else -> Unit
-            }
-        }.also {
-            lifecycleOwner.lifecycle.addObserver(it)
-        }
-
-        onDispose {
-            lifecycleOwner.lifecycle.removeObserver(observer)
-        }
+    LaunchedEffect(Unit) {
+        dateViewModel.updateDate(date)
+        viewModel.fetchImages(date)
     }
 
     val context = LocalContext.current

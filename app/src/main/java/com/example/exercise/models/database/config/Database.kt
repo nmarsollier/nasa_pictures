@@ -9,18 +9,18 @@ import com.example.exercise.models.database.dates.DatesEntityDao
 import com.example.exercise.models.database.image.ImageEntity
 import com.example.exercise.models.database.image.ImageEntityDao
 
-private var INSTANCE: ExampleDatabase? = null
+private var INSTANCE: LocalDatabase? = null
 private const val DATABASE_NAME = "example"
 
 @Database(entities = [ImageEntity::class, DatesEntity::class], version = 3, exportSchema = false)
-abstract class ExampleDatabase : RoomDatabase() {
+abstract class LocalDatabase : RoomDatabase() {
     abstract fun imageDao(): ImageEntityDao
     abstract fun datesDao(): DatesEntityDao
 }
 
-fun getRoomDatabase(androidContext: Context): ExampleDatabase {
+fun getRoomDatabase(androidContext: Context): LocalDatabase {
     return INSTANCE ?: Room.databaseBuilder(
-        androidContext, ExampleDatabase::class.java, DATABASE_NAME
+        androidContext, LocalDatabase::class.java, DATABASE_NAME
     ).build().also {
         INSTANCE = it
     }

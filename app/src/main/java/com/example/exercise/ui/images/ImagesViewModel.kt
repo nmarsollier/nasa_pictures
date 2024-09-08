@@ -1,9 +1,8 @@
 package com.example.exercise.ui.images
 
 import androidx.lifecycle.viewModelScope
-import com.example.exercise.models.api.tools.Result
-import com.example.exercise.models.businessObjects.ExtendedDateValue
 import com.example.exercise.models.api.images.ImageValue
+import com.example.exercise.models.extendedDate.ExtendedDateValue
 import com.example.exercise.models.useCases.FetchImagesUseCase
 import com.example.exercise.ui.utils.BaseViewModel
 import kotlinx.coroutines.Dispatchers
@@ -46,14 +45,11 @@ class ImagesViewModel(
             return@launch
         }
 
-        viewModelScope.launch(Dispatchers.IO) {
-            fetchImagesUseCase.fetchImages(queryDate).let {
-                when (val result = it) {
-                    is Result.Error -> ImagesState.Error
-                    is Result.Success -> ImagesState.Ready(result.data)
-                }
-            }.sendToState()
-        }
+        try {
+            ImagesState.Ready(fetchImagesUseCase.fetchImages(queryDate))
+        } catch (e: Exception) {
+            ImagesState.Error
+        }.sendToState()
     }
 
     override fun redirect(destination: Destination) {

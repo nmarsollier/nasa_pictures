@@ -1,7 +1,7 @@
 package com.example.exercise.ui.utils
 
-import com.example.exercise.models.businessObjects.ExtendedDateValue
 import com.example.exercise.models.api.images.ImageValue
+import com.example.exercise.models.extendedDate.ExtendedDateValue
 import com.example.exercise.ui.home.Destination
 import com.example.exercise.ui.home.MainReducer
 import com.example.exercise.ui.imagePreview.ImagesPreviewReducer

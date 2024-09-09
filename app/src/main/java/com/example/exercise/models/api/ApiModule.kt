@@ -9,5 +9,8 @@ import org.koin.dsl.module
 val koinApiModule = module {
     factoryOf(::DatesApi)
     factoryOf(::ImagesApi)
+}
+
+val koinRetrofit = module {
     single { RetrofitClient("https://epic.gsfc.nasa.gov/").retrofit }
 }

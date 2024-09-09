@@ -2,6 +2,7 @@ package com.example.exercise
 
 import android.app.Application
 import com.example.exercise.models.api.koinApiModule
+import com.example.exercise.models.api.koinRetrofit
 import com.example.exercise.models.database.koinDatabaseModule
 import com.example.exercise.models.extendedDate.koinExtendedDateModule
 import com.example.exercise.models.useCases.koinUseCaseModule
@@ -21,6 +22,7 @@ class MainApplication : Application(), KoinComponent {
             androidContext(this@MainApplication)
 
             modules(
+                koinRetrofit,
                 koinApiModule,
                 koinDatabaseModule,
                 koinExtendedDateModule,

@@ -9,7 +9,7 @@ import com.example.exercise.models.database.dates.storeIn
 import java.time.LocalDate
 
 class FetchDatesUseCase(
-    private val datesClient: DatesApi,
+    private val datesApi: DatesApi,
     private val dateDao: DatesEntityDao
 ) {
     suspend fun syncDates() {
@@ -26,7 +26,7 @@ class FetchDatesUseCase(
 
     private suspend fun syncRemoteDates() {
         try {
-            datesClient.listDates()
+            datesApi.listDates()
                 .map { it.asDateEntity }.toList()
                 .storeIn(dateDao)
         } catch (e: Exception) {

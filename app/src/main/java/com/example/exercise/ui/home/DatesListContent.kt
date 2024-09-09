@@ -14,7 +14,7 @@ import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.itemContentType
 import androidx.paging.compose.itemKey
 import com.example.exercise.R
-import com.example.exercise.ui.common.ui.LoadingView
+import com.example.exercise.common.ui.LoadingView
 
 @OptIn(ExperimentalFoundationApi::class)
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
@@ -28,6 +28,7 @@ fun DatesListContent(
         is LoadState.Loading -> {
             LoadingView()
         }
+
         else -> {
             Column(
                 modifier = Modifier.background(colorResource(id = R.color.blueBackground))

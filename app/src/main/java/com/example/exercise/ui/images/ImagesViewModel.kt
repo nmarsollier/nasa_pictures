@@ -1,10 +1,10 @@
 package com.example.exercise.ui.images
 
 import androidx.lifecycle.viewModelScope
+import com.example.exercise.common.vm.StateViewModel
 import com.example.exercise.models.api.images.ImageValue
 import com.example.exercise.models.extendedDate.ExtendedDateValue
 import com.example.exercise.models.useCases.FetchImagesUseCase
-import com.example.exercise.ui.common.vm.StateViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 

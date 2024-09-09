@@ -18,9 +18,9 @@ import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.viewModelScope
 import com.example.exercise.R
-import com.example.exercise.ui.common.ui.ErrorView
-import com.example.exercise.ui.common.ui.KoinPreview
-import com.example.exercise.ui.common.ui.LoadingView
+import com.example.exercise.common.ui.ErrorView
+import com.example.exercise.common.ui.KoinPreview
+import com.example.exercise.common.ui.LoadingView
 import com.example.exercise.ui.images.ImagesActivity
 import org.koin.androidx.compose.koinViewModel
 

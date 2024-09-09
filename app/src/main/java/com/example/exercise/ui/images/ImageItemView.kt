@@ -23,9 +23,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
 import com.example.exercise.R
+import com.example.exercise.common.ui.CircleProgressBarDrawable
+import com.example.exercise.common.ui.KoinPreview
 import com.example.exercise.models.api.images.ImageValue
-import com.example.exercise.ui.common.ui.KoinPreview
-import com.example.exercise.ui.utils.CircleProgressBarDrawable
 import com.facebook.drawee.backends.pipeline.Fresco
 import com.facebook.drawee.controller.ControllerListener
 import com.facebook.drawee.view.SimpleDraweeView

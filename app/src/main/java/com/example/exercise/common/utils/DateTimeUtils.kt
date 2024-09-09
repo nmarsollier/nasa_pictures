@@ -1,4 +1,4 @@
-package com.example.exercise.ui.utils
+package com.example.exercise.common.utils
 
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter

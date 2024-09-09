@@ -1,4 +1,4 @@
-package com.example.exercise.ui.utils
+package com.example.exercise.common.ui
 
 import android.content.Context
 import android.graphics.Canvas
@@ -6,7 +6,7 @@ import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.Rect
 import android.graphics.RectF
-import com.example.exercise.ui.common.ui.getKoinInstance
+
 import com.facebook.drawee.drawable.ProgressBarDrawable
 
 private val SECONDARY_COLOR = Color.parseColor("#656C78")
@@ -14,6 +14,7 @@ private val PRIMARY_COLOR = Color.parseColor("#B2B7BD")
 
 private val Int.dp: Int
     get() = (this * getKoinInstance<Context>().resources.displayMetrics.density).toInt()
+
 
 class CircleProgressBarDrawable : ProgressBarDrawable() {
     private val textPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {

@@ -6,6 +6,7 @@ import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
+import com.example.exercise.common.vm.StateViewModel
 import com.example.exercise.models.api.dates.asDateValue
 import com.example.exercise.models.api.dates.asExtendedDateValue
 import com.example.exercise.models.database.config.LocalDatabase
@@ -14,14 +15,10 @@ import com.example.exercise.models.database.dates.DatesEntityDao
 import com.example.exercise.models.extendedDate.ExtendedDateValue
 import com.example.exercise.models.extendedDate.FrescoUtils
 import com.example.exercise.models.useCases.FetchDatesUseCase
-import com.example.exercise.ui.common.vm.StateViewModel
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
-import kotlin.coroutines.resume
-import kotlin.coroutines.suspendCoroutine
 
 sealed interface MainEvent {
     data class GoImages(val date: ExtendedDateValue) : MainEvent
@@ -86,15 +83,10 @@ class DatesPaging(
             .coerceAtLeast(0)
     }
 
-    override suspend fun load(params: LoadParams<Int>): LoadResult<Int, ExtendedDateValue> =
-        suspendCoroutine {
-            val loadPage = params.key ?: 1
-            MainScope().launch(Dispatchers.IO) {
-                it.resume(
-                    dateRepository.findAll(loadPage * PAGE_SIZE, PAGE_SIZE).asResultPage(loadPage)
-                )
-            }
-        }
+    override suspend fun load(params: LoadParams<Int>): LoadResult<Int, ExtendedDateValue> {
+        val loadPage = params.key ?: 1
+        return dateRepository.findAll(loadPage * PAGE_SIZE, PAGE_SIZE).asResultPage(loadPage)
+    }
 
     private suspend fun List<DatesEntity>?.asResultPage(loadPage: Int)
             : LoadResult.Page<Int, ExtendedDateValue> =

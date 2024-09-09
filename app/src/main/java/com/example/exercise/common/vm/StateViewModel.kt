@@ -1,4 +1,4 @@
-package com.example.exercise.ui.common.vm
+package com.example.exercise.common.vm
 
 /**
  * Abstract class that models states, events and actions for all ViewModels.

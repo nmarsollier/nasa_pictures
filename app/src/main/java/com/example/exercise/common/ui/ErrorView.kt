@@ -1,4 +1,4 @@
-package com.example.exercise.ui.common.ui
+package com.example.exercise.common.ui
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background

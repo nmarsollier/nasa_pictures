@@ -1,4 +1,4 @@
-package com.example.exercise.ui.utils
+package com.example.exercise.common.utils
 
 import com.example.exercise.models.extendedDate.ExtendedDateValue
 

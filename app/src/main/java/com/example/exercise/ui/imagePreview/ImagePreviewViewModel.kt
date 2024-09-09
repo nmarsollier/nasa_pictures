@@ -1,7 +1,7 @@
 package com.example.exercise.ui.imagePreview
 
+import com.example.exercise.common.vm.StateViewModel
 import com.example.exercise.models.api.images.ImageValue
-import com.example.exercise.ui.common.vm.StateViewModel
 
 sealed interface ImagePreviewState {
     data object Loading : ImagePreviewState

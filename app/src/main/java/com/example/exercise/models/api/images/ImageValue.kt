@@ -1,11 +1,11 @@
 package com.example.exercise.models.api.images
 
+import com.example.exercise.common.utils.toDateTimeString
+import com.example.exercise.common.utils.toDayString
+import com.example.exercise.common.utils.toHourMinuteString
+import com.example.exercise.common.utils.toLocalDateTime
+import com.example.exercise.common.utils.toMonthString
 import com.example.exercise.models.database.image.ImageEntity
-import com.example.exercise.ui.utils.toDateTimeString
-import com.example.exercise.ui.utils.toDayString
-import com.example.exercise.ui.utils.toHourMinuteString
-import com.example.exercise.ui.utils.toLocalDateTime
-import com.example.exercise.ui.utils.toMonthString
 import com.google.gson.annotations.SerializedName
 
 data class CoordinatesValue(

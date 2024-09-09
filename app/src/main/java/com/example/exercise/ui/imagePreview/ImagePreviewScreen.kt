@@ -19,7 +19,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewModelScope
 import com.example.exercise.R
-import com.example.exercise.ui.common.ui.LoadingView
+import com.example.exercise.common.ui.LoadingView
 import org.koin.androidx.compose.koinViewModel
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")

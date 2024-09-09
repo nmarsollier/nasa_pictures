@@ -6,10 +6,10 @@ import android.graphics.drawable.BitmapDrawable
 import android.net.Uri
 import androidx.core.graphics.scale
 import androidx.lifecycle.viewModelScope
+import com.example.exercise.common.vm.StateViewModel
 import com.example.exercise.models.api.images.ImageValue
 import com.example.exercise.models.extendedDate.ExtendedDateValue
 import com.example.exercise.models.useCases.FetchImagesUseCase
-import com.example.exercise.ui.common.vm.StateViewModel
 import com.facebook.common.executors.CallerThreadExecutor
 import com.facebook.common.references.CloseableReference
 import com.facebook.datasource.DataSource
@@ -52,7 +52,7 @@ class AnimatedPreviewViewModel(
         }
     }
 
-    private fun fetchImages(dateValue: ExtendedDateValue) = viewModelScope.launch(Dispatchers.IO) {
+    fun fetchImages(dateValue: ExtendedDateValue) = viewModelScope.launch(Dispatchers.IO) {
         try {
             fetchImagesUseCase.fetchImages(dateValue.date)
         } catch (e: Exception) {
@@ -60,30 +60,29 @@ class AnimatedPreviewViewModel(
         }.asState().sendToState()
     }
 
-    private suspend fun animation(images: List<ImageValue>) = suspendCoroutine { suspend ->
+    private suspend fun animation(images: List<ImageValue>): AnimationDrawable {
         val animationDrawable = AnimationDrawable()
         animationDrawable.isOneShot = false
 
-        viewModelScope.launch(Dispatchers.IO) {
-            images.forEach { img ->
-                getBitmapFromUri(Uri.parse(img.downloadUrl)).let {
-                    animationDrawable.addFrame(BitmapDrawable(it), 50)
-                }
+        images.forEach { img ->
+            getBitmapFromUri(Uri.parse(img.downloadUrl)).let {
+                animationDrawable.addFrame(BitmapDrawable(it), 50)
             }
-            suspend.resume(animationDrawable)
         }
+
+        return animationDrawable
     }
 
-    private suspend fun getBitmapFromUri(imageUri: Uri) = suspendCoroutine { suspend ->
+    private suspend fun getBitmapFromUri(imageUri: Uri) = suspendCoroutine { continuation ->
         val imageRequest = ImageRequestBuilder.newBuilderWithSource(imageUri).build()
         fresco.fetchDecodedImage(imageRequest, this).subscribe(
             object : BaseBitmapDataSubscriber() {
                 override fun onNewResultImpl(bitmap: Bitmap?) {
-                    suspend.resume(bitmap?.scale(400, 400))
+                    continuation.resume(bitmap?.scale(400, 400))
                 }
 
                 override fun onFailureImpl(dataSource: DataSource<CloseableReference<CloseableImage>>) {
-                    suspend.resume(null)
+                    continuation.resume(null)
                 }
             }, CallerThreadExecutor.getInstance()
         )

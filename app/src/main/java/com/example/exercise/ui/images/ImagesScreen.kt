@@ -16,13 +16,13 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewModelScope
 import com.example.exercise.R
+import com.example.exercise.common.ui.EmptyView
+import com.example.exercise.common.ui.ErrorView
+import com.example.exercise.common.ui.LoadingView
+import com.example.exercise.common.utils.Samples
 import com.example.exercise.models.extendedDate.ExtendedDateValue
 import com.example.exercise.ui.animatedPreiew.AnimatedPreviewActivity
-import com.example.exercise.ui.common.ui.EmptyView
-import com.example.exercise.ui.common.ui.ErrorView
-import com.example.exercise.ui.common.ui.LoadingView
 import com.example.exercise.ui.imagePreview.ImagePreviewActivity
-import com.example.exercise.ui.utils.Samples
 import org.koin.androidx.compose.koinViewModel
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")

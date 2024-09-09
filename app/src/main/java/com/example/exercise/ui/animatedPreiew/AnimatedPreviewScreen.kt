@@ -21,10 +21,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.lifecycle.viewModelScope
 import com.example.exercise.R
+import com.example.exercise.common.ui.EmptyView
+import com.example.exercise.common.ui.KoinPreview
+import com.example.exercise.common.ui.LoadingView
 import com.example.exercise.models.extendedDate.ExtendedDateValue
-import com.example.exercise.ui.common.ui.EmptyView
-import com.example.exercise.ui.common.ui.KoinPreview
-import com.example.exercise.ui.common.ui.LoadingView
 import org.koin.androidx.compose.koinViewModel
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")

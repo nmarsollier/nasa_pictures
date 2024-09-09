@@ -28,8 +28,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.exercise.R
+import com.example.exercise.common.utils.Samples
 import com.example.exercise.models.extendedDate.ExtendedDateValue
-import com.example.exercise.ui.utils.Samples
 
 @Composable
 @ExperimentalFoundationApi

@@ -1,95 +1,78 @@
 package com.example.exercise.ui.images
 
-import android.annotation.SuppressLint
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material.MaterialTheme
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.colorResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewModelScope
-import com.example.exercise.R
 import com.example.exercise.common.ui.EmptyView
 import com.example.exercise.common.ui.ErrorView
 import com.example.exercise.common.ui.LoadingView
-import com.example.exercise.common.utils.Samples
 import com.example.exercise.models.extendedDate.ExtendedDateValue
 import com.example.exercise.ui.animatedPreiew.AnimatedPreviewActivity
+import com.example.exercise.ui.home.MainScreenUpdate
 import com.example.exercise.ui.imagePreview.ImagePreviewActivity
 import org.koin.androidx.compose.koinViewModel
+import org.koin.compose.koinInject
 
-@SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
 fun ImagesScreen(
     date: ExtendedDateValue,
     viewModel: ImagesViewModel = koinViewModel(),
-    dateViewModel: ImagesDateViewModel = koinViewModel()
+    dateViewModel: ImagesDateViewModel = koinViewModel(),
+    mainScreenUpdate: MainScreenUpdate = koinInject()
 ) {
     val state by viewModel.state.collectAsState(viewModel.viewModelScope.coroutineContext)
-    val datesState by dateViewModel.state.collectAsState(viewModel.viewModelScope.coroutineContext)
+    val event by viewModel.event.collectAsState(null, viewModel.viewModelScope.coroutineContext)
+    val datesState by dateViewModel.state.collectAsState(dateViewModel.viewModelScope.coroutineContext)
 
-    LaunchedEffect(Unit) {
-        dateViewModel.updateDate(date)
-        viewModel.fetchImages(date)
+    DisposableEffect(date) {
+        dateViewModel.reduce(ImagesDateAction.UpdateDate(date))
+        viewModel.reduce(ImagesAction.FetchImages(date))
+
+        onDispose { }
     }
 
-    val context = LocalContext.current
-    LaunchedEffect(Unit) {
-        viewModel.event.collect { event ->
-            when (event) {
-                is ImagesEvent.GoAnimate -> AnimatedPreviewActivity.startActivity(
-                    context,
-                    event.date
-                )
+    when (val e = event) {
+        is ImagesEvent.GoAnimate -> AnimatedPreviewActivity.startActivity(
+            LocalContext.current, e.date
+        )
 
-                is ImagesEvent.GoPreview -> ImagePreviewActivity.startActivity(context, event.image)
-            }
-        }
+        is ImagesEvent.GoPreview -> ImagePreviewActivity.startActivity(
+            LocalContext.current, e.image
+        )
+
+        null -> Unit
     }
 
     Scaffold(topBar = {
-        ImagesMenu(date)
+        ImagesMenu(date) {
+            mainScreenUpdate.updateScreen()
+        }
     }) {
-        Column(
-            modifier = Modifier
-                .background(
-                    colorResource(id = R.color.blueBackground)
-                )
-                .fillMaxSize()
-        ) {
+        Box(modifier = Modifier.padding(it)) {
             when (val st = state) {
                 is ImagesState.Ready -> {
                     if (st.images.isEmpty()) {
                         EmptyView()
                     } else {
-                        ImagesListContent(st, viewModel::reduce, datesState, dateViewModel::reduce)
+                        ImagesListContent(
+                            st, viewModel::reduce, datesState, dateViewModel::reduce
+                        )
                     }
                 }
 
                 is ImagesState.Error -> ErrorView {
-                    viewModel.fetchImages(date)
+                    viewModel.reduce(ImagesAction.FetchImages(date))
                 }
 
                 else -> LoadingView()
             }
         }
-    }
-}
-
-@Preview(showSystemUi = true)
-@Composable
-fun MainScreenPreview() {
-    MaterialTheme {
-        ImagesScreen(
-            ExtendedDateValue.Samples.fullyLoadedExtendedDateValueSample,
-            koinViewModel()
-        )
     }
 }

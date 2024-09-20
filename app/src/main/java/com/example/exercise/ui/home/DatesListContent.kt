@@ -1,6 +1,5 @@
 package com.example.exercise.ui.home
 
-import android.annotation.SuppressLint
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
@@ -17,7 +16,6 @@ import com.example.exercise.R
 import com.example.exercise.common.ui.LoadingView
 
 @OptIn(ExperimentalFoundationApi::class)
-@SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
 fun DatesListContent(
     state: MainState.Ready, reduce: (MainAction) -> Unit
@@ -47,17 +45,3 @@ fun DatesListContent(
         }
     }
 }
-
-/*
-@Preview(showSystemUi = true)
-@Composable
-fun DatesListViewPreview() {
-    KoinPreview {
-        DatesListContent(
-            MainState.Ready(
-                Pager(ExtendedDateValue.Samples.combinedListExtendedDateValueSample)
-            ), MainReducer.Samples.empty
-        )
-    }
-}
-*/

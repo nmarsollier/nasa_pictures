@@ -17,12 +17,13 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.colorResource
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -33,7 +34,7 @@ import com.example.exercise.models.extendedDate.ExtendedDateValue
 
 @Composable
 @ExperimentalFoundationApi
-fun HeaderButtonButton(
+fun HeaderButton(
     state: ImagesDateState,
     imagesReducer: (a: ImagesAction) -> Unit
 ) {
@@ -71,7 +72,7 @@ fun LoadingItemsButton() {
             Spacer(Modifier.width(16.dp))
 
             Image(
-                painterResource(id = R.drawable.ic_reload),
+                imageVector = Icons.Default.Refresh,
                 contentDescription = null,
                 colorFilter = ColorFilter.tint(colorResource(R.color.textColorGray)),
                 modifier = Modifier.size(20.dp)
@@ -116,12 +117,12 @@ fun LoadingItemsViewPreview() {
             PlayImagesButton(
                 ExtendedDateValue.Samples.fullyLoadedExtendedDateValueSample
             ) {}
-            HeaderButtonButton(
+            HeaderButton(
                 ImagesDateState.Ready(
                     date = ExtendedDateValue.Samples.partialLoadedExtendedDateValueSample
                 )
             ) { }
-            HeaderButtonButton(
+            HeaderButton(
                 ImagesDateState.Ready(
                     date = ExtendedDateValue.Samples.fullyLoadedExtendedDateValueSample
                 )

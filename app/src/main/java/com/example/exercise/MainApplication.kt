@@ -1,11 +1,7 @@
 package com.example.exercise
 
 import android.app.Application
-import com.example.exercise.models.api.koinApiModule
-import com.example.exercise.models.api.koinRetrofit
-import com.example.exercise.models.database.koinDatabaseModule
-import com.example.exercise.models.extendedDate.koinExtendedDateModule
-import com.example.exercise.models.useCases.koinUseCaseModule
+import com.example.exercise.models.modelsModule
 import com.example.exercise.ui.koinViewModelModule
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
@@ -22,11 +18,7 @@ class MainApplication : Application(), KoinComponent {
             androidContext(this@MainApplication)
 
             modules(
-                koinRetrofit,
-                koinApiModule,
-                koinDatabaseModule,
-                koinExtendedDateModule,
-                koinUseCaseModule,
+                modelsModule,
                 koinViewModelModule
             )
         }

@@ -3,9 +3,7 @@ package com.example.exercise.common.ui
 import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
-import com.example.exercise.models.api.koinApiModule
-import com.example.exercise.models.database.koinDatabaseModule
-import com.example.exercise.models.useCases.koinUseCaseModule
+import com.example.exercise.models.modelsModule
 import com.example.exercise.ui.koinViewModelModule
 import org.koin.android.ext.koin.androidContext
 import org.koin.compose.KoinApplication
@@ -19,7 +17,7 @@ fun KoinPreview(composable: @Composable () -> Unit) {
     MaterialTheme {
         KoinApplication(application = {
             androidContext(context)
-            modules(koinApiModule, koinDatabaseModule, koinUseCaseModule, koinViewModelModule)
+            modules(modelsModule, koinViewModelModule)
         }, composable)
     }
 }

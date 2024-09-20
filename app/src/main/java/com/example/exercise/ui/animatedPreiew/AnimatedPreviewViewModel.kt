@@ -4,6 +4,7 @@ import android.graphics.Bitmap
 import android.graphics.drawable.AnimationDrawable
 import android.graphics.drawable.BitmapDrawable
 import android.net.Uri
+import androidx.compose.runtime.Stable
 import androidx.core.graphics.scale
 import androidx.lifecycle.viewModelScope
 import com.example.exercise.common.vm.StateViewModel
@@ -23,26 +24,27 @@ import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
 sealed interface AnimatedPreviewState {
+    @Stable
     data object Loading : AnimatedPreviewState
 
+    @Stable
     data object Error : AnimatedPreviewState
 
+    @Stable
     data class Ready(
         val animation: AnimationDrawable
     ) : AnimatedPreviewState
 }
 
 sealed interface AnimatedPreviewAction {
+    @Stable
     data class FetchImages(val date: ExtendedDateValue) : AnimatedPreviewAction
-}
-
-sealed interface AnimatedPreviewEvent {
 }
 
 class AnimatedPreviewViewModel(
     private val fetchImagesUseCase: FetchImagesUseCase,
     private val fresco: ImagePipeline
-) : StateViewModel<AnimatedPreviewState, AnimatedPreviewEvent, AnimatedPreviewAction>(
+) : StateViewModel<AnimatedPreviewState, Unit, AnimatedPreviewAction>(
     AnimatedPreviewState.Loading
 ) {
 
@@ -52,7 +54,7 @@ class AnimatedPreviewViewModel(
         }
     }
 
-    fun fetchImages(dateValue: ExtendedDateValue) = viewModelScope.launch(Dispatchers.IO) {
+    private fun fetchImages(dateValue: ExtendedDateValue) = viewModelScope.launch(Dispatchers.IO) {
         try {
             fetchImagesUseCase.fetchImages(dateValue.date)
         } catch (e: Exception) {

@@ -1,5 +1,6 @@
 package com.example.exercise.models.api.images
 
+import androidx.compose.runtime.Stable
 import com.example.exercise.common.utils.toDateTimeString
 import com.example.exercise.common.utils.toDayString
 import com.example.exercise.common.utils.toHourMinuteString
@@ -8,11 +9,13 @@ import com.example.exercise.common.utils.toMonthString
 import com.example.exercise.models.database.image.ImageEntity
 import com.google.gson.annotations.SerializedName
 
+@Stable
 data class CoordinatesValue(
     @SerializedName("lat") val lat: Double,
     @SerializedName("lon") val lon: Double,
 )
 
+@Stable
 data class ImageValue(
     @SerializedName("identifier") val identifier: String,
     @SerializedName("date") val date: String,

@@ -1,27 +1,30 @@
 package com.example.exercise.ui.imagePreview
 
+import androidx.compose.runtime.Stable
 import com.example.exercise.common.vm.StateViewModel
 import com.example.exercise.models.api.images.ImageValue
 
 sealed interface ImagePreviewState {
+    @Stable
     data object Loading : ImagePreviewState
 
+    @Stable
     data class Ready(
         val imageValue: ImageValue,
         val showDetails: Boolean = false
     ) : ImagePreviewState
 }
 
-sealed interface ImagePreviewEvent {
-}
-
 sealed interface ImagePreviewAction {
+    @Stable
     data class Init(val imageValue: ImageValue) : ImagePreviewAction
+
+    @Stable
     data object ToggleDetails : ImagePreviewAction
 }
 
 class ImagePreviewViewModel :
-    StateViewModel<ImagePreviewState, ImagePreviewEvent, ImagePreviewAction>(ImagePreviewState.Loading) {
+    StateViewModel<ImagePreviewState, Unit, ImagePreviewAction>(ImagePreviewState.Loading) {
 
     override fun reduce(action: ImagePreviewAction) {
         when (action) {
@@ -30,17 +33,16 @@ class ImagePreviewViewModel :
         }
     }
 
-    fun init(imageValue: ImageValue) {
+    private fun init(imageValue: ImageValue) {
         ImagePreviewState.Ready(
             imageValue = imageValue,
             showDetails = false
         ).sendToState()
     }
 
-    fun toggleDetails() {
+    private fun toggleDetails() {
         (state.value as? ImagePreviewState.Ready)?.let { st ->
             st.copy(showDetails = !st.showDetails).sendToState()
         }
     }
-
 }

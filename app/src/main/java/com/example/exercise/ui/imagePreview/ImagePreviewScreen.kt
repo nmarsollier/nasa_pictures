@@ -1,6 +1,5 @@
 package com.example.exercise.ui.imagePreview
 
-import android.annotation.SuppressLint
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -22,7 +21,6 @@ import com.example.exercise.R
 import com.example.exercise.common.ui.LoadingView
 import org.koin.androidx.compose.koinViewModel
 
-@SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
 fun ImagePreviewScreen(viewModel: ImagePreviewViewModel = koinViewModel()) {
     val state by viewModel.state.collectAsState(viewModel.viewModelScope.coroutineContext)
@@ -32,7 +30,7 @@ fun ImagePreviewScreen(viewModel: ImagePreviewViewModel = koinViewModel()) {
             if ((state as? ImagePreviewState.Ready)?.showDetails == false) {
                 FloatingActionButton(
                     onClick = {
-                        viewModel.toggleDetails()
+                        viewModel.reduce(ImagePreviewAction.ToggleDetails)
                     },
                     shape = CircleShape,
                     backgroundColor = colorResource(R.color.lightBlueBackground)
@@ -52,6 +50,7 @@ fun ImagePreviewScreen(viewModel: ImagePreviewViewModel = koinViewModel()) {
     ) {
         Column(
             modifier = Modifier
+                .padding(it)
                 .background(
                     colorResource(id = R.color.blackBackground)
                 )

@@ -16,7 +16,7 @@ import org.koin.test.get
 class MainScreenViewModelTest : BaseUnitTest() {
     @Test
     fun testStateChanges() = runBlocking {
-        val model = MainViewModel(get(), get(), get())
+        val model = MainViewModel(get(), get())
 
         testHttpServer.setAnswer(
             "/api/enhanced/all",
@@ -26,7 +26,7 @@ class MainScreenViewModelTest : BaseUnitTest() {
         model.state.test {
             Assert.assertEquals(MainState.Loading, awaitItem())
 
-            model.reduce(MainAction.SyncDates)
+            model.reduce(MainAction.RefreshDates)
 
             Assert.assertTrue(
                 awaitItem() is MainState.Ready
@@ -36,7 +36,7 @@ class MainScreenViewModelTest : BaseUnitTest() {
             coVerify(exactly = 2) { datesDao.findLast() }
             coVerify(exactly = 5) { datesDao.insert(any()) }
 
-            model.reduce(MainAction.SyncDates)
+            model.reduce(MainAction.RefreshDates)
             Assert.assertTrue(
                 awaitItem() is MainState.Ready
             )

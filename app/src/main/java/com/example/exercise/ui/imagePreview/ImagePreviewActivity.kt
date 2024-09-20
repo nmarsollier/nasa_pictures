@@ -27,7 +27,7 @@ class ImagePreviewActivity : AppCompatActivity() {
 
         imageValueParam?.let {
             setContent { ImagePreviewScreen() }
-            viewModel.init(it)
+            viewModel.reduce(ImagePreviewAction.Init(it))
         }
     }
 

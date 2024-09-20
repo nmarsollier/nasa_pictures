@@ -28,7 +28,8 @@ import com.example.exercise.models.extendedDate.ExtendedDateValue
 
 @Composable
 fun ImagesMenu(
-    date: ExtendedDateValue
+    date: ExtendedDateValue,
+    onClose: () -> Unit,
 ) {
     val context = LocalContext.current as? Activity
 
@@ -65,6 +66,7 @@ fun ImagesMenu(
         },
         navigationIcon = {
             IconButton(onClick = {
+                onClose()
                 context?.finish()
             }) {
                 Icon(painterResource(id = R.drawable.ic_back), "")
@@ -77,7 +79,7 @@ fun ImagesMenu(
 fun ImagesMenuPreview() {
     MaterialTheme {
         Column {
-            ImagesMenu(ExtendedDateValue.Samples.fullyLoadedExtendedDateValueSample)
+            ImagesMenu(ExtendedDateValue.Samples.fullyLoadedExtendedDateValueSample) {}
         }
     }
 }

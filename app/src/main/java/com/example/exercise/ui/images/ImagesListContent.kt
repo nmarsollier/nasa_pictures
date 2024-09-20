@@ -22,7 +22,6 @@ import com.example.exercise.models.api.images.ImageValue
 import com.example.exercise.models.extendedDate.ExtendedDateValue
 
 @OptIn(ExperimentalFoundationApi::class)
-@SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
 fun ImagesListContent(
     state: ImagesState.Ready,
@@ -33,7 +32,7 @@ fun ImagesListContent(
     Column(
         modifier = Modifier.background(colorResource(id = R.color.blueBackground))
     ) {
-        HeaderButtonButton(datesState, imagesReducer)
+        HeaderButton(datesState, imagesReducer)
 
         LazyVerticalGrid(
             columns = GridCells.Fixed(2),

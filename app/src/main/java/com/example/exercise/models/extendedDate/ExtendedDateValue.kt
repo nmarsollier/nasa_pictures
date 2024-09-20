@@ -1,6 +1,7 @@
 package com.example.exercise.models.extendedDate
 
 import android.os.Parcelable
+import androidx.compose.runtime.Stable
 
 import kotlinx.parcelize.Parcelize
 import java.time.LocalDate
@@ -10,15 +11,15 @@ private val dayFormatter = DateTimeFormatter.ofPattern("EEEE")
 private val dateParser = DateTimeFormatter.ofPattern("yyyy-MM-dd")
 private val dateFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy")
 
-
+@Stable
 @Parcelize
 data class ExtendedDateValue(
     val date: String,
-    var count: Int = 0,
-    var caches: Int = 0
+    val count: Int = 0,
+    val caches: Int = 0
 ) : Parcelable {
 
-    val parsedDate: LocalDate
+    private val parsedDate: LocalDate
         get() = LocalDate.parse(date, dateParser)
 
     val formattedDayString: String

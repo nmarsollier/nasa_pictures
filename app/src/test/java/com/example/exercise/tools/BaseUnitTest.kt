@@ -6,7 +6,7 @@ import com.example.exercise.models.database.config.LocalDatabase
 import com.example.exercise.models.database.dates.DatesEntityDao
 import com.example.exercise.models.database.image.ImageEntityDao
 import com.example.exercise.models.extendedDate.FrescoUtils
-import com.example.exercise.models.useCases.koinUseCaseModule
+import com.example.exercise.models.modelsModule
 import com.example.exercise.ui.koinViewModelModule
 import com.google.gson.GsonBuilder
 import io.mockk.mockk
@@ -49,7 +49,7 @@ abstract class BaseUnitTest : KoinTest {
         modules(
             testModule,
             koinApiModule,
-            koinUseCaseModule,
+            modelsModule,
             koinViewModelModule
         )
     }

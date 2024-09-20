@@ -1,7 +1,6 @@
 package com.example.exercise.ui.home
 
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.combinedClickable
@@ -14,12 +13,18 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
+import androidx.compose.material.Icon
 import androidx.compose.material.Text
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Check
+import androidx.compose.material.icons.filled.KeyboardArrowRight
+import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.colorResource
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -32,6 +37,16 @@ import com.example.exercise.models.extendedDate.ExtendedDateValue
 @Composable
 @ExperimentalFoundationApi
 fun DateItemView(date: ExtendedDateValue, reduce: (MainAction) -> Unit) {
+    val image = remember(date) {
+        imageResource(date)
+    }
+    val text = remember(date) {
+        text(date)
+    }
+    val color = remember(date) {
+        textColor(date)
+    }
+
     Card(shape = RoundedCornerShape(10.dp),
         backgroundColor = (colorResource(id = R.color.blueCardBackground)),
         modifier = Modifier
@@ -64,25 +79,34 @@ fun DateItemView(date: ExtendedDateValue, reduce: (MainAction) -> Unit) {
                 horizontalArrangement = Arrangement.spacedBy(3.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Image(
-                    painterResource(imageResource(date)), "", modifier = Modifier.size(16.dp)
-                )
+                image?.let {
+                    Icon(
+                        it,
+                        contentDescription = "",
+                        modifier = Modifier.size(16.dp),
+                        tint = colorResource(id = color)
+                    )
+                }
+
                 Text(
-                    text = text(date), fontSize = 14.sp, color = colorResource(id = textColor(date))
+                    text = text, fontSize = 14.sp, color = colorResource(id = color)
                 )
-                Image(
-                    painterResource(R.drawable.ic_next), ""
+
+                Icon(
+                    imageVector = Icons.Default.KeyboardArrowRight,
+                    contentDescription = "",
+                    tint = colorResource(id = R.color.textColorLightGray),
                 )
             }
         }
     }
 }
 
-fun imageResource(date: ExtendedDateValue): Int {
+fun imageResource(date: ExtendedDateValue): ImageVector? {
     return when {
-        date.isLoading -> R.drawable.ic_reload
-        !date.needsLoad -> R.drawable.ic_clock
-        else -> R.drawable.ic_empty
+        date.isLoading -> Icons.Default.Refresh
+        !date.needsLoad -> Icons.Default.Check
+        else -> null
     }
 }
 

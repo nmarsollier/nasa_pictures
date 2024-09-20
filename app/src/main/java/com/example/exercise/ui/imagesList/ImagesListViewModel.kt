@@ -1,4 +1,4 @@
-package com.example.exercise.ui.images
+package com.example.exercise.ui.imagesList
 
 import androidx.compose.runtime.Stable
 import androidx.lifecycle.viewModelScope
@@ -12,74 +12,74 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
 
-sealed interface ImagesEvent {
+sealed interface ImagesListEvent {
     @Stable
-    data class GoPreview(val image: ImageValue) : ImagesEvent
+    data class GoPreview(val image: ImageValue) : ImagesListEvent
 
     @Stable
-    data class GoAnimate(val date: ExtendedDateValue) : ImagesEvent
+    data class GoAnimate(val date: ExtendedDateValue) : ImagesListEvent
 }
 
-sealed interface ImagesState {
+sealed interface ImagesListState {
     @Stable
-    data object Loading : ImagesState
+    data object Loading : ImagesListState
 
     @Stable
-    data object Error : ImagesState
+    data object Error : ImagesListState
 
     @Stable
     data class Ready(
         val date: ExtendedDateValue?, val images: List<ImageValue>
-    ) : ImagesState
+    ) : ImagesListState
 }
 
-sealed interface ImagesAction {
+sealed interface ImagesListAction {
     @Stable
-    data class FetchImages(val date: ExtendedDateValue?) : ImagesAction
+    data class FetchImages(val date: ExtendedDateValue?) : ImagesListAction
 
     @Stable
-    data class GoPreview(val image: ImageValue) : ImagesAction
+    data class GoPreview(val image: ImageValue) : ImagesListAction
 
     @Stable
-    data class GoAnimate(val date: ExtendedDateValue) : ImagesAction
+    data class GoAnimate(val date: ExtendedDateValue) : ImagesListAction
 
     @Stable
-    data object UpdateDate : ImagesAction
+    data object UpdateDate : ImagesListAction
 }
 
-class ImagesViewModel(
+class ImagesListViewModel(
     private val frescoUtils: FrescoUtils, private val fetchImagesUseCase: FetchImagesUseCase
-) : StateViewModel<ImagesState, ImagesEvent, ImagesAction>(ImagesState.Loading) {
+) : StateViewModel<ImagesListState, ImagesListEvent, ImagesListAction>(ImagesListState.Loading) {
 
-    override fun reduce(action: ImagesAction) {
+    override fun reduce(action: ImagesListAction) {
         when (action) {
-            is ImagesAction.FetchImages -> fetchImages(action.date)
-            is ImagesAction.GoPreview -> ImagesEvent.GoPreview(action.image).sendToEvent()
-            is ImagesAction.GoAnimate -> ImagesEvent.GoAnimate(action.date).sendToEvent()
-            ImagesAction.UpdateDate -> updateDate()
+            is ImagesListAction.FetchImages -> fetchImages(action.date)
+            is ImagesListAction.GoPreview -> ImagesListEvent.GoPreview(action.image).sendToEvent()
+            is ImagesListAction.GoAnimate -> ImagesListEvent.GoAnimate(action.date).sendToEvent()
+            ImagesListAction.UpdateDate -> updateDate()
         }
     }
 
     private fun fetchImages(date: ExtendedDateValue?) = viewModelScope.launch(Dispatchers.IO) {
-        ImagesState.Loading.sendToState()
+        ImagesListState.Loading.sendToState()
 
         val queryDate = date?.date ?: run {
-            ImagesState.Error.sendToState()
+            ImagesListState.Error.sendToState()
             return@launch
         }
 
         try {
-            ImagesState.Ready(
+            ImagesListState.Ready(
                 images = fetchImagesUseCase.fetchImages(queryDate),
                 date = date.refresh(frescoUtils),
             )
         } catch (e: Exception) {
-            ImagesState.Error
+            ImagesListState.Error
         }.sendToState()
     }
 
     private fun updateDate() = MainScope().launch(Dispatchers.IO) {
-        (state.value as? ImagesState.Ready)?.let {
+        (state.value as? ImagesListState.Ready)?.let {
             it.copy(
                 date = it.date?.refresh(frescoUtils)
             ).sendToState()

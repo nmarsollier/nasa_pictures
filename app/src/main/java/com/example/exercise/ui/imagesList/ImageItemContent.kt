@@ -1,4 +1,4 @@
-package com.example.exercise.ui.images
+package com.example.exercise.ui.imagesList
 
 import android.graphics.drawable.Animatable
 import android.net.Uri
@@ -34,9 +34,9 @@ import com.facebook.imagepipeline.request.ImageRequestBuilder
 
 @Composable
 @ExperimentalFoundationApi
-fun ImageItemView(
+fun ImageItemContent(
     image: ImageValue,
-    reduce: (ImagesAction) -> Unit,
+    reduce: (ImagesListAction) -> Unit,
 ) {
     Card(shape = RoundedCornerShape(10.dp),
         backgroundColor = (colorResource(id = R.color.blackBackground)),
@@ -44,7 +44,7 @@ fun ImageItemView(
             .size(165.dp)
             .combinedClickable(onClick = {})
             .clickable {
-                reduce(ImagesAction.GoPreview(image))
+                reduce(ImagesListAction.GoPreview(image))
             }
     ) {
         AndroidView(modifier = Modifier
@@ -56,7 +56,7 @@ fun ImageItemView(
             },
             update = { view ->
                 loadImage(view, image) {
-                    reduce(ImagesAction.UpdateDate)
+                    reduce(ImagesListAction.UpdateDate)
                 }
             })
 
@@ -112,7 +112,7 @@ fun onLoaded(callback: () -> Unit) = object : ControllerListener<Any> {
 fun ImageItemViewPreview() {
     KoinPreview {
         Column {
-            ImageItemView(
+            ImageItemContent(
                 ImageValue.Samples.simpleImageValeSample
             ) {}
         }

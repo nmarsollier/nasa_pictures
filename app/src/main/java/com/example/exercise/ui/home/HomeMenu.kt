@@ -17,7 +17,7 @@ import androidx.compose.ui.unit.dp
 import com.example.exercise.R
 
 @Composable
-fun MainMenu(
+fun HomeMenu(
 ) {
     TopAppBar(
         modifier = Modifier
@@ -42,7 +42,7 @@ fun MainMenu(
 fun MainMenuPreview() {
     MaterialTheme {
         Column {
-            MainMenu()
+            HomeMenu()
         }
     }
 }

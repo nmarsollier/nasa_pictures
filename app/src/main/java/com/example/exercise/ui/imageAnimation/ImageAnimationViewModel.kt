@@ -1,4 +1,4 @@
-package com.example.exercise.ui.animatedPreview
+package com.example.exercise.ui.imageAnimation
 
 import android.graphics.Bitmap
 import android.graphics.drawable.AnimationDrawable
@@ -23,34 +23,34 @@ import kotlinx.coroutines.launch
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
-sealed interface AnimatedPreviewState {
+sealed interface ImageAnimationState {
     @Stable
-    data object Loading : AnimatedPreviewState
+    data object Loading : ImageAnimationState
 
     @Stable
-    data object Error : AnimatedPreviewState
+    data object Error : ImageAnimationState
 
     @Stable
     data class Ready(
         val animation: AnimationDrawable
-    ) : AnimatedPreviewState
+    ) : ImageAnimationState
 }
 
-sealed interface AnimatedPreviewAction {
+sealed interface ImageAnimationAction {
     @Stable
-    data class FetchImages(val date: ExtendedDateValue) : AnimatedPreviewAction
+    data class FetchImages(val date: ExtendedDateValue) : ImageAnimationAction
 }
 
-class AnimatedPreviewViewModel(
+class ImageAnimationViewModel(
     private val fetchImagesUseCase: FetchImagesUseCase,
     private val fresco: ImagePipeline
-) : StateViewModel<AnimatedPreviewState, Unit, AnimatedPreviewAction>(
-    AnimatedPreviewState.Loading
+) : StateViewModel<ImageAnimationState, Unit, ImageAnimationAction>(
+    ImageAnimationState.Loading
 ) {
 
-    override fun reduce(action: AnimatedPreviewAction) {
+    override fun reduce(action: ImageAnimationAction) {
         when (action) {
-            is AnimatedPreviewAction.FetchImages -> fetchImages(action.date)
+            is ImageAnimationAction.FetchImages -> fetchImages(action.date)
         }
     }
 
@@ -90,11 +90,11 @@ class AnimatedPreviewViewModel(
         )
     }
 
-    private suspend fun List<ImageValue>.asState(): AnimatedPreviewState {
+    private suspend fun List<ImageValue>.asState(): ImageAnimationState {
         return if (this.isEmpty()) {
-            AnimatedPreviewState.Error
+            ImageAnimationState.Error
         } else {
-            AnimatedPreviewState.Ready(animation(this))
+            ImageAnimationState.Ready(animation(this))
         }
     }
 }

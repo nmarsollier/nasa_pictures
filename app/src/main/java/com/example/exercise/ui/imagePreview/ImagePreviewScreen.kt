@@ -20,14 +20,17 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewModelScope
 import com.example.exercise.R
+import com.example.exercise.common.navigation.AppNavActions
 import com.example.exercise.common.ui.LoadingView
 import com.example.exercise.models.api.images.ImageValue
 import org.koin.androidx.compose.koinViewModel
+import org.koin.compose.koinInject
 
 @Composable
 fun ImagePreviewScreen(
     imageValue: ImageValue,
-    viewModel: ImagePreviewViewModel = koinViewModel()
+    viewModel: ImagePreviewViewModel = koinViewModel(),
+    navActions: AppNavActions = koinInject()
 ) {
     val state by viewModel.state.collectAsState(viewModel.viewModelScope.coroutineContext)
 

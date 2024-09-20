@@ -25,17 +25,17 @@ sealed interface MainEvent {
     data class GoImages(val date: ExtendedDateValue) : MainEvent
 }
 
-sealed interface MainState {
+sealed interface HomeState {
     @Stable
-    data object Loading : MainState
+    data object Loading : HomeState
 
     @Stable
-    data object Error : MainState
+    data object Error : HomeState
 
     @Stable
     data class Ready(
         val pager: Flow<PagingData<ExtendedDateValue>>
-    ) : MainState
+    ) : HomeState
 }
 
 sealed interface MainAction {
@@ -46,12 +46,12 @@ sealed interface MainAction {
     data class GoImages(val date: ExtendedDateValue) : MainAction
 }
 
-class MainViewModel(
+class HomeViewModel(
     private val dateDao: DatesEntityDao,
     private val frescoUtils: FrescoUtils,
     private val fetchDatesUseCase: FetchDatesUseCase,
-    private val mainScreenUpdate: MainScreenUpdate
-) : StateViewModel<MainState, MainEvent, MainAction>(MainState.Loading) {
+    private val homeScreenUpdater: HomeScreenUpdater
+) : StateViewModel<HomeState, MainEvent, MainAction>(HomeState.Loading) {
     init {
         loadDates()
 
@@ -62,7 +62,7 @@ class MainViewModel(
         }
 
         viewModelScope.launch(Dispatchers.IO) {
-            mainScreenUpdate.updateFlow.collect {
+            homeScreenUpdater.updateFlow.collect {
                 reduce(MainAction.RefreshDates)
             }
         }
@@ -76,7 +76,7 @@ class MainViewModel(
     }
 
     private fun loadDates() = viewModelScope.launch(Dispatchers.IO) {
-        MainState.Ready(createPager()).sendToState()
+        HomeState.Ready(createPager()).sendToState()
     }
 
     private fun createPager(): Flow<PagingData<ExtendedDateValue>> {
@@ -89,12 +89,10 @@ class MainViewModel(
 private const val PAGE_SIZE = 30;
 
 class DatesPagingSource(
-    private val dateRepository: DatesEntityDao,
-    private val frescoUtils: FrescoUtils
+    private val dateRepository: DatesEntityDao, private val frescoUtils: FrescoUtils
 ) : PagingSource<Int, ExtendedDateValue>() {
     override fun getRefreshKey(state: PagingState<Int, ExtendedDateValue>): Int {
-        return ((state.anchorPosition ?: 0) - state.config.initialLoadSize / 2)
-            .coerceAtLeast(0)
+        return ((state.anchorPosition ?: 0) - state.config.initialLoadSize / 2).coerceAtLeast(0)
     }
 
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, ExtendedDateValue> {
@@ -102,8 +100,7 @@ class DatesPagingSource(
         return dateRepository.findAll(loadPage * PAGE_SIZE, PAGE_SIZE).asResultPage(loadPage)
     }
 
-    private suspend fun List<DatesEntity>?.asResultPage(loadPage: Int)
-            : LoadResult.Page<Int, ExtendedDateValue> =
+    private suspend fun List<DatesEntity>?.asResultPage(loadPage: Int): LoadResult.Page<Int, ExtendedDateValue> =
         (this ?: emptyList()).let {
             LoadResult.Page(
                 data = it.map { entity -> entity.date.asDateValue.asExtendedDateValue(frescoUtils) },

@@ -1,4 +1,4 @@
-package com.example.exercise.ui.animatedPreview
+package com.example.exercise.ui.imageAnimation
 
 import android.annotation.SuppressLint
 import android.graphics.drawable.AnimationDrawable
@@ -29,14 +29,14 @@ import org.koin.androidx.compose.koinViewModel
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
-fun AnimatedPreviewScreen(
+fun ImageAnimationScreen(
     date: ExtendedDateValue,
-    viewModel: AnimatedPreviewViewModel = koinViewModel()
+    viewModel: ImageAnimationViewModel = koinViewModel()
 ) {
     val state by viewModel.state.collectAsState(viewModel.viewModelScope.coroutineContext)
 
     DisposableEffect(date) {
-        viewModel.reduce(AnimatedPreviewAction.FetchImages(date))
+        viewModel.reduce(ImageAnimationAction.FetchImages(date))
         onDispose { }
     }
 
@@ -48,15 +48,15 @@ fun AnimatedPreviewScreen(
             .fillMaxSize()
     ) {
         when (val st = state) {
-            is AnimatedPreviewState.Ready -> AnimatedPreviewContent(st)
-            AnimatedPreviewState.Error -> EmptyView()
+            is ImageAnimationState.Ready -> AnimatedPreviewContent(st)
+            ImageAnimationState.Error -> EmptyView()
             else -> LoadingView()
         }
     }
 }
 
 @Composable
-fun AnimatedPreviewContent(state: AnimatedPreviewState.Ready) {
+fun AnimatedPreviewContent(state: ImageAnimationState.Ready) {
     Box(
         contentAlignment = Alignment.Center,
         modifier = Modifier
@@ -83,7 +83,7 @@ fun OptionsViewPreview() {
     KoinPreview {
         Column {
             AnimatedPreviewContent(
-                AnimatedPreviewState.Ready(
+                ImageAnimationState.Ready(
                     animation = AnimationDrawable()
                 )
             )

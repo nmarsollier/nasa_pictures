@@ -6,7 +6,7 @@ enum class MainScreenState {
     Update
 }
 
-class MainScreenUpdate : StateEventObject<MainScreenState>() {
+class HomeScreenUpdater : StateEventObject<MainScreenState>() {
     fun updateScreen() {
         MainScreenState.Update.sendToEvent()
     }

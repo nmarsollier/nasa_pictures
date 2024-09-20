@@ -1,4 +1,4 @@
-package com.example.exercise.ui.images
+package com.example.exercise.ui.imagesList
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
@@ -23,8 +23,8 @@ import com.example.exercise.models.extendedDate.ExtendedDateValue
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun ImagesListContent(
-    state: ImagesState.Ready,
-    imagesReducer: (event: ImagesAction) -> Unit,
+    state: ImagesListState.Ready,
+    imagesReducer: (event: ImagesListAction) -> Unit,
 ) {
     Column(
         modifier = Modifier.background(colorResource(id = R.color.blueBackground))
@@ -39,7 +39,7 @@ fun ImagesListContent(
             horizontalArrangement = Arrangement.spacedBy(16.dp),
         ) {
             items(state.images) {
-                ImageItemView(it, imagesReducer)
+                ImageItemContent(it, imagesReducer)
             }
         }
     }
@@ -50,7 +50,7 @@ fun ImagesListContent(
 fun ImagesListViewPreview() {
     KoinPreview {
         ImagesListContent(
-            ImagesState.Ready(
+            ImagesListState.Ready(
                 images = listOf(
                     ImageValue.Samples.simpleImageValeSample
                 ), date = ExtendedDateValue.Samples.fullyLoadedExtendedDateValueSample

@@ -1,4 +1,4 @@
-package com.example.exercise.ui.images
+package com.example.exercise.ui.imagesList
 
 
 import androidx.compose.foundation.ExperimentalFoundationApi
@@ -35,18 +35,18 @@ import com.example.exercise.models.extendedDate.ExtendedDateValue
 @Composable
 @ExperimentalFoundationApi
 fun HeaderButton(
-    state: ImagesState,
-    imagesReducer: (a: ImagesAction) -> Unit
+    state: ImagesListState,
+    imagesReducer: (a: ImagesListAction) -> Unit
 ) {
     when (state) {
-        ImagesState.Loading -> LoadingItemsButton()
-        is ImagesState.Ready -> if (state.date?.isLoading == false) {
+        ImagesListState.Loading -> LoadingItemsButton()
+        is ImagesListState.Ready -> if (state.date?.isLoading == false) {
             PlayImagesButton(state.date, imagesReducer)
         } else {
             LoadingItemsButton()
         }
 
-        ImagesState.Error -> Unit
+        ImagesListState.Error -> Unit
     }
 }
 
@@ -87,14 +87,14 @@ fun LoadingItemsButton() {
 @ExperimentalFoundationApi
 fun PlayImagesButton(
     dates: ExtendedDateValue,
-    reduce: (a: ImagesAction) -> Unit
+    reduce: (a: ImagesListAction) -> Unit
 ) {
     Card(shape = RoundedCornerShape(10.dp),
         backgroundColor = (colorResource(id = R.color.lightBlueCardBackground)),
         modifier = Modifier
             .padding(start = 16.dp, top = 16.dp, end = 16.dp)
             .height(48.dp)
-            .clickable { reduce(ImagesAction.GoAnimate(dates)) }
+            .clickable { reduce(ImagesListAction.GoAnimate(dates)) }
             .fillMaxWidth()) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
@@ -120,13 +120,13 @@ fun LoadingItemsViewPreview() {
                 ExtendedDateValue.Samples.fullyLoadedExtendedDateValueSample
             ) {}
             HeaderButton(
-                ImagesState.Ready(
+                ImagesListState.Ready(
                     images = emptyList(),
                     date = ExtendedDateValue.Samples.partialLoadedExtendedDateValueSample
                 )
             ) { }
             HeaderButton(
-                ImagesState.Ready(
+                ImagesListState.Ready(
                     images = emptyList(),
                     date = ExtendedDateValue.Samples.fullyLoadedExtendedDateValueSample
                 )

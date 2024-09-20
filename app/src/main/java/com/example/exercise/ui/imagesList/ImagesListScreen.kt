@@ -1,4 +1,4 @@
-package com.example.exercise.ui.images
+package com.example.exercise.ui.imagesList
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
@@ -8,52 +8,51 @@ import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.viewModelScope
+import com.example.exercise.common.navigation.AppNavActions
 import com.example.exercise.common.ui.EmptyView
 import com.example.exercise.common.ui.ErrorView
 import com.example.exercise.common.ui.LoadingView
 import com.example.exercise.models.extendedDate.ExtendedDateValue
-import com.example.exercise.ui.animatedPreview.AnimatedPreviewActivity
-import com.example.exercise.ui.home.MainScreenUpdate
-import com.example.exercise.ui.imagePreview.ImagePreviewActivity
+import com.example.exercise.ui.home.HomeScreenUpdater
 import org.koin.androidx.compose.koinViewModel
 import org.koin.compose.koinInject
 
 @Composable
-fun ImagesScreen(
+fun ImagesListScreen(
     date: ExtendedDateValue,
-    viewModel: ImagesViewModel = koinViewModel(),
-    mainScreenUpdate: MainScreenUpdate = koinInject()
+    viewModel: ImagesListViewModel = koinViewModel(),
+    homeScreenUpdater: HomeScreenUpdater = koinInject(),
+    navActions: AppNavActions = koinInject()
 ) {
     val state by viewModel.state.collectAsState(viewModel.viewModelScope.coroutineContext)
     val event by viewModel.event.collectAsState(null, viewModel.viewModelScope.coroutineContext)
 
     DisposableEffect(date) {
-        viewModel.reduce(ImagesAction.FetchImages(date))
+        viewModel.reduce(ImagesListAction.FetchImages(date))
         onDispose { }
     }
 
     when (val e = event) {
-        is ImagesEvent.GoAnimate -> AnimatedPreviewActivity.startActivity(
-            LocalContext.current, e.date
-        )
+        is ImagesListEvent.GoAnimate -> {
+            navActions.goImageAnimation(e.date)
+        }
 
-        is ImagesEvent.GoPreview -> ImagePreviewActivity.startActivity(
-            LocalContext.current, e.image
-        )
+        is ImagesListEvent.GoPreview -> {
+            navActions.goImagePreview(e.image)
+        }
 
         null -> Unit
     }
 
     Scaffold(topBar = {
-        ImagesMenu(date) {
-            mainScreenUpdate.updateScreen()
+        ImagesListMenu(date) {
+            homeScreenUpdater.updateScreen()
         }
     }) {
         Box(modifier = Modifier.padding(it)) {
             when (val st = state) {
-                is ImagesState.Ready -> {
+                is ImagesListState.Ready -> {
                     if (st.images.isEmpty()) {
                         EmptyView()
                     } else {
@@ -61,8 +60,8 @@ fun ImagesScreen(
                     }
                 }
 
-                is ImagesState.Error -> ErrorView {
-                    viewModel.reduce(ImagesAction.FetchImages(date))
+                is ImagesListState.Error -> ErrorView {
+                    viewModel.reduce(ImagesListAction.FetchImages(date))
                 }
 
                 else -> LoadingView()

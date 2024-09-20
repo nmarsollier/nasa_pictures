@@ -1,18 +1,18 @@
 package com.example.exercise.ui
 
-import com.example.exercise.ui.animatedPreview.AnimatedPreviewViewModel
-import com.example.exercise.ui.home.MainScreenUpdate
-import com.example.exercise.ui.home.MainViewModel
+import com.example.exercise.ui.imageAnimation.ImageAnimationViewModel
+import com.example.exercise.ui.home.HomeScreenUpdater
+import com.example.exercise.ui.home.HomeViewModel
 import com.example.exercise.ui.imagePreview.ImagePreviewViewModel
-import com.example.exercise.ui.images.ImagesViewModel
+import com.example.exercise.ui.imagesList.ImagesListViewModel
 import org.koin.androidx.viewmodel.dsl.viewModelOf
 import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.module
 
 val koinViewModelModule = module {
-    viewModelOf(::AnimatedPreviewViewModel)
-    viewModelOf(::MainViewModel)
+    viewModelOf(::ImageAnimationViewModel)
+    viewModelOf(::HomeViewModel)
     viewModelOf(::ImagePreviewViewModel)
-    viewModelOf(::ImagesViewModel)
-    singleOf(::MainScreenUpdate)
+    viewModelOf(::ImagesListViewModel)
+    singleOf(::HomeScreenUpdater)
 }

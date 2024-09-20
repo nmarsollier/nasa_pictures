@@ -16,7 +16,7 @@ import com.example.exercise.common.ui.LoadingView
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun DatesListContent(
-    state: MainState.Ready, reduce: (MainAction) -> Unit
+    state: HomeState.Ready, reduce: (MainAction) -> Unit
 ) {
     val dates = state.pager.collectAsLazyPagingItems()
 

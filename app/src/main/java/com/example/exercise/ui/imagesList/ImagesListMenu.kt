@@ -1,4 +1,4 @@
-package com.example.exercise.ui.images
+package com.example.exercise.ui.imagesList
 
 import android.app.Activity
 import androidx.compose.foundation.background
@@ -23,27 +23,29 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.exercise.R
+import com.example.exercise.common.navigation.AppNavActions
 import com.example.exercise.common.utils.Samples
 import com.example.exercise.models.extendedDate.ExtendedDateValue
+import org.koin.compose.koinInject
 
 @Composable
-fun ImagesMenu(
+fun ImagesListMenu(
     date: ExtendedDateValue,
+    navActions: AppNavActions = koinInject(),
     onClose: () -> Unit,
 ) {
     val context = LocalContext.current as? Activity
 
-    TopAppBar(
-        modifier = Modifier
-            .background(
-                Brush.verticalGradient(
-                    colors = listOf(
-                        colorResource(id = R.color.lightBlueBackground),
-                        colorResource(id = R.color.blueBackground)
-                    )
+    TopAppBar(modifier = Modifier
+        .background(
+            Brush.verticalGradient(
+                colors = listOf(
+                    colorResource(id = R.color.lightBlueBackground),
+                    colorResource(id = R.color.blueBackground)
                 )
             )
-            .padding(top = 24.dp),
+        )
+        .padding(top = 24.dp),
         elevation = 0.dp,
         backgroundColor = Color.Transparent,
         contentColor = colorResource(id = R.color.textWhite),
@@ -67,7 +69,7 @@ fun ImagesMenu(
         navigationIcon = {
             IconButton(onClick = {
                 onClose()
-                context?.finish()
+                navActions.goUp()
             }) {
                 Icon(painterResource(id = R.drawable.ic_back), "")
             }
@@ -79,7 +81,7 @@ fun ImagesMenu(
 fun ImagesMenuPreview() {
     MaterialTheme {
         Column {
-            ImagesMenu(ExtendedDateValue.Samples.fullyLoadedExtendedDateValueSample) {}
+            ImagesListMenu(date = ExtendedDateValue.Samples.fullyLoadedExtendedDateValueSample) {}
         }
     }
 }

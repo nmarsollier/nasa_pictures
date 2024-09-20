@@ -1,4 +1,4 @@
-package com.example.exercise.ui.animatedPreiew
+package com.example.exercise.ui.animatedPreview
 
 import android.annotation.SuppressLint
 import android.graphics.drawable.AnimationDrawable

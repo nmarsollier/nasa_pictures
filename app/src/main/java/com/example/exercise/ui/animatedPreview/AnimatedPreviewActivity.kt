@@ -1,4 +1,4 @@
-package com.example.exercise.ui.animatedPreiew
+package com.example.exercise.ui.animatedPreview
 
 import android.content.Context
 import android.content.Intent

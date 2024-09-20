@@ -14,7 +14,7 @@ import com.example.exercise.common.ui.EmptyView
 import com.example.exercise.common.ui.ErrorView
 import com.example.exercise.common.ui.LoadingView
 import com.example.exercise.models.extendedDate.ExtendedDateValue
-import com.example.exercise.ui.animatedPreiew.AnimatedPreviewActivity
+import com.example.exercise.ui.animatedPreview.AnimatedPreviewActivity
 import com.example.exercise.ui.home.MainScreenUpdate
 import com.example.exercise.ui.imagePreview.ImagePreviewActivity
 import org.koin.androidx.compose.koinViewModel

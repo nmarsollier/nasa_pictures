@@ -1,6 +1,6 @@
 package com.example.exercise.ui
 
-import com.example.exercise.ui.animatedPreiew.AnimatedPreviewViewModel
+import com.example.exercise.ui.animatedPreview.AnimatedPreviewViewModel
 import com.example.exercise.ui.home.MainScreenUpdate
 import com.example.exercise.ui.home.MainViewModel
 import com.example.exercise.ui.imagePreview.ImagePreviewViewModel

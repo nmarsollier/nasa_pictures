@@ -38,7 +38,7 @@
             android:label="@string/app_name"></activity>
 
         <activity
-            android:name=".ui.animatedPreiew.AnimatedPreviewActivity"
+            android:name=".ui.animatedPreview.AnimatedPreviewActivity"
             android:exported="true"
             android:label="@string/app_name"></activity>
 

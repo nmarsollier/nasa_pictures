@@ -24,17 +24,13 @@ import org.koin.compose.koinInject
 fun ImagesScreen(
     date: ExtendedDateValue,
     viewModel: ImagesViewModel = koinViewModel(),
-    dateViewModel: ImagesDateViewModel = koinViewModel(),
     mainScreenUpdate: MainScreenUpdate = koinInject()
 ) {
     val state by viewModel.state.collectAsState(viewModel.viewModelScope.coroutineContext)
     val event by viewModel.event.collectAsState(null, viewModel.viewModelScope.coroutineContext)
-    val datesState by dateViewModel.state.collectAsState(dateViewModel.viewModelScope.coroutineContext)
 
     DisposableEffect(date) {
-        dateViewModel.reduce(ImagesDateAction.UpdateDate(date))
         viewModel.reduce(ImagesAction.FetchImages(date))
-
         onDispose { }
     }
 
@@ -61,9 +57,7 @@ fun ImagesScreen(
                     if (st.images.isEmpty()) {
                         EmptyView()
                     } else {
-                        ImagesListContent(
-                            st, viewModel::reduce, datesState, dateViewModel::reduce
-                        )
+                        ImagesListContent(st, viewModel::reduce)
                     }
                 }
 

@@ -10,7 +10,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.width
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -30,12 +30,14 @@ import org.koin.androidx.compose.koinViewModel
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
 fun AnimatedPreviewScreen(
-    date: ExtendedDateValue, viewModel: AnimatedPreviewViewModel = koinViewModel()
+    date: ExtendedDateValue,
+    viewModel: AnimatedPreviewViewModel = koinViewModel()
 ) {
     val state by viewModel.state.collectAsState(viewModel.viewModelScope.coroutineContext)
 
-    LaunchedEffect(Unit) {
+    DisposableEffect(date) {
         viewModel.reduce(AnimatedPreviewAction.FetchImages(date))
+        onDispose { }
     }
 
     Column(

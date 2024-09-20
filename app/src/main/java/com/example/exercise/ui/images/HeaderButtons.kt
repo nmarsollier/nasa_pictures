@@ -35,16 +35,18 @@ import com.example.exercise.models.extendedDate.ExtendedDateValue
 @Composable
 @ExperimentalFoundationApi
 fun HeaderButton(
-    state: ImagesDateState,
+    state: ImagesState,
     imagesReducer: (a: ImagesAction) -> Unit
 ) {
     when (state) {
-        ImagesDateState.Loading -> LoadingItemsButton()
-        is ImagesDateState.Ready -> if (state.date?.isLoading == false) {
+        ImagesState.Loading -> LoadingItemsButton()
+        is ImagesState.Ready -> if (state.date?.isLoading == false) {
             PlayImagesButton(state.date, imagesReducer)
         } else {
             LoadingItemsButton()
         }
+
+        ImagesState.Error -> Unit
     }
 }
 
@@ -118,12 +120,14 @@ fun LoadingItemsViewPreview() {
                 ExtendedDateValue.Samples.fullyLoadedExtendedDateValueSample
             ) {}
             HeaderButton(
-                ImagesDateState.Ready(
+                ImagesState.Ready(
+                    images = emptyList(),
                     date = ExtendedDateValue.Samples.partialLoadedExtendedDateValueSample
                 )
             ) { }
             HeaderButton(
-                ImagesDateState.Ready(
+                ImagesState.Ready(
+                    images = emptyList(),
                     date = ExtendedDateValue.Samples.fullyLoadedExtendedDateValueSample
                 )
             ) { }

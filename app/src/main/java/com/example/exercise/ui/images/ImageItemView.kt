@@ -36,16 +36,17 @@ import com.facebook.imagepipeline.request.ImageRequestBuilder
 @ExperimentalFoundationApi
 fun ImageItemView(
     image: ImageValue,
-    imageReduce: (ImagesAction) -> Unit,
-    dateReduce: (ImagesDateAction) -> Unit
+    reduce: (ImagesAction) -> Unit,
 ) {
     Card(shape = RoundedCornerShape(10.dp),
         backgroundColor = (colorResource(id = R.color.blackBackground)),
         modifier = Modifier
             .size(165.dp)
             .combinedClickable(onClick = {})
-            .clickable { imageReduce(ImagesAction.GoPreview(image)) }) {
-
+            .clickable {
+                reduce(ImagesAction.GoPreview(image))
+            }
+    ) {
         AndroidView(modifier = Modifier
             .padding(16.dp)
             .height(165.dp)
@@ -55,7 +56,7 @@ fun ImageItemView(
             },
             update = { view ->
                 loadImage(view, image) {
-                    dateReduce(ImagesDateAction.UpdateDate(null))
+                    reduce(ImagesAction.UpdateDate)
                 }
             })
 
@@ -112,10 +113,8 @@ fun ImageItemViewPreview() {
     KoinPreview {
         Column {
             ImageItemView(
-                ImageValue.Samples.simpleImageValeSample,
-                {},
-                { }
-            )
+                ImageValue.Samples.simpleImageValeSample
+            ) {}
         }
     }
 }

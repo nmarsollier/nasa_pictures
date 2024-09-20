@@ -1,6 +1,5 @@
 package com.example.exercise.ui.images
 
-import android.annotation.SuppressLint
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -26,13 +25,11 @@ import com.example.exercise.models.extendedDate.ExtendedDateValue
 fun ImagesListContent(
     state: ImagesState.Ready,
     imagesReducer: (event: ImagesAction) -> Unit,
-    datesState: ImagesDateState,
-    datesReducer: (event: ImagesDateAction) -> Unit,
 ) {
     Column(
         modifier = Modifier.background(colorResource(id = R.color.blueBackground))
     ) {
-        HeaderButton(datesState, imagesReducer)
+        HeaderButton(state, imagesReducer)
 
         LazyVerticalGrid(
             columns = GridCells.Fixed(2),
@@ -42,7 +39,7 @@ fun ImagesListContent(
             horizontalArrangement = Arrangement.spacedBy(16.dp),
         ) {
             items(state.images) {
-                ImageItemView(it, imagesReducer, datesReducer)
+                ImageItemView(it, imagesReducer)
             }
         }
     }
@@ -56,13 +53,8 @@ fun ImagesListViewPreview() {
             ImagesState.Ready(
                 images = listOf(
                     ImageValue.Samples.simpleImageValeSample
-                )
+                ), date = ExtendedDateValue.Samples.fullyLoadedExtendedDateValueSample
             ),
-            {},
-            ImagesDateState.Ready(
-                ExtendedDateValue.Samples.fullyLoadedExtendedDateValueSample
-            ),
-            { }
-        )
+        ) {}
     }
 }

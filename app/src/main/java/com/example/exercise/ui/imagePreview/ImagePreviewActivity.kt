@@ -4,7 +4,6 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.compose.setContent
-import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.view.WindowCompat
@@ -12,11 +11,9 @@ import com.example.exercise.common.utils.jsonToObject
 import com.example.exercise.common.utils.toJson
 import com.example.exercise.models.api.images.ImageValue
 
-private val IMAGE = "IMAGE"
+private const val IMAGE = "IMAGE"
 
 class ImagePreviewActivity : AppCompatActivity() {
-    private val viewModel: ImagePreviewViewModel by viewModels()
-
     private val imageValueParam: ImageValue?
         get() = intent.getStringExtra(IMAGE).jsonToObject()
 
@@ -26,8 +23,7 @@ class ImagePreviewActivity : AppCompatActivity() {
         supportActionBar?.hide()
 
         imageValueParam?.let {
-            setContent { ImagePreviewScreen() }
-            viewModel.reduce(ImagePreviewAction.Init(it))
+            setContent { ImagePreviewScreen(it) }
         }
     }
 

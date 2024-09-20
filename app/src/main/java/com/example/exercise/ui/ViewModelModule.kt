@@ -4,7 +4,6 @@ import com.example.exercise.ui.animatedPreiew.AnimatedPreviewViewModel
 import com.example.exercise.ui.home.MainScreenUpdate
 import com.example.exercise.ui.home.MainViewModel
 import com.example.exercise.ui.imagePreview.ImagePreviewViewModel
-import com.example.exercise.ui.images.ImagesDateViewModel
 import com.example.exercise.ui.images.ImagesViewModel
 import org.koin.androidx.viewmodel.dsl.viewModelOf
 import org.koin.core.module.dsl.singleOf
@@ -15,6 +14,5 @@ val koinViewModelModule = module {
     viewModelOf(::MainViewModel)
     viewModelOf(::ImagePreviewViewModel)
     viewModelOf(::ImagesViewModel)
-    viewModelOf(::ImagesDateViewModel)
     singleOf(::MainScreenUpdate)
 }

@@ -6,11 +6,11 @@ plugins {
 }
 
 android {
-    namespace = "com.example.exercise"
+    namespace = "com.nmarsollier.nasa"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.example.exercise"
+        applicationId = "com.nmarsollier.nasa"
         minSdk = 28
         targetSdk = 33
         versionCode = 1

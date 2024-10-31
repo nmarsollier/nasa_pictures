@@ -1,26 +1,29 @@
 package com.nmarsollier.nasa.models.api.images
 
 import androidx.compose.runtime.Stable
-import com.google.gson.annotations.SerializedName
 import com.nmarsollier.nasa.common.utils.toDateTimeString
 import com.nmarsollier.nasa.common.utils.toDayString
 import com.nmarsollier.nasa.common.utils.toHourMinuteString
 import com.nmarsollier.nasa.common.utils.toLocalDateTime
 import com.nmarsollier.nasa.common.utils.toMonthString
 import com.nmarsollier.nasa.models.database.image.ImageEntity
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
 @Stable
+@Serializable
 data class CoordinatesValue(
-    @SerializedName("lat") val lat: Double,
-    @SerializedName("lon") val lon: Double,
+    @SerialName("lat") val lat: Double,
+    @SerialName("lon") val lon: Double,
 )
 
 @Stable
+@Serializable
 data class ImageValue(
-    @SerializedName("identifier") val identifier: String,
-    @SerializedName("date") val date: String,
-    @SerializedName("image") val image: String,
-    @SerializedName("centroid_coordinates") val coordinates: CoordinatesValue,
+    @SerialName("identifier") val identifier: String,
+    @SerialName("date") val date: String,
+    @SerialName("image") val image: String,
+    @SerialName("centroid_coordinates") val coordinates: CoordinatesValue,
 ) {
     val downloadUrl: String
         get() {

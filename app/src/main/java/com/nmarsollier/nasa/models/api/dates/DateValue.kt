@@ -1,19 +1,21 @@
 package com.nmarsollier.nasa.models.api.dates
 
 import android.os.Parcelable
-import com.google.gson.annotations.SerializedName
 import com.nmarsollier.nasa.models.database.dates.DatesEntity
 import com.nmarsollier.nasa.models.extendedDate.ExtendedDateValue
 import com.nmarsollier.nasa.models.extendedDate.FrescoUtils
 import kotlinx.parcelize.Parcelize
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
 private val dateParser = DateTimeFormatter.ofPattern("yyyy-MM-dd")
 
+@Serializable
 @Parcelize
 data class DateValue(
-    @SerializedName("date") val date: String,
+    @SerialName("date") val date: String,
 ) : Parcelable {
     val parsedDate: LocalDate
         get() = LocalDate.parse(date, dateParser)

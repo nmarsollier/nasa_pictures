@@ -4,6 +4,7 @@ import android.os.Parcelable
 import androidx.compose.runtime.Stable
 
 import kotlinx.parcelize.Parcelize
+import kotlinx.serialization.Serializable
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
@@ -13,6 +14,7 @@ private val dateFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy")
 
 @Stable
 @Parcelize
+@Serializable
 data class ExtendedDateValue(
     val date: String,
     val count: Int = 0,

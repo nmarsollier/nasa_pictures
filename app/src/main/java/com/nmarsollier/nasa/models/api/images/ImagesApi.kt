@@ -1,18 +1,14 @@
 package com.nmarsollier.nasa.models.api.images
 
-import retrofit2.Retrofit
-import retrofit2.http.GET
-import retrofit2.http.Path
-
-interface ImagesApiInterface {
-    @GET("/api/enhanced/date/{date}")
-    suspend fun fetchImages(@Path("date") date: String): List<ImageValue>
-}
+import io.ktor.client.HttpClient
+import io.ktor.client.call.body
+import io.ktor.client.request.get
 
 class ImagesApi(
-    retrofitClient: Retrofit
+    val client: HttpClient,
+    val baseUrl: String,
 ) {
-    private val service = retrofitClient.create(ImagesApiInterface::class.java)
-
-    suspend fun fetchImages(date: String) = service.fetchImages(date)
+    suspend fun fetchImages(date: String): List<ImageValue> {
+        return client.get("${baseUrl}api/enhanced/date/${date}").body()
+    }
 }

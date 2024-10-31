@@ -78,17 +78,20 @@ dependencies {
     implementation("androidx.compose.material:material-icons-core:1.7.2")
     implementation("androidx.compose.material:material-icons-extended:1.7.2")
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
-    implementation("com.squareup.retrofit2:retrofit:2.9.0")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.3")
-    implementation("com.squareup.okhttp3:logging-interceptor:4.12.0")
-    implementation("com.squareup.okhttp3:okhttp:4.12.0")
     implementation("com.facebook.fresco:fresco:3.0.0")
     implementation("com.facebook.infer.annotation:infer-annotation:0.18.0")
     implementation("androidx.room:room-ktx:2.6.1")
     implementation("androidx.room:room-runtime:2.6.1")
     kapt("androidx.room:room-compiler:2.6.1")
     implementation("io.insert-koin:koin-androidx-compose:3.5.3")
+
+    // Ktor Client Core
+    implementation("io.ktor:ktor-client-core:2.3.4")
+    implementation("io.ktor:ktor-client-android:2.3.4")
+    implementation("io.ktor:ktor-client-content-negotiation:2.3.4")
+    implementation("io.ktor:ktor-serialization-kotlinx-json:2.3.4")
 
     testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test-jvm:1.7.3")
     testImplementation("junit:junit:4.13.2")
@@ -105,8 +108,6 @@ dependencies {
     androidTestImplementation("androidx.test.espresso:espresso-core:3.6.1")
     androidTestImplementation("io.mockk:mockk-android:1.13.9")
     androidTestImplementation("io.mockk:mockk-agent:1.13.9")
-    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.0")
-    implementation("com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter:0.8.0")
 }
 
 kapt {

@@ -2,15 +2,11 @@ package com.nmarsollier.nasa.models.extendedDate
 
 import android.os.Parcelable
 import androidx.compose.runtime.Stable
-
+import kotlinx.datetime.LocalDate
+import kotlinx.datetime.toJavaLocalDate
+import kotlinx.datetime.toLocalDate
 import kotlinx.parcelize.Parcelize
 import kotlinx.serialization.Serializable
-import java.time.LocalDate
-import java.time.format.DateTimeFormatter
-
-private val dayFormatter = DateTimeFormatter.ofPattern("EEEE")
-private val dateParser = DateTimeFormatter.ofPattern("yyyy-MM-dd")
-private val dateFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy")
 
 @Stable
 @Parcelize
@@ -22,13 +18,13 @@ data class ExtendedDateValue(
 ) : Parcelable {
 
     private val parsedDate: LocalDate
-        get() = LocalDate.parse(date, dateParser)
+        get() = date.toLocalDate()
 
     val formattedDayString: String
-        get() = dayFormatter.format(parsedDate)
+        get() = parsedDate.toJavaLocalDate().dayOfWeek.toString()
 
     val formattedDateString: String
-        get() = dateFormatter.format(parsedDate)
+        get() = "${parsedDate.dayOfMonth}/${parsedDate.monthNumber}/${parsedDate.year}"
 
     val needsLoad: Boolean
         get() = count == 0

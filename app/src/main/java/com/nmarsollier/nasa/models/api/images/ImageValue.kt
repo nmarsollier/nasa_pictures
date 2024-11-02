@@ -27,17 +27,17 @@ data class ImageValue(
 ) {
     val downloadUrl: String
         get() {
-            val currentDate = date.toLocalDateTime
+            val currentDate = date.toLocalDateTime ?: return ""
             return "https://epic.gsfc.nasa.gov/archive/enhanced/${currentDate.year}/" +
                     "${currentDate.toMonthString}/" +
                     "${currentDate.toDayString}/png/${image}.png"
         }
 
     val formattedDateOnly: String
-        get() = date.toLocalDateTime.toDateTimeString
+        get() = date.toLocalDateTime?.toDateTimeString ?: ""
 
     val formattedHourMinute: String
-        get() = date.toLocalDateTime.toHourMinuteString
+        get() = date.toLocalDateTime?.toHourMinuteString ?: ""
 
     fun toImageEntity(): ImageEntity {
         return ImageEntity(

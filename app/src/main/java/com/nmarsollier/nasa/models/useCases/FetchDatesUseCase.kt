@@ -11,7 +11,11 @@ import com.nmarsollier.nasa.models.database.dates.storeIn
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
-import java.time.LocalDate
+import kotlinx.datetime.Clock
+import kotlinx.datetime.DateTimeUnit
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.minus
+import kotlinx.datetime.toLocalDateTime
 
 @Stable
 enum class FetchDatesState {
@@ -31,7 +35,12 @@ class FetchDatesUseCase(
         val date = lastDateFromDatabase()
         when {
             date == null -> syncRemoteDates()
-            date.parsedDate.isBefore(LocalDate.now().minusDays(1)) -> syncRemoteDates()
+            date.parsedDate <
+                    Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()).date.minus(
+                        1,
+                        DateTimeUnit.DAY
+                    )
+                -> syncRemoteDates()
         }
     }
 

@@ -33,7 +33,7 @@ android {
     buildTypes {
         debug {
             isMinifyEnabled = false
-            isDebuggable = false
+            isDebuggable = true
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro"
             )
@@ -87,6 +87,8 @@ dependencies {
     implementation("androidx.room:room-runtime:2.6.1")
     kapt("androidx.room:room-compiler:2.6.1")
     implementation("io.insert-koin:koin-androidx-compose:3.5.3")
+
+    implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.4.0")
 
     // Ktor Client Core
     implementation("io.ktor:ktor-client-core:2.3.4")

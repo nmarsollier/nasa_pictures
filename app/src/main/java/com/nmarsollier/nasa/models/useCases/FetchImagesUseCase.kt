@@ -32,6 +32,7 @@ class FetchImagesUseCase(
             }
             data
         } catch (e: Exception) {
+            e.printStackTrace()
             emptyList()
         }
 }

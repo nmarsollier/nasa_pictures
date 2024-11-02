@@ -9,12 +9,12 @@ plugins {
 
 android {
     namespace = "com.nmarsollier.nasa"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         applicationId = "com.nmarsollier.nasa"
         minSdk = 28
-        targetSdk = 33
+        targetSdk = 35
         versionCode = 1
         versionName = "1.0"
 
@@ -62,25 +62,25 @@ android {
 dependencies {
     val composeBom = platform("androidx.compose:compose-bom:2023.08.00")
     implementation(composeBom)
-    implementation("androidx.compose.material:material:1.7.2")
+    implementation("androidx.compose.material:material:1.7.5")
     implementation("androidx.compose.ui:ui-tooling")
     implementation("androidx.compose.ui:ui-tooling-preview")
     implementation("androidx.compose.foundation:foundation")
     implementation("androidx.lifecycle:lifecycle-runtime-compose")
-    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.8.6")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.8.7")
     implementation("androidx.activity:activity-compose")
     implementation("androidx.paging:paging-runtime-ktx:3.3.2")
     implementation("androidx.paging:paging-compose:3.3.2")
     implementation("com.google.accompanist:accompanist-navigation-material:0.34.0")
 
-    implementation("androidx.core:core-ktx:1.13.1")
+    implementation("androidx.core:core-ktx:1.15.0")
     implementation("androidx.appcompat:appcompat:1.7.0")
     implementation("com.google.android.material:material:1.12.0")
-    implementation("androidx.compose.material:material-icons-core:1.7.2")
-    implementation("androidx.compose.material:material-icons-extended:1.7.2")
-    implementation("androidx.constraintlayout:constraintlayout:2.1.4")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.3")
+    implementation("androidx.compose.material:material-icons-core:1.7.5")
+    implementation("androidx.compose.material:material-icons-extended:1.7.5")
+    implementation("androidx.constraintlayout:constraintlayout:2.2.0")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.9.0")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.9.0")
     implementation("com.facebook.fresco:fresco:3.0.0")
     implementation("com.facebook.infer.annotation:infer-annotation:0.18.0")
     implementation("androidx.room:room-ktx:2.6.1")
@@ -94,7 +94,7 @@ dependencies {
     implementation("io.ktor:ktor-client-content-negotiation:2.3.4")
     implementation("io.ktor:ktor-serialization-kotlinx-json:2.3.4")
 
-    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test-jvm:1.7.3")
+    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test-jvm:1.9.0")
     testImplementation("junit:junit:4.13.2")
     testImplementation("io.mockk:mockk-android:1.13.9")
     testImplementation("io.mockk:mockk-agent:1.13.9")
@@ -104,7 +104,7 @@ dependencies {
 
     testImplementation("com.squareup.okhttp3:mockwebserver:4.0.0")
 
-    androidTestImplementation("androidx.compose.ui:ui-test-junit4:1.7.2")
+    androidTestImplementation("androidx.compose.ui:ui-test-junit4:1.7.5")
     androidTestImplementation("androidx.test.ext:junit:1.2.1")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.6.1")
     androidTestImplementation("io.mockk:mockk-android:1.13.9")

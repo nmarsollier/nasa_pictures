@@ -1,12 +1,12 @@
-# EPIC project for DEPT exercise example
- 
-## Running project 
+# EPIC project
+
+## Running project
 
 Just open it with android studio and run the app module
 
 Tested on Pixel 5 - API 33 emulator.
 
-## Architecture 
+## Architecture
 
 Simple MVI architecture that should have more iterations to finish it.
 

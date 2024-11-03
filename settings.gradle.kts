@@ -13,5 +13,5 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "Exercise"
+rootProject.name = "Nasa Pictures"
 include(":app")

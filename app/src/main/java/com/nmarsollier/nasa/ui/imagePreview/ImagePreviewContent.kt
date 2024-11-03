@@ -15,10 +15,13 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Text
+import androidx.compose.runtime.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.graphics.ImageBitmap
+import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -26,43 +29,43 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import coil3.ImageLoader
-import coil3.compose.SubcomposeAsyncImage
-import coil3.request.ImageRequest
-import coil3.request.crossfade
 import com.nmarsollier.nasa.R
 import com.nmarsollier.nasa.common.ui.KoinPreview
 import com.nmarsollier.nasa.models.api.images.ImageValue
+import com.nmarsollier.nasa.models.extendedDate.CoilUtils
 import org.koin.compose.koinInject
 
 @Composable
 fun ImagePreviewContent(
     image: ImagePreviewState.Ready,
-    imageLoader: ImageLoader = koinInject(),
+    coilUtils: CoilUtils = koinInject(),
     reduce: (ImagePreviewAction) -> Unit
 ) {
+    var imageBitmap by remember { mutableStateOf<ImageBitmap?>(null) }
+    LaunchedEffect(image.imageValue.downloadUrl) {
+        imageBitmap = coilUtils.loadImage(image.imageValue.downloadUrl)?.asImageBitmap()
+    }
+    val imageBm = imageBitmap
+
     Box(
         contentAlignment = Alignment.Center,
         modifier = Modifier
             .fillMaxSize()
             .background(colorResource(id = R.color.blackBackground))
     ) {
-        SubcomposeAsyncImage(
-            modifier = Modifier.fillMaxSize(),
-            model = ImageRequest.Builder(LocalContext.current)
-                .data(image.imageValue.downloadUrl)
-                .crossfade(true).build(),
-            imageLoader = imageLoader,
-            contentDescription = null,
-            loading = {
-                CircularProgressIndicator(
-                    modifier = Modifier
-                        .size(64.dp)
-                        .padding(16.dp),
-                    color = colorResource(id = R.color.textWhite)
-                )
-            },
-        )
+        if (imageBm != null) {
+            ZoomableImage(
+                modifier = Modifier.fillMaxSize(),
+                imageBitmap = imageBm
+            )
+        } else {
+            CircularProgressIndicator(
+                modifier = Modifier
+                    .size(64.dp)
+                    .padding(16.dp),
+                color = colorResource(id = R.color.textWhite)
+            )
+        }
 
         if (image.showDetails) {
             Column(

@@ -6,20 +6,13 @@ import androidx.compose.runtime.Stable
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.lifecycle.viewModelScope
-import coil3.ImageLoader
-import coil3.request.ImageRequest
-import coil3.request.SuccessResult
-import coil3.request.allowHardware
-import coil3.toBitmap
 import com.nmarsollier.nasa.common.vm.StateViewModel
 import com.nmarsollier.nasa.models.api.images.ImageValue
+import com.nmarsollier.nasa.models.extendedDate.CoilUtils
 import com.nmarsollier.nasa.models.extendedDate.ExtendedDateValue
 import com.nmarsollier.nasa.models.useCases.FetchImagesUseCase
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlin.coroutines.resume
-import kotlin.coroutines.suspendCoroutine
 
 sealed interface ImageAnimationState {
     @Stable
@@ -42,7 +35,7 @@ sealed interface ImageAnimationAction {
 class ImageAnimationViewModel(
     private val context: Context,
     private val fetchImagesUseCase: FetchImagesUseCase,
-    private val imageLoader: ImageLoader,
+    private val coilUtils: CoilUtils,
 ) : StateViewModel<ImageAnimationState, Unit, ImageAnimationAction>(
     ImageAnimationState.Loading
 ) {
@@ -66,16 +59,8 @@ class ImageAnimationViewModel(
         }.filter { it != null }.map { it!!.asImageBitmap() }
     }
 
-    private suspend fun getBitmapFromUri(imageUri: Uri) = suspendCoroutine { continuation ->
-        CoroutineScope(Dispatchers.IO).launch {
-            continuation.resume(
-                imageLoader.execute(
-                    ImageRequest.Builder(context).data(imageUri).allowHardware(false).size(600, 600)
-                        .build()
-                ).takeIf { it is SuccessResult }?.image?.toBitmap()
-            )
-        }
-    }
+    private suspend fun getBitmapFromUri(imageUri: Uri) =
+        coilUtils.loadImage(imageUri.toString(), 600)
 
     private suspend fun List<ImageValue>.asState(): ImageAnimationState {
         return if (this.isEmpty()) {

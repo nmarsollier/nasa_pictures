@@ -1,10 +1,19 @@
 package com.nmarsollier.nasa.models.extendedDate
 
+import android.content.Context
+import coil3.Bitmap
 import coil3.ImageLoader
+import coil3.request.ImageRequest
+import coil3.request.SuccessResult
+import coil3.request.allowHardware
+import coil3.toBitmap
 import com.nmarsollier.nasa.models.api.dates.DateValue
 import com.nmarsollier.nasa.models.database.image.ImageEntityDao
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 class CoilUtils(
+    private val context: Context,
     private val imageEntityDao: ImageEntityDao, private val imageLoader: ImageLoader
 ) {
     /**
@@ -23,5 +32,24 @@ class CoilUtils(
             } ?: 0
         }
         return ExtendedDateValue(date = date, count = count, caches = caches)
+    }
+
+    suspend fun loadImage(url: String, size: Int? = null): Bitmap? {
+        val requestBuilder = ImageRequest.Builder(context)
+            .allowHardware(false)
+            .data(url)
+
+        if (size != null) {
+            requestBuilder.size(size)
+        }
+
+        return withContext(Dispatchers.IO) {
+            val result = imageLoader.execute(requestBuilder.build())
+            if (result is SuccessResult) {
+                result.image.toBitmap()
+            } else {
+                null
+            }
+        }
     }
 }

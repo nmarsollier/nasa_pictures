@@ -13,8 +13,8 @@ import com.nmarsollier.nasa.models.api.dates.asDateValue
 import com.nmarsollier.nasa.models.api.dates.asExtendedDateValue
 import com.nmarsollier.nasa.models.database.dates.DatesEntity
 import com.nmarsollier.nasa.models.database.dates.DatesEntityDao
+import com.nmarsollier.nasa.models.extendedDate.CoilUtils
 import com.nmarsollier.nasa.models.extendedDate.ExtendedDateValue
-import com.nmarsollier.nasa.models.extendedDate.FrescoUtils
 import com.nmarsollier.nasa.models.useCases.FetchDatesUseCase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
@@ -48,7 +48,7 @@ sealed interface MainAction {
 
 class HomeViewModel(
     private val dateDao: DatesEntityDao,
-    private val frescoUtils: FrescoUtils,
+    private val coilUtils: CoilUtils,
     private val fetchDatesUseCase: FetchDatesUseCase,
     private val homeScreenUpdater: HomeScreenUpdater
 ) : StateViewModel<HomeState, MainEvent, MainAction>(HomeState.Loading) {
@@ -81,7 +81,7 @@ class HomeViewModel(
 
     private fun createPager(): Flow<PagingData<ExtendedDateValue>> {
         return Pager(PagingConfig(pageSize = 30)) {
-            DatesPagingSource(dateDao, frescoUtils)
+            DatesPagingSource(dateDao, coilUtils)
         }.flow.cachedIn(viewModelScope)
     }
 }
@@ -89,7 +89,7 @@ class HomeViewModel(
 private const val PAGE_SIZE = 30;
 
 class DatesPagingSource(
-    private val dateRepository: DatesEntityDao, private val frescoUtils: FrescoUtils
+    private val dateRepository: DatesEntityDao, private val coilUtils: CoilUtils
 ) : PagingSource<Int, ExtendedDateValue>() {
     override fun getRefreshKey(state: PagingState<Int, ExtendedDateValue>): Int {
         return ((state.anchorPosition ?: 0) - state.config.initialLoadSize / 2).coerceAtLeast(0)
@@ -103,7 +103,7 @@ class DatesPagingSource(
     private suspend fun List<DatesEntity>?.asResultPage(loadPage: Int): LoadResult.Page<Int, ExtendedDateValue> =
         (this ?: emptyList()).let {
             LoadResult.Page(
-                data = it.map { entity -> entity.date.asDateValue.asExtendedDateValue(frescoUtils) },
+                data = it.map { entity -> entity.date.asDateValue.asExtendedDateValue(coilUtils) },
                 prevKey = if (loadPage > 1) loadPage - 1 else null,
                 nextKey = if (it.size == PAGE_SIZE) loadPage + 1 else null
             )

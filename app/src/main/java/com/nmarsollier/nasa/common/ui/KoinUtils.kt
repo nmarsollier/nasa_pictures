@@ -3,7 +3,6 @@ package com.nmarsollier.nasa.common.ui
 import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
-import com.facebook.drawee.backends.pipeline.Fresco
 import com.nmarsollier.nasa.models.modelsModule
 import com.nmarsollier.nasa.ui.koinViewModelModule
 import org.koin.android.ext.koin.androidContext
@@ -14,10 +13,6 @@ import org.koin.core.component.inject
 @Composable
 fun KoinPreview(composable: @Composable () -> Unit) {
     val context = LocalContext.current
-
-    if (!Fresco.hasBeenInitialized()) {
-        Fresco.initialize(context)
-    }
 
     MaterialTheme {
         KoinApplication(application = {

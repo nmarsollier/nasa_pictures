@@ -1,37 +1,41 @@
 package com.nmarsollier.nasa.ui.imageAnimation
 
 import android.annotation.SuppressLint
-import android.graphics.drawable.AnimationDrawable
-import android.widget.ImageView
+import android.content.res.Resources
+import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.viewinterop.AndroidView
 import androidx.lifecycle.viewModelScope
 import com.nmarsollier.nasa.R
 import com.nmarsollier.nasa.common.ui.EmptyView
 import com.nmarsollier.nasa.common.ui.KoinPreview
 import com.nmarsollier.nasa.common.ui.LoadingView
 import com.nmarsollier.nasa.models.extendedDate.ExtendedDateValue
+import kotlinx.coroutines.delay
 import org.koin.androidx.compose.koinViewModel
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
 fun ImageAnimationScreen(
-    date: ExtendedDateValue,
-    viewModel: ImageAnimationViewModel = koinViewModel()
+    date: ExtendedDateValue, viewModel: ImageAnimationViewModel = koinViewModel()
 ) {
     val state by viewModel.state.collectAsState(viewModel.viewModelScope.coroutineContext)
 
@@ -55,6 +59,25 @@ fun ImageAnimationScreen(
     }
 }
 
+val Int.px
+    get() = (this / Resources.getSystem().displayMetrics.density).dp
+
+@Composable
+fun BitmapAnimation(bitmaps: List<ImageBitmap>, frameDuration: Long = 50) {
+    var currentFrame by remember { mutableIntStateOf(0) }
+
+    LaunchedEffect(Unit) {
+        while (true) {
+            delay(frameDuration)
+            currentFrame = (currentFrame + 1) % bitmaps.size
+        }
+    }
+
+    Canvas(modifier = Modifier.size(600.px, 600.px)) {
+        drawImage(image = bitmaps[currentFrame], topLeft = Offset.Zero)
+    }
+}
+
 @Composable
 fun AnimatedPreviewContent(state: ImageAnimationState.Ready) {
     Box(
@@ -63,17 +86,9 @@ fun AnimatedPreviewContent(state: ImageAnimationState.Ready) {
             .fillMaxSize()
             .background(colorResource(id = R.color.blackBackground))
     ) {
-        AndroidView(modifier = Modifier
-            .align(Alignment.Center)
-            .width(400.dp)
-            .height(400.dp),
-            factory = { context ->
-                ImageView(context)
-            },
-            update = { view ->
-                view.setBackgroundDrawable(state.animation)
-                state.animation.start()
-            })
+        BitmapAnimation(
+            state.bitmaps
+        )
     }
 }
 
@@ -84,7 +99,7 @@ fun OptionsViewPreview() {
         Column {
             AnimatedPreviewContent(
                 ImageAnimationState.Ready(
-                    animation = AnimationDrawable()
+                    bitmaps = emptyList()
                 )
             )
         }

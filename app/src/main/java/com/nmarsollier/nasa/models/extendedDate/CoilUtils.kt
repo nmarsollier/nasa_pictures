@@ -1,12 +1,11 @@
 package com.nmarsollier.nasa.models.extendedDate
 
-import android.net.Uri
-import com.facebook.imagepipeline.core.ImagePipeline
+import coil3.ImageLoader
 import com.nmarsollier.nasa.models.api.dates.DateValue
 import com.nmarsollier.nasa.models.database.image.ImageEntityDao
 
-class FrescoUtils(
-    private val imageEntityDao: ImageEntityDao, private val fresco: ImagePipeline
+class CoilUtils(
+    private val imageEntityDao: ImageEntityDao, private val imageLoader: ImageLoader
 ) {
     /**
      * Esta funcion busca las imagenes y se fija cuales estan en cache
@@ -20,10 +19,9 @@ class FrescoUtils(
         imageEntityDao.findByDate(date).let { images ->
             count = images?.size ?: 0
             caches = images?.count { entity ->
-                fresco.isInDiskCache(Uri.parse(entity.url)).isFinished
+                imageLoader.diskCache?.openSnapshot(entity.url)?.use { true } ?: false
             } ?: 0
         }
         return ExtendedDateValue(date = date, count = count, caches = caches)
     }
 }
-

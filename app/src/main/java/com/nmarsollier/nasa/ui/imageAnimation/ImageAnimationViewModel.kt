@@ -1,23 +1,21 @@
 package com.nmarsollier.nasa.ui.imageAnimation
 
-import android.graphics.Bitmap
-import android.graphics.drawable.AnimationDrawable
-import android.graphics.drawable.BitmapDrawable
+import android.content.Context
 import android.net.Uri
 import androidx.compose.runtime.Stable
-import androidx.core.graphics.scale
+import androidx.compose.ui.graphics.ImageBitmap
+import androidx.compose.ui.graphics.asImageBitmap
 import androidx.lifecycle.viewModelScope
-import com.facebook.common.executors.CallerThreadExecutor
-import com.facebook.common.references.CloseableReference
-import com.facebook.datasource.DataSource
-import com.facebook.imagepipeline.core.ImagePipeline
-import com.facebook.imagepipeline.datasource.BaseBitmapDataSubscriber
-import com.facebook.imagepipeline.image.CloseableImage
-import com.facebook.imagepipeline.request.ImageRequestBuilder
+import coil3.ImageLoader
+import coil3.request.ImageRequest
+import coil3.request.SuccessResult
+import coil3.request.allowHardware
+import coil3.toBitmap
 import com.nmarsollier.nasa.common.vm.StateViewModel
 import com.nmarsollier.nasa.models.api.images.ImageValue
 import com.nmarsollier.nasa.models.extendedDate.ExtendedDateValue
 import com.nmarsollier.nasa.models.useCases.FetchImagesUseCase
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlin.coroutines.resume
@@ -32,7 +30,7 @@ sealed interface ImageAnimationState {
 
     @Stable
     data class Ready(
-        val animation: AnimationDrawable
+        val bitmaps: List<ImageBitmap>,
     ) : ImageAnimationState
 }
 
@@ -42,12 +40,12 @@ sealed interface ImageAnimationAction {
 }
 
 class ImageAnimationViewModel(
+    private val context: Context,
     private val fetchImagesUseCase: FetchImagesUseCase,
-    private val fresco: ImagePipeline
+    private val imageLoader: ImageLoader,
 ) : StateViewModel<ImageAnimationState, Unit, ImageAnimationAction>(
     ImageAnimationState.Loading
 ) {
-
     override fun reduce(action: ImageAnimationAction) {
         when (action) {
             is ImageAnimationAction.FetchImages -> fetchImages(action.date)
@@ -62,32 +60,21 @@ class ImageAnimationViewModel(
         }.asState().sendToState()
     }
 
-    private suspend fun animation(images: List<ImageValue>): AnimationDrawable {
-        val animationDrawable = AnimationDrawable()
-        animationDrawable.isOneShot = false
-
-        images.forEach { img ->
-            getBitmapFromUri(Uri.parse(img.downloadUrl)).let {
-                animationDrawable.addFrame(BitmapDrawable(it), 50)
-            }
-        }
-
-        return animationDrawable
+    private suspend fun animation(images: List<ImageValue>): List<ImageBitmap> {
+        return images.map { img ->
+            getBitmapFromUri(Uri.parse(img.downloadUrl))
+        }.filter { it != null }.map { it!!.asImageBitmap() }
     }
 
     private suspend fun getBitmapFromUri(imageUri: Uri) = suspendCoroutine { continuation ->
-        val imageRequest = ImageRequestBuilder.newBuilderWithSource(imageUri).build()
-        fresco.fetchDecodedImage(imageRequest, this).subscribe(
-            object : BaseBitmapDataSubscriber() {
-                override fun onNewResultImpl(bitmap: Bitmap?) {
-                    continuation.resume(bitmap?.scale(400, 400))
-                }
-
-                override fun onFailureImpl(dataSource: DataSource<CloseableReference<CloseableImage>>) {
-                    continuation.resume(null)
-                }
-            }, CallerThreadExecutor.getInstance()
-        )
+        CoroutineScope(Dispatchers.IO).launch {
+            continuation.resume(
+                imageLoader.execute(
+                    ImageRequest.Builder(context).data(imageUri).allowHardware(false).size(600, 600)
+                        .build()
+                ).takeIf { it is SuccessResult }?.image?.toBitmap()
+            )
+        }
     }
 
     private suspend fun List<ImageValue>.asState(): ImageAnimationState {

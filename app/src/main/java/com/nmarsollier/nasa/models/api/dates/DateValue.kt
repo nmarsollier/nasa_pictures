@@ -2,8 +2,8 @@ package com.nmarsollier.nasa.models.api.dates
 
 import android.os.Parcelable
 import com.nmarsollier.nasa.models.database.dates.DatesEntity
+import com.nmarsollier.nasa.models.extendedDate.CoilUtils
 import com.nmarsollier.nasa.models.extendedDate.ExtendedDateValue
-import com.nmarsollier.nasa.models.extendedDate.FrescoUtils
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.toLocalDate
 import kotlinx.parcelize.Parcelize
@@ -19,12 +19,12 @@ data class DateValue(
         get() = date.toLocalDate()
 }
 
-suspend fun DateValue.asExtendedDateValue(frescoUtils: FrescoUtils): ExtendedDateValue {
-    return frescoUtils.toExtendedData(this)
+suspend fun DateValue.asExtendedDateValue(coilUtils: CoilUtils): ExtendedDateValue {
+    return coilUtils.toExtendedData(this)
 }
 
-suspend fun ExtendedDateValue.refresh(frescoUtils: FrescoUtils): ExtendedDateValue {
-    return this.date.asDateValue.asExtendedDateValue(frescoUtils)
+suspend fun ExtendedDateValue.refresh(coilUtils: CoilUtils): ExtendedDateValue {
+    return this.date.asDateValue.asExtendedDateValue(coilUtils)
 }
 
 val String.asDateValue

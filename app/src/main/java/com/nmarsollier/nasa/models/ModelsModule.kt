@@ -1,26 +1,25 @@
 package com.nmarsollier.nasa.models
 
-import com.facebook.cache.disk.DiskCacheConfig
-import com.facebook.common.util.ByteConstants
-import com.facebook.drawee.backends.pipeline.Fresco
-import com.facebook.imagepipeline.core.ImagePipeline
-import com.facebook.imagepipeline.core.ImagePipelineConfig
+import coil3.ImageLoader
+import coil3.disk.DiskCache
+import coil3.disk.directory
+import coil3.memory.MemoryCache
 import com.nmarsollier.nasa.models.api.dates.DatesApi
 import com.nmarsollier.nasa.models.api.images.ImagesApi
 import com.nmarsollier.nasa.models.database.config.LocalDatabase
 import com.nmarsollier.nasa.models.database.config.getRoomDatabase
-import com.nmarsollier.nasa.models.extendedDate.FrescoUtils
+import com.nmarsollier.nasa.models.extendedDate.CoilUtils
 import com.nmarsollier.nasa.models.useCases.FetchDatesUseCase
 import com.nmarsollier.nasa.models.useCases.FetchImagesUseCase
-import org.koin.android.ext.koin.androidContext
-import org.koin.core.module.dsl.singleOf
-import org.koin.dsl.module
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.android.Android
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.json.Json
+import org.koin.android.ext.koin.androidContext
+import org.koin.core.module.dsl.singleOf
 import org.koin.core.qualifier.named
+import org.koin.dsl.module
 
 val modelsModule = module {
     single {
@@ -53,21 +52,22 @@ val modelsModule = module {
         }
     }
 
-    single { DatesApi(get(), get(named("nasaBaseUrl")))}
+    single { DatesApi(get(), get(named("nasaBaseUrl"))) }
     single { ImagesApi(get(), get(named("nasaBaseUrl"))) }
 
-    // Fresco
-    singleOf(::FrescoUtils)
-    single<ImagePipeline> {
-        Fresco.initialize(
-            androidContext(),
-            ImagePipelineConfig.newBuilder(androidContext()).setDownsampleEnabled(true)
-                .setMainDiskCacheConfig(
-                    DiskCacheConfig.newBuilder(androidContext())
-                        .setMaxCacheSize(100L * ByteConstants.MB)
-                        .build()
-                ).setDiskCacheEnabled(true).build()
-        )
-        Fresco.getImagePipeline()
+    singleOf(::CoilUtils)
+
+    single<ImageLoader> {
+        ImageLoader.Builder(androidContext())
+            .memoryCache {
+                MemoryCache.Builder().maxSizePercent(androidContext(), 0.50).build()
+            }
+            .diskCache {
+                DiskCache.Builder()
+                    .directory(androidContext().cacheDir.resolve("image_cache"))
+                    .maxSizeBytes(100 * 1024 * 1024)
+                    .build()
+            }
+            .build()
     }
 }

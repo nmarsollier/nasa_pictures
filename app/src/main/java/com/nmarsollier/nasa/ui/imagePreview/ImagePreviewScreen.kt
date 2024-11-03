@@ -20,17 +20,14 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewModelScope
 import com.nmarsollier.nasa.R
-import com.nmarsollier.nasa.common.navigation.AppNavActions
 import com.nmarsollier.nasa.common.ui.LoadingView
 import com.nmarsollier.nasa.models.api.images.ImageValue
 import org.koin.androidx.compose.koinViewModel
-import org.koin.compose.koinInject
 
 @Composable
 fun ImagePreviewScreen(
     imageValue: ImageValue,
     viewModel: ImagePreviewViewModel = koinViewModel(),
-    navActions: AppNavActions = koinInject()
 ) {
     val state by viewModel.state.collectAsState(viewModel.viewModelScope.coroutineContext)
 
@@ -71,7 +68,7 @@ fun ImagePreviewScreen(
                 .fillMaxSize()
         ) {
             when (val st = state) {
-                is ImagePreviewState.Ready -> ImagePreviewContent(st, viewModel::reduce)
+                is ImagePreviewState.Ready -> ImagePreviewContent(st, reduce = viewModel::reduce)
                 else -> LoadingView()
             }
         }

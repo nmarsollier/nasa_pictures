@@ -39,7 +39,7 @@ fun ImagesListContent(
             horizontalArrangement = Arrangement.spacedBy(16.dp),
         ) {
             items(state.images) {
-                ImageItemContent(it, imagesReducer)
+                ImageItemContent(image = it, reduce = imagesReducer)
             }
         }
     }

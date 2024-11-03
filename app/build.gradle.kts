@@ -77,11 +77,12 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.9.0")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.9.0")
 
-    implementation("com.facebook.fresco:fresco:3.0.0")
-    implementation("com.facebook.infer.annotation:infer-annotation:0.18.0")
-
     implementation("io.insert-koin:koin-androidx-compose:3.5.3")
     implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.4.0")
+
+    // COIL
+    implementation("io.coil-kt.coil3:coil-compose:3.0.0-rc02")
+    implementation("io.coil-kt.coil3:coil-network-ktor3:3.0.0-rc02")
 
     // MATERIAL
     implementation("androidx.compose.material:material:1.7.5")
@@ -96,10 +97,10 @@ dependencies {
     ksp("androidx.room:room-compiler:2.6.1")
 
     // Ktor Client Core
-    implementation("io.ktor:ktor-client-core:2.3.4")
-    implementation("io.ktor:ktor-client-android:2.3.4")
-    implementation("io.ktor:ktor-client-content-negotiation:2.3.4")
-    implementation("io.ktor:ktor-serialization-kotlinx-json:2.3.4")
+    implementation("io.ktor:ktor-client-core:3.0.0")
+    implementation("io.ktor:ktor-client-android:3.0.0")
+    implementation("io.ktor:ktor-client-content-negotiation:3.0.0")
+    implementation("io.ktor:ktor-serialization-kotlinx-json:3.0.0")
 
     testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test-jvm:1.9.0")
     testImplementation("junit:junit:4.13.2")

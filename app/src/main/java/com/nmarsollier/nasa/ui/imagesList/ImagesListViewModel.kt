@@ -5,7 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.nmarsollier.nasa.common.vm.StateViewModel
 import com.nmarsollier.nasa.models.api.dates.refresh
 import com.nmarsollier.nasa.models.api.images.ImageValue
-import com.nmarsollier.nasa.models.extendedDate.CoilUtils
+import com.nmarsollier.nasa.common.ui.CoilUtils
 import com.nmarsollier.nasa.models.extendedDate.ExtendedDateValue
 import com.nmarsollier.nasa.models.useCases.FetchImagesUseCase
 import kotlinx.coroutines.Dispatchers

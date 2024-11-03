@@ -1,4 +1,4 @@
-package com.nmarsollier.nasa.models.extendedDate
+package com.nmarsollier.nasa.common.ui
 
 import android.content.Context
 import coil3.Bitmap
@@ -9,6 +9,7 @@ import coil3.request.allowHardware
 import coil3.toBitmap
 import com.nmarsollier.nasa.models.api.dates.DateValue
 import com.nmarsollier.nasa.models.database.image.ImageEntityDao
+import com.nmarsollier.nasa.models.extendedDate.ExtendedDateValue
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 

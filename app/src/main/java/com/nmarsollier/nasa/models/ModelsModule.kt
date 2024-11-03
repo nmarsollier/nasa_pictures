@@ -8,7 +8,7 @@ import com.nmarsollier.nasa.models.api.dates.DatesApi
 import com.nmarsollier.nasa.models.api.images.ImagesApi
 import com.nmarsollier.nasa.models.database.config.LocalDatabase
 import com.nmarsollier.nasa.models.database.config.getRoomDatabase
-import com.nmarsollier.nasa.models.extendedDate.CoilUtils
+import com.nmarsollier.nasa.common.ui.CoilUtils
 import com.nmarsollier.nasa.models.useCases.FetchDatesUseCase
 import com.nmarsollier.nasa.models.useCases.FetchImagesUseCase
 import io.ktor.client.HttpClient

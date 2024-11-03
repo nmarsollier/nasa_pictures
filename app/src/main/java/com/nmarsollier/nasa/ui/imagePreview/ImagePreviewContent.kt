@@ -32,7 +32,7 @@ import androidx.compose.ui.unit.sp
 import com.nmarsollier.nasa.R
 import com.nmarsollier.nasa.common.ui.KoinPreview
 import com.nmarsollier.nasa.models.api.images.ImageValue
-import com.nmarsollier.nasa.models.extendedDate.CoilUtils
+import com.nmarsollier.nasa.common.ui.CoilUtils
 import org.koin.compose.koinInject
 
 @Composable

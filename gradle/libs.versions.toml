@@ -1,0 +1,72 @@
+[versions]
+accompanistNavigationMaterial = "0.34.0"
+androidApplicationPlugin = "8.6.1"
+androidLibraryPlugin = "8.1.1"
+appcompat = "1.7.0"
+coilCompose = "3.0.0-rc02"
+coilNetworkKtor3 = "3.0.0-rc02"
+composeBom = "2024.10.01"
+constraintlayout = "2.2.0"
+coreKtx = "1.15.0"
+coroutinesAndroid = "1.9.0"
+coroutinesCore = "1.9.0"
+koinAndroidxCompose = "3.5.3"
+kotlinComposePlugin = "2.0.21"
+kotlinPlugin = "2.0.21"
+kotlinSerializationPlugin = "2.0.21"
+kotlinxDatetime = "0.4.0"
+kspPlugin = "2.0.21-1.0.26"
+ktorClientAndroid = "3.0.0"
+ktorClientContentNegotiation = "3.0.0"
+ktorClientCore = "3.0.0"
+ktorSerializationKotlinxJson = "3.0.0"
+lifecycleRuntimeCompose = "2.8.7"
+material = "1.7.5"
+materialIconsCore = "1.7.5"
+materialIconsExtended = "1.7.5"
+materialVersion = "1.12.0"
+pagingCompose = "3.3.2"
+pagingRuntimeKtx = "3.3.2"
+roomCompiler = "2.6.1"
+roomKtx = "2.6.1"
+roomRuntime = "2.6.1"
+
+[libraries]
+accompanistNavigationMaterial = { module = "com.google.accompanist:accompanist-navigation-material", version.ref = "accompanistNavigationMaterial" }
+androidxActivityCompose = { module = "androidx.activity:activity-compose" }
+androidxLifecycleRuntimeCompose = { module = "androidx.lifecycle:lifecycle-runtime-compose" }
+appcompat = { module = "androidx.appcompat:appcompat", version.ref = "appcompat" }
+coilCompose = { module = "io.coil-kt.coil3:coil-compose", version.ref = "coilCompose" }
+coilNetworkKtor3 = { module = "io.coil-kt.coil3:coil-network-ktor3", version.ref = "coilNetworkKtor3" }
+composeBom = { module = "androidx.compose:compose-bom", version.ref = "composeBom" }
+constraintlayout = { module = "androidx.constraintlayout:constraintlayout", version.ref = "constraintlayout" }
+coreKtx = { module = "androidx.core:core-ktx", version.ref = "coreKtx" }
+coroutinesAndroid = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "coroutinesAndroid" }
+coroutinesCore = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "coroutinesCore" }
+foundation = { module = "androidx.compose.foundation:foundation" }
+googleMaterial = { module = "com.google.android.material:material", version.ref = "materialVersion" }
+koinAndroidxCompose = { module = "io.insert-koin:koin-androidx-compose", version.ref = "koinAndroidxCompose" }
+kotlinxDatetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "kotlinxDatetime" }
+ktorClientAndroid = { module = "io.ktor:ktor-client-android", version.ref = "ktorClientAndroid" }
+ktorClientContentNegotiation = { module = "io.ktor:ktor-client-content-negotiation", version.ref = "ktorClientContentNegotiation" }
+ktorClientCore = { module = "io.ktor:ktor-client-core", version.ref = "ktorClientCore" }
+ktorSerializationKotlinxJson = { module = "io.ktor:ktor-serialization-kotlinx-json", version.ref = "ktorSerializationKotlinxJson" }
+lifecycleViewmodelCompose = { module = "androidx.lifecycle:lifecycle-viewmodel-compose", version.ref = "lifecycleRuntimeCompose" }
+material = { module = "androidx.compose.material:material", version.ref = "material" }
+materialIconsCore = { module = "androidx.compose.material:material-icons-core", version.ref = "materialIconsCore" }
+materialIconsExtended = { module = "androidx.compose.material:material-icons-extended", version.ref = "materialIconsExtended" }
+pagingCompose = { module = "androidx.paging:paging-compose", version.ref = "pagingCompose" }
+pagingRuntimeKtx = { module = "androidx.paging:paging-runtime-ktx", version.ref = "pagingRuntimeKtx" }
+roomCompiler = { module = "androidx.room:room-compiler", version.ref = "roomCompiler" }
+roomKtx = { module = "androidx.room:room-ktx", version.ref = "roomKtx" }
+roomRuntime = { module = "androidx.room:room-runtime", version.ref = "roomRuntime" }
+uiTooling = { module = "androidx.compose.ui:ui-tooling" }
+uiToolingPreview = { module = "androidx.compose.ui:ui-tooling-preview" }
+
+[plugins]
+androidApplication = { id = "com.android.application", version.ref = "androidApplicationPlugin" }
+androidLibrary = { id = "com.android.library", version.ref = "androidLibraryPlugin" }
+kotlinAndroid = { id = "org.jetbrains.kotlin.android", version.ref = "kotlinPlugin" }
+kotlinCompose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlinComposePlugin" }
+kotlinSerialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlinSerializationPlugin" }
+ksp = { id = "com.google.devtools.ksp", version.ref = "kspPlugin" }

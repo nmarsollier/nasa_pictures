@@ -1,14 +1,11 @@
 package com.nmarsollier.nasa.models.database.image
 
-import android.os.Parcelable
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.nmarsollier.nasa.models.api.images.CoordinatesValue
 import com.nmarsollier.nasa.models.api.images.ImageValue
-import kotlinx.parcelize.Parcelize
 
-@Parcelize
 @Entity(tableName = "images")
 data class ImageEntity(
     @PrimaryKey val identifier: String,
@@ -18,7 +15,7 @@ data class ImageEntity(
     @ColumnInfo(name = "url") var url: String = "",
     @ColumnInfo(name = "lat") var lat: Double,
     @ColumnInfo(name = "lon") var lon: Double
-) : Parcelable {
+) {
     fun toImage(): ImageValue {
         return ImageValue(
             identifier = this.identifier,

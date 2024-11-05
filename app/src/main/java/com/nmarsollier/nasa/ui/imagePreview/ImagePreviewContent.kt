@@ -15,24 +15,25 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Text
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Close
 import androidx.compose.runtime.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.ImageBitmap
-import androidx.compose.ui.graphics.asImageBitmap
+import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.res.colorResource
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import coil3.Bitmap
 import com.nmarsollier.nasa.R
+import com.nmarsollier.nasa.common.ui.CoilUtils
 import com.nmarsollier.nasa.common.ui.KoinPreview
 import com.nmarsollier.nasa.models.api.images.ImageValue
-import com.nmarsollier.nasa.common.ui.CoilUtils
 import org.koin.compose.koinInject
 
 @Composable
@@ -41,9 +42,9 @@ fun ImagePreviewContent(
     coilUtils: CoilUtils = koinInject(),
     reduce: (ImagePreviewAction) -> Unit
 ) {
-    var imageBitmap by remember { mutableStateOf<ImageBitmap?>(null) }
+    var imageBitmap by remember { mutableStateOf<Bitmap?>(null) }
     LaunchedEffect(image.imageValue.downloadUrl) {
-        imageBitmap = coilUtils.loadImage(image.imageValue.downloadUrl)?.asImageBitmap()
+        imageBitmap = coilUtils.loadImage(image.imageValue.downloadUrl)
     }
     val imageBm = imageBitmap
 
@@ -100,7 +101,7 @@ fun ImageSheet(image: ImageValue, reduce: (ImagePreviewAction) -> Unit) {
             )
             Spacer(Modifier.weight(1f))
             Image(
-                painterResource(id = android.R.drawable.ic_menu_close_clear_cancel),
+                rememberVectorPainter(Icons.Filled.Close),
                 contentDescription = null,
                 modifier = Modifier.clickable { reduce(ImagePreviewAction.ToggleDetails) }
             )

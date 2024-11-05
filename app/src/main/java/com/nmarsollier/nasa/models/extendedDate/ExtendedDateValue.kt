@@ -2,7 +2,6 @@ package com.nmarsollier.nasa.models.extendedDate
 
 import androidx.compose.runtime.Stable
 import kotlinx.datetime.LocalDate
-import kotlinx.datetime.toJavaLocalDate
 import kotlinx.datetime.toLocalDate
 import kotlinx.serialization.Serializable
 
@@ -16,7 +15,7 @@ data class ExtendedDateValue(
         get() = date.toLocalDate()
 
     val formattedDayString: String
-        get() = parsedDate.toJavaLocalDate().dayOfWeek.toString()
+        get() = parsedDate.dayOfWeek.toString()
 
     val formattedDateString: String
         get() = "${parsedDate.dayOfMonth}/${parsedDate.monthNumber}/${parsedDate.year}"

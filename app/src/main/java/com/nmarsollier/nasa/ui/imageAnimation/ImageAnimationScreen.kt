@@ -19,7 +19,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.graphics.ImageBitmap
+import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -63,32 +63,23 @@ val Int.px
     get() = (this / Resources.getSystem().displayMetrics.density).dp
 
 @Composable
-fun BitmapAnimation(bitmaps: List<ImageBitmap>, frameDuration: Long = 50) {
+fun AnimatedPreviewContent(state: ImageAnimationState.Ready, frameDuration: Long = 50) {
     var currentFrame by remember { mutableIntStateOf(0) }
 
-    LaunchedEffect(Unit) {
-        while (true) {
-            delay(frameDuration)
-            currentFrame = (currentFrame + 1) % bitmaps.size
-        }
+    LaunchedEffect(currentFrame) {
+        delay(frameDuration)
+        currentFrame = (currentFrame + 1) % state.bitmaps.size
     }
 
-    Canvas(modifier = Modifier.size(600.px, 600.px)) {
-        drawImage(image = bitmaps[currentFrame], topLeft = Offset.Zero)
-    }
-}
-
-@Composable
-fun AnimatedPreviewContent(state: ImageAnimationState.Ready) {
     Box(
         contentAlignment = Alignment.Center,
         modifier = Modifier
             .fillMaxSize()
             .background(colorResource(id = R.color.blackBackground))
     ) {
-        BitmapAnimation(
-            state.bitmaps
-        )
+        Canvas(modifier = Modifier.size(600.px, 600.px)) {
+            drawImage(image = state.bitmaps[currentFrame].asImageBitmap(), topLeft = Offset.Zero)
+        }
     }
 }
 

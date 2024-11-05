@@ -1,14 +1,12 @@
 package com.nmarsollier.nasa.ui.imageAnimation
 
-import android.content.Context
 import android.net.Uri
 import androidx.compose.runtime.Stable
-import androidx.compose.ui.graphics.ImageBitmap
-import androidx.compose.ui.graphics.asImageBitmap
 import androidx.lifecycle.viewModelScope
+import coil3.Bitmap
+import com.nmarsollier.nasa.common.ui.CoilUtils
 import com.nmarsollier.nasa.common.vm.StateViewModel
 import com.nmarsollier.nasa.models.api.images.ImageValue
-import com.nmarsollier.nasa.common.ui.CoilUtils
 import com.nmarsollier.nasa.models.extendedDate.ExtendedDateValue
 import com.nmarsollier.nasa.models.useCases.FetchImagesUseCase
 import kotlinx.coroutines.Dispatchers
@@ -23,7 +21,7 @@ sealed interface ImageAnimationState {
 
     @Stable
     data class Ready(
-        val bitmaps: List<ImageBitmap>,
+        val bitmaps: List<Bitmap>,
     ) : ImageAnimationState
 }
 
@@ -33,7 +31,6 @@ sealed interface ImageAnimationAction {
 }
 
 class ImageAnimationViewModel(
-    private val context: Context,
     private val fetchImagesUseCase: FetchImagesUseCase,
     private val coilUtils: CoilUtils,
 ) : StateViewModel<ImageAnimationState, Unit, ImageAnimationAction>(
@@ -53,10 +50,10 @@ class ImageAnimationViewModel(
         }.asState().sendToState()
     }
 
-    private suspend fun animation(images: List<ImageValue>): List<ImageBitmap> {
-        return images.map { img ->
+    private suspend fun animation(images: List<ImageValue>): List<Bitmap> {
+        return images.mapNotNull { img ->
             getBitmapFromUri(Uri.parse(img.downloadUrl))
-        }.filter { it != null }.map { it!!.asImageBitmap() }
+        }
     }
 
     private suspend fun getBitmapFromUri(imageUri: Uri) =

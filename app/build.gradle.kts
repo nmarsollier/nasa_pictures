@@ -66,8 +66,8 @@ dependencies {
     implementation(libs.androidxLifecycleRuntimeCompose)
     implementation(libs.lifecycleViewmodelCompose)
     implementation(libs.androidxActivityCompose)
-    implementation(libs.pagingRuntimeKtx)
     implementation(libs.pagingCompose)
+    implementation(libs.pagingRuntime)
 
     implementation(libs.coreKtx)
     implementation(libs.appcompat)

@@ -86,7 +86,7 @@ class HomeViewModel(
     }
 }
 
-private const val PAGE_SIZE = 30;
+private const val PAGE_SIZE = 30
 
 class DatesPagingSource(
     private val dateRepository: DatesEntityDao, private val coilUtils: CoilUtils

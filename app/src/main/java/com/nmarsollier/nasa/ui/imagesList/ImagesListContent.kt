@@ -18,6 +18,7 @@ import com.nmarsollier.nasa.R
 import com.nmarsollier.nasa.common.ui.KoinPreview
 import com.nmarsollier.nasa.common.utils.Samples
 import com.nmarsollier.nasa.models.api.images.ImageValue
+import com.nmarsollier.nasa.models.api.images.Samples
 import com.nmarsollier.nasa.models.extendedDate.ExtendedDateValue
 
 @OptIn(ExperimentalFoundationApi::class)
@@ -52,7 +53,7 @@ fun ImagesListViewPreview() {
         ImagesListContent(
             ImagesListState.Ready(
                 images = listOf(
-                    ImageValue.Samples.simpleImageValeSample
+                    ImageValue.Companion.Samples.simpleImageValeSample
                 ), date = ExtendedDateValue.Samples.fullyLoadedExtendedDateValueSample
             ),
         ) {}

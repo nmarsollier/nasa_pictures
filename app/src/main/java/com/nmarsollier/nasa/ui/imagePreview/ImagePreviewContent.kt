@@ -34,6 +34,7 @@ import com.nmarsollier.nasa.R
 import com.nmarsollier.nasa.common.ui.CoilUtils
 import com.nmarsollier.nasa.common.ui.KoinPreview
 import com.nmarsollier.nasa.models.api.images.ImageValue
+import com.nmarsollier.nasa.models.api.images.Samples
 import org.koin.compose.koinInject
 
 @Composable
@@ -182,7 +183,7 @@ fun OptionsViewPreview() {
         Column {
             ImagePreviewContent(
                 ImagePreviewState.Ready(
-                    imageValue = ImageValue.Samples.simpleImageValeSample,
+                    imageValue = ImageValue.Companion.Samples.simpleImageValeSample,
                     showDetails = false
                 )
             ) { }

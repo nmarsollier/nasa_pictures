@@ -28,6 +28,7 @@ import coil3.request.crossfade
 import com.nmarsollier.nasa.R
 import com.nmarsollier.nasa.common.ui.KoinPreview
 import com.nmarsollier.nasa.models.api.images.ImageValue
+import com.nmarsollier.nasa.models.api.images.Samples
 import org.koin.compose.koinInject
 
 @Composable
@@ -94,7 +95,7 @@ fun ImageItemViewPreview() {
     KoinPreview {
         Column {
             ImageItemContent(
-                ImageValue.Samples.simpleImageValeSample
+                ImageValue.Companion.Samples.simpleImageValeSample
             ) {}
         }
     }

@@ -8,7 +8,7 @@ import androidx.compose.runtime.remember
 import androidx.core.view.WindowCompat
 import androidx.navigation.compose.rememberNavController
 import com.nmarsollier.nasa.common.navigation.AppNavActions
-import com.nmarsollier.fitfat.ui.common.navigation.AppNavigationHost
+import com.nmarsollier.nasa.common.navigation.AppNavigationHost
 import org.koin.compose.getKoin
 import org.koin.dsl.module
 

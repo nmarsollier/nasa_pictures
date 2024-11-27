@@ -1,4 +1,4 @@
-package com.nmarsollier.fitfat.ui.common.navigation
+package com.nmarsollier.nasa.common.navigation
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -7,8 +7,6 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
-import com.nmarsollier.nasa.common.navigation.AppGraph
-import com.nmarsollier.nasa.common.navigation.AppNavActions
 import com.nmarsollier.nasa.common.utils.jsonToObject
 import com.nmarsollier.nasa.models.api.images.ImageValue
 import com.nmarsollier.nasa.models.extendedDate.ExtendedDateValue

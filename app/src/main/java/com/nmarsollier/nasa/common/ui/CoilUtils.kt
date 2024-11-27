@@ -29,7 +29,7 @@ class CoilUtils(
         imageEntityDao.findByDate(date).let { images ->
             count = images?.size ?: 0
             caches = images?.count { entity ->
-                imageLoader.diskCache?.openSnapshot(entity.url)?.use { true } ?: false
+                imageLoader.diskCache?.openSnapshot(entity.url)?.use { true } == true
             } ?: 0
         }
         return ExtendedDateValue(date = date, count = count, caches = caches)

@@ -89,13 +89,13 @@ fun ImageItemContent(
 }
 
 @ExperimentalFoundationApi
-@Preview(showSystemUi = true)
+@Preview
 @Composable
 fun ImageItemViewPreview() {
     KoinPreview {
         Column {
             ImageItemContent(
-                ImageValue.Companion.Samples.simpleImageValeSample
+                ImageValue.Samples.simpleImageValeSample
             ) {}
         }
     }

@@ -176,14 +176,14 @@ fun ImageSheet(image: ImageValue, reduce: (ImagePreviewAction) -> Unit) {
     }
 }
 
-@Preview(showSystemUi = true)
+@Preview
 @Composable
 fun OptionsViewPreview() {
     KoinPreview {
         Column {
             ImagePreviewContent(
                 ImagePreviewState.Ready(
-                    imageValue = ImageValue.Companion.Samples.simpleImageValeSample,
+                    imageValue = ImageValue.Samples.simpleImageValeSample,
                     showDetails = false
                 )
             ) { }

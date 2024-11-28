@@ -35,7 +35,7 @@ fun EmptyView() {
     }
 }
 
-@Preview(showSystemUi = true)
+@Preview
 @Composable
 fun EmptyViewPreview() {
     EmptyView()

@@ -113,7 +113,7 @@ fun DateItemView(date: ExtendedDateValue, reduce: (MainAction) -> Unit) {
 }
 
 @ExperimentalFoundationApi
-@Preview(showSystemUi = true)
+@Preview
 @Composable
 fun DateItemViewPreview() {
     KoinPreview {

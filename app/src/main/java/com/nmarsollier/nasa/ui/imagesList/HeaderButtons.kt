@@ -110,7 +110,7 @@ fun PlayImagesButton(
 }
 
 @ExperimentalFoundationApi
-@Preview(showSystemUi = true)
+@Preview
 @Composable
 fun LoadingItemsViewPreview() {
     MaterialTheme {

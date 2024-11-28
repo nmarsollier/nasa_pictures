@@ -83,7 +83,7 @@ fun AnimatedPreviewContent(state: ImageAnimationState.Ready, frameDuration: Long
     }
 }
 
-@Preview(showSystemUi = true)
+@Preview
 @Composable
 fun OptionsViewPreview() {
     KoinPreview {

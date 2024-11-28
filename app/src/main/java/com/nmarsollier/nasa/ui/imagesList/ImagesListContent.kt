@@ -46,14 +46,14 @@ fun ImagesListContent(
     }
 }
 
-@Preview(showSystemUi = true)
+@Preview
 @Composable
 fun ImagesListViewPreview() {
     KoinPreview {
         ImagesListContent(
             ImagesListState.Ready(
                 images = listOf(
-                    ImageValue.Companion.Samples.simpleImageValeSample
+                    ImageValue.Samples.simpleImageValeSample
                 ), date = ExtendedDateValue.Samples.fullyLoadedExtendedDateValueSample
             ),
         ) {}

@@ -31,7 +31,7 @@ fun LoadingView() {
     }
 }
 
-@Preview(showSystemUi = true)
+@Preview
 @Composable
 fun LoadingViewPreview() {
     LoadingView()

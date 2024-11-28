@@ -74,7 +74,7 @@ fun ImagesListMenu(
         })
 }
 
-@Preview(showSystemUi = true)
+@Preview
 @Composable
 fun ImagesMenuPreview() {
     MaterialTheme {

@@ -37,7 +37,7 @@ fun HomeMenu(
     )
 }
 
-@Preview(showSystemUi = true)
+@Preview
 @Composable
 fun MainMenuPreview() {
     MaterialTheme {

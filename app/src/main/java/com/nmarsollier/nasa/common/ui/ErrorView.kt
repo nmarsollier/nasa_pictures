@@ -55,7 +55,7 @@ fun ErrorView(onClick: () -> Unit) {
     }
 }
 
-@Preview(showSystemUi = true)
+@Preview
 @Composable
 fun ErrorViewPreview() {
     ErrorView {

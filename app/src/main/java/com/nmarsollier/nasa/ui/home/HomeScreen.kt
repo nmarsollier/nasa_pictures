@@ -10,7 +10,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.viewModelScope
 import com.nmarsollier.nasa.common.navigation.AppNavActions
-import com.nmarsollier.nasa.common.res.AppColors
+import com.nmarsollier.nasa.res.AppColors
 import com.nmarsollier.nasa.ui.utils.ErrorView
 import com.nmarsollier.nasa.ui.utils.LoadingView
 import org.koin.androidx.compose.koinViewModel

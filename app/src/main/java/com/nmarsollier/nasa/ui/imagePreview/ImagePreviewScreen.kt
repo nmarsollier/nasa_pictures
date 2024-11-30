@@ -18,7 +18,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewModelScope
-import com.nmarsollier.nasa.common.res.AppColors
+import com.nmarsollier.nasa.res.AppColors
 import com.nmarsollier.nasa.models.api.images.ImageValue
 import com.nmarsollier.nasa.ui.utils.LoadingView
 import org.koin.androidx.compose.koinViewModel

@@ -31,10 +31,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil3.Bitmap
-import com.nmarsollier.nasa.common.res.AppColors
-import com.nmarsollier.nasa.common.res.AppStrings
+import com.nmarsollier.nasa.res.AppColors
+import com.nmarsollier.nasa.res.AppStrings
 import com.nmarsollier.nasa.models.api.images.ImageValue
-import com.nmarsollier.nasa.ui.utils.CoilUtils
+import com.nmarsollier.nasa.common.utils.CoilUtils
 import com.nmarsollier.nasa.ui.utils.ImageValueSamples
 import com.nmarsollier.nasa.ui.utils.KoinPreview
 import org.koin.compose.koinInject

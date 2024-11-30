@@ -1,4 +1,4 @@
-package com.nmarsollier.nasa.common.res
+package com.nmarsollier.nasa.res
 
 object AppStrings {
     const val appName = "Daily Images"

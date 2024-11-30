@@ -12,8 +12,8 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.nmarsollier.nasa.common.res.AppColors
-import com.nmarsollier.nasa.common.res.AppStrings
+import com.nmarsollier.nasa.res.AppColors
+import com.nmarsollier.nasa.res.AppStrings
 
 @Composable
 fun HomeMenu(

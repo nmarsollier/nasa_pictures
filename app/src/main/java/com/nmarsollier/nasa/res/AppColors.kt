@@ -1,4 +1,4 @@
-package com.nmarsollier.nasa.common.res
+package com.nmarsollier.nasa.res
 
 import androidx.compose.ui.graphics.Color
 

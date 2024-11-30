@@ -1,7 +1,7 @@
 package com.nmarsollier.nasa.models.api.dates
 
-import com.nmarsollier.nasa.ui.utils.CoilUtils
 import com.nmarsollier.nasa.models.database.dates.DatesEntity
+import com.nmarsollier.nasa.models.extendedDate.DateToExtendedDate
 import com.nmarsollier.nasa.models.extendedDate.ExtendedDateValue
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.toLocalDate
@@ -16,12 +16,12 @@ data class DateValue(
         get() = date.toLocalDate()
 }
 
-suspend fun DateValue.asExtendedDateValue(coilUtils: CoilUtils): ExtendedDateValue {
-    return coilUtils.toExtendedData(this)
+suspend fun DateValue.asExtendedDateValue(dateToExtendedDate: DateToExtendedDate): ExtendedDateValue {
+    return dateToExtendedDate.toExtendedData(this)
 }
 
-suspend fun ExtendedDateValue.refresh(coilUtils: CoilUtils): ExtendedDateValue {
-    return this.date.asDateValue.asExtendedDateValue(coilUtils)
+suspend fun ExtendedDateValue.refresh(dateToExtendedDate: DateToExtendedDate): ExtendedDateValue {
+    return this.date.asDateValue.asExtendedDateValue(dateToExtendedDate)
 }
 
 val String.asDateValue

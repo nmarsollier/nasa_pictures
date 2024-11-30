@@ -9,7 +9,7 @@ import androidx.compose.ui.Modifier
 import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.itemKey
-import com.nmarsollier.nasa.common.res.AppColors
+import com.nmarsollier.nasa.res.AppColors
 import com.nmarsollier.nasa.ui.utils.LoadingView
 
 @OptIn(ExperimentalFoundationApi::class)

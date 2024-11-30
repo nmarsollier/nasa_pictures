@@ -22,7 +22,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.nmarsollier.nasa.common.navigation.AppNavActions
-import com.nmarsollier.nasa.common.res.AppColors
+import com.nmarsollier.nasa.res.AppColors
 import com.nmarsollier.nasa.models.extendedDate.ExtendedDateValue
 import com.nmarsollier.nasa.ui.utils.ExtendedDateValueSamples
 import org.koin.compose.koinInject

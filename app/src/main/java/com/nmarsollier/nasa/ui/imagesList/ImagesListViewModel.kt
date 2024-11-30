@@ -5,9 +5,9 @@ import androidx.lifecycle.viewModelScope
 import com.nmarsollier.nasa.common.vm.StateViewModel
 import com.nmarsollier.nasa.models.api.dates.refresh
 import com.nmarsollier.nasa.models.api.images.ImageValue
+import com.nmarsollier.nasa.models.extendedDate.DateToExtendedDate
 import com.nmarsollier.nasa.models.extendedDate.ExtendedDateValue
 import com.nmarsollier.nasa.models.useCases.FetchImagesUseCase
-import com.nmarsollier.nasa.ui.utils.CoilUtils
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
@@ -48,7 +48,7 @@ sealed interface ImagesListAction {
 }
 
 class ImagesListViewModel(
-    private val coilUtils: CoilUtils,
+    private val dateToExtendedDate: DateToExtendedDate,
     private val fetchImagesUseCase: FetchImagesUseCase,
 ) : StateViewModel<ImagesListState, ImagesListEvent, ImagesListAction>(ImagesListState.Loading) {
 
@@ -72,7 +72,7 @@ class ImagesListViewModel(
         try {
             ImagesListState.Ready(
                 images = fetchImagesUseCase.fetchImages(queryDate),
-                date = date.refresh(coilUtils),
+                date = date.refresh(dateToExtendedDate),
             )
         } catch (e: Exception) {
             ImagesListState.Error
@@ -82,7 +82,7 @@ class ImagesListViewModel(
     private fun updateDate() = MainScope().launch(Dispatchers.IO) {
         (state.value as? ImagesListState.Ready)?.let {
             it.copy(
-                date = it.date?.refresh(coilUtils)
+                date = it.date?.refresh(dateToExtendedDate)
             ).sendToState()
         }
     }

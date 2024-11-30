@@ -13,9 +13,9 @@ import com.nmarsollier.nasa.models.api.dates.asDateValue
 import com.nmarsollier.nasa.models.api.dates.asExtendedDateValue
 import com.nmarsollier.nasa.models.database.dates.DatesEntity
 import com.nmarsollier.nasa.models.database.dates.DatesEntityDao
+import com.nmarsollier.nasa.models.extendedDate.DateToExtendedDate
 import com.nmarsollier.nasa.models.extendedDate.ExtendedDateValue
 import com.nmarsollier.nasa.models.useCases.FetchDatesUseCase
-import com.nmarsollier.nasa.ui.utils.CoilUtils
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
@@ -48,7 +48,7 @@ sealed interface MainAction {
 
 class HomeViewModel(
     private val dateDao: DatesEntityDao,
-    private val coilUtils: CoilUtils,
+    private val dateToExtendedDate: DateToExtendedDate,
     private val fetchDatesUseCase: FetchDatesUseCase,
     private val homeScreenUpdater: HomeScreenUpdater
 ) : StateViewModel<HomeState, MainEvent, MainAction>(HomeState.Loading) {
@@ -81,7 +81,7 @@ class HomeViewModel(
 
     private fun createPager(): Flow<PagingData<ExtendedDateValue>> {
         return Pager(PagingConfig(pageSize = 30)) {
-            DatesPagingSource(dateDao, coilUtils)
+            DatesPagingSource(dateDao, dateToExtendedDate)
         }.flow.cachedIn(viewModelScope)
     }
 }
@@ -89,7 +89,8 @@ class HomeViewModel(
 private const val PAGE_SIZE = 30
 
 class DatesPagingSource(
-    private val dateRepository: DatesEntityDao, private val coilUtils: CoilUtils
+    private val dateRepository: DatesEntityDao,
+    private val dateToExtendedDate: DateToExtendedDate
 ) : PagingSource<Int, ExtendedDateValue>() {
     override fun getRefreshKey(state: PagingState<Int, ExtendedDateValue>): Int {
         return ((state.anchorPosition ?: 0) - state.config.initialLoadSize / 2).coerceAtLeast(0)
@@ -103,7 +104,11 @@ class DatesPagingSource(
     private suspend fun List<DatesEntity>?.asResultPage(loadPage: Int): LoadResult.Page<Int, ExtendedDateValue> =
         (this ?: emptyList()).let {
             LoadResult.Page(
-                data = it.map { entity -> entity.date.asDateValue.asExtendedDateValue(coilUtils) },
+                data = it.map { entity ->
+                    entity.date.asDateValue.asExtendedDateValue(
+                        dateToExtendedDate
+                    )
+                },
                 prevKey = if (loadPage > 1) loadPage - 1 else null,
                 nextKey = if (it.size == PAGE_SIZE) loadPage + 1 else null
             )

@@ -19,8 +19,8 @@ import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.nmarsollier.nasa.common.res.AppColors
-import com.nmarsollier.nasa.common.res.AppStrings
+import com.nmarsollier.nasa.res.AppColors
+import com.nmarsollier.nasa.res.AppStrings
 
 @Composable
 fun ErrorView(onClick: () -> Unit) {

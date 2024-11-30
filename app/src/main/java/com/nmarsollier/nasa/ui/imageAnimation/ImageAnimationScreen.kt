@@ -23,7 +23,7 @@ import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewModelScope
-import com.nmarsollier.nasa.common.res.AppColors
+import com.nmarsollier.nasa.res.AppColors
 import com.nmarsollier.nasa.models.extendedDate.ExtendedDateValue
 import com.nmarsollier.nasa.ui.utils.EmptyView
 import com.nmarsollier.nasa.ui.utils.KoinPreview

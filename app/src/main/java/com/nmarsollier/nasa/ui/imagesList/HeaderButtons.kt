@@ -23,14 +23,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
-import androidx.compose.ui.res.colorResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.nmarsollier.nasa.R
-import com.nmarsollier.nasa.common.utils.Samples
+import com.nmarsollier.nasa.common.res.AppColors
+import com.nmarsollier.nasa.common.res.AppStrings
 import com.nmarsollier.nasa.models.extendedDate.ExtendedDateValue
+import com.nmarsollier.nasa.ui.utils.ExtendedDateValueSamples
 
 @Composable
 @ExperimentalFoundationApi
@@ -55,7 +54,7 @@ fun HeaderButton(
 fun LoadingItemsButton() {
     Card(
         shape = RoundedCornerShape(10.dp),
-        backgroundColor = (colorResource(id = R.color.blueCardBackground)),
+        backgroundColor = AppColors.BlueCardBackground,
         modifier = Modifier
             .padding(start = 16.dp, top = 16.dp, end = 16.dp)
             .height(48.dp)
@@ -66,8 +65,8 @@ fun LoadingItemsButton() {
             horizontalArrangement = Arrangement.Center
         ) {
             Text(
-                text = stringResource(R.string.downloading_images),
-                color = colorResource(R.color.textColorGray),
+                text = AppStrings.downloadingImages,
+                color = AppColors.TextColorGray,
                 fontSize = 20.sp
             )
 
@@ -76,7 +75,7 @@ fun LoadingItemsButton() {
             Image(
                 imageVector = Icons.Default.Refresh,
                 contentDescription = null,
-                colorFilter = ColorFilter.tint(colorResource(R.color.textColorGray)),
+                colorFilter = ColorFilter.tint(AppColors.TextColorGray),
                 modifier = Modifier.size(20.dp)
             )
         }
@@ -89,8 +88,9 @@ fun PlayImagesButton(
     dates: ExtendedDateValue,
     reduce: (a: ImagesListAction) -> Unit
 ) {
-    Card(shape = RoundedCornerShape(10.dp),
-        backgroundColor = (colorResource(id = R.color.lightBlueCardBackground)),
+    Card(
+        shape = RoundedCornerShape(10.dp),
+        backgroundColor = (AppColors.LightBlueCardBackground),
         modifier = Modifier
             .padding(start = 16.dp, top = 16.dp, end = 16.dp)
             .height(48.dp)
@@ -101,8 +101,8 @@ fun PlayImagesButton(
             horizontalArrangement = Arrangement.Center
         ) {
             Text(
-                text = stringResource(R.string.play_images),
-                color = colorResource(R.color.textWhite),
+                text = AppStrings.playImages,
+                color = AppColors.TextWhite,
                 fontSize = 20.sp
             )
         }
@@ -117,18 +117,18 @@ fun LoadingItemsViewPreview() {
         Column {
             LoadingItemsButton()
             PlayImagesButton(
-                ExtendedDateValue.Samples.fullyLoadedExtendedDateValueSample
+                ExtendedDateValueSamples.fullyLoadedExtendedDateValueSample
             ) {}
             HeaderButton(
                 ImagesListState.Ready(
                     images = emptyList(),
-                    date = ExtendedDateValue.Samples.partialLoadedExtendedDateValueSample
+                    date = ExtendedDateValueSamples.partialLoadedExtendedDateValueSample
                 )
             ) { }
             HeaderButton(
                 ImagesListState.Ready(
                     images = emptyList(),
-                    date = ExtendedDateValue.Samples.fullyLoadedExtendedDateValueSample
+                    date = ExtendedDateValueSamples.fullyLoadedExtendedDateValueSample
                 )
             ) { }
         }

@@ -1,4 +1,4 @@
-package com.nmarsollier.nasa.common.ui
+package com.nmarsollier.nasa.ui.utils
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -9,12 +9,11 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.colorResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.nmarsollier.nasa.R
+import com.nmarsollier.nasa.common.res.AppColors
+import com.nmarsollier.nasa.common.res.AppStrings
 
 @Composable
 fun EmptyView() {
@@ -23,12 +22,12 @@ fun EmptyView() {
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier
             .fillMaxSize()
-            .background(colorResource(id = R.color.blueBackground))
+            .background(AppColors.BlueBackground)
     ) {
 
         Text(
-            text = stringResource(R.string.no_images_loaded),
-            color = colorResource(id = R.color.textWhite),
+            text = AppStrings.noImagesLoaded,
+            color = AppColors.TextWhite,
             fontSize = 16.sp,
             modifier = Modifier.padding(top = 16.dp)
         )

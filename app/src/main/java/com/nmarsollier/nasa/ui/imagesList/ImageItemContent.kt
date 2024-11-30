@@ -16,8 +16,6 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.colorResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -25,10 +23,11 @@ import coil3.ImageLoader
 import coil3.compose.SubcomposeAsyncImage
 import coil3.request.ImageRequest
 import coil3.request.crossfade
-import com.nmarsollier.nasa.R
-import com.nmarsollier.nasa.common.ui.KoinPreview
+import com.nmarsollier.nasa.common.res.AppColors
+import com.nmarsollier.nasa.common.res.AppStrings
 import com.nmarsollier.nasa.models.api.images.ImageValue
-import com.nmarsollier.nasa.models.api.images.Samples
+import com.nmarsollier.nasa.ui.utils.ImageValueSamples
+import com.nmarsollier.nasa.ui.utils.KoinPreview
 import org.koin.compose.koinInject
 
 @Composable
@@ -39,7 +38,7 @@ fun ImageItemContent(
     reduce: (ImagesListAction) -> Unit,
 ) {
     Card(shape = RoundedCornerShape(10.dp),
-        backgroundColor = (colorResource(id = R.color.blackBackground)),
+        backgroundColor = AppColors.BlackBackground,
         modifier = Modifier
             .size(165.dp)
             .combinedClickable(onClick = {})
@@ -61,7 +60,7 @@ fun ImageItemContent(
                     modifier = Modifier
                         .size(64.dp)
                         .padding(16.dp),
-                    color = colorResource(id = R.color.textWhite)
+                    color = AppColors.TextWhite
                 )
             },
             onSuccess = {
@@ -76,12 +75,12 @@ fun ImageItemContent(
             Text(
                 text = image.identifier,
                 fontSize = 10.sp,
-                color = colorResource(id = R.color.textWhite)
+                color = AppColors.TextWhite
             )
             Text(
-                text = "${stringResource(R.string.captured)} ${image.formattedHourMinute}hs",
+                text = "${AppStrings.captured} ${image.formattedHourMinute}hs",
                 fontSize = 10.sp,
-                color = colorResource(id = R.color.textWhite)
+                color = AppColors.TextWhite
             )
         }
 
@@ -95,7 +94,7 @@ fun ImageItemViewPreview() {
     KoinPreview {
         Column {
             ImageItemContent(
-                ImageValue.Samples.simpleImageValeSample
+                ImageValueSamples.simpleImageValeSample
             ) {}
         }
     }

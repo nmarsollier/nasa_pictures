@@ -5,6 +5,7 @@ import com.nmarsollier.nasa.ui.home.HomeViewModel
 import com.nmarsollier.nasa.ui.imageAnimation.ImageAnimationViewModel
 import com.nmarsollier.nasa.ui.imagePreview.ImagePreviewViewModel
 import com.nmarsollier.nasa.ui.imagesList.ImagesListViewModel
+import com.nmarsollier.nasa.ui.utils.CoilUtils
 import org.koin.androidx.viewmodel.dsl.viewModelOf
 import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.module
@@ -15,4 +16,5 @@ val koinViewModelModule = module {
     viewModelOf(::ImagePreviewViewModel)
     viewModelOf(::ImagesListViewModel)
     singleOf(::HomeScreenUpdater)
+    singleOf(::CoilUtils)
 }

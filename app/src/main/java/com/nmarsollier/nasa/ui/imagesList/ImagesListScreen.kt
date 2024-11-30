@@ -10,11 +10,11 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.viewModelScope
 import com.nmarsollier.nasa.common.navigation.AppNavActions
-import com.nmarsollier.nasa.common.ui.EmptyView
-import com.nmarsollier.nasa.common.ui.ErrorView
-import com.nmarsollier.nasa.common.ui.LoadingView
 import com.nmarsollier.nasa.models.extendedDate.ExtendedDateValue
 import com.nmarsollier.nasa.ui.home.HomeScreenUpdater
+import com.nmarsollier.nasa.ui.utils.EmptyView
+import com.nmarsollier.nasa.ui.utils.ErrorView
+import com.nmarsollier.nasa.ui.utils.LoadingView
 import org.koin.androidx.compose.koinViewModel
 import org.koin.compose.koinInject
 

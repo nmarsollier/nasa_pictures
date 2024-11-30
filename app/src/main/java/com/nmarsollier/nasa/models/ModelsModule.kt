@@ -8,7 +8,6 @@ import com.nmarsollier.nasa.models.api.dates.DatesApi
 import com.nmarsollier.nasa.models.api.images.ImagesApi
 import com.nmarsollier.nasa.models.database.config.LocalDatabase
 import com.nmarsollier.nasa.models.database.config.getRoomDatabase
-import com.nmarsollier.nasa.common.ui.CoilUtils
 import com.nmarsollier.nasa.models.useCases.FetchDatesUseCase
 import com.nmarsollier.nasa.models.useCases.FetchImagesUseCase
 import io.ktor.client.HttpClient
@@ -55,7 +54,6 @@ val modelsModule = module {
     single { DatesApi(get(), get(named("nasaBaseUrl"))) }
     single { ImagesApi(get(), get(named("nasaBaseUrl"))) }
 
-    singleOf(::CoilUtils)
 
     single<ImageLoader> {
         ImageLoader.Builder(androidContext())

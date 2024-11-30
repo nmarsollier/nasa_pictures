@@ -16,12 +16,11 @@ import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewModelScope
-import com.nmarsollier.nasa.R
-import com.nmarsollier.nasa.common.ui.LoadingView
+import com.nmarsollier.nasa.common.res.AppColors
 import com.nmarsollier.nasa.models.api.images.ImageValue
+import com.nmarsollier.nasa.ui.utils.LoadingView
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
@@ -44,27 +43,23 @@ fun ImagePreviewScreen(
                         viewModel.reduce(ImagePreviewAction.ToggleDetails)
                     },
                     shape = CircleShape,
-                    backgroundColor = colorResource(R.color.lightBlueBackground)
+                    backgroundColor = AppColors.LightBlueBackground
                 ) {
                     Icon(
                         imageVector = Icons.Default.Info,
                         "",
-                        tint = colorResource(R.color.textWhite)
+                        tint = AppColors.TextWhite
                     )
                 }
             }
         }, floatingActionButtonPosition = FabPosition.End, modifier = Modifier
-            .background(
-                colorResource(id = R.color.blackBackground)
-            )
+            .background(AppColors.BlackBackground)
             .padding(bottom = 32.dp)
     ) {
         Column(
             modifier = Modifier
                 .padding(it)
-                .background(
-                    colorResource(id = R.color.blackBackground)
-                )
+                .background(AppColors.BlackBackground)
                 .fillMaxSize()
         ) {
             when (val st = state) {

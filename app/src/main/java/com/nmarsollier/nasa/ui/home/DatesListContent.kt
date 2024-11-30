@@ -6,12 +6,11 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.colorResource
 import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.itemKey
-import com.nmarsollier.nasa.R
-import com.nmarsollier.nasa.common.ui.LoadingView
+import com.nmarsollier.nasa.common.res.AppColors
+import com.nmarsollier.nasa.ui.utils.LoadingView
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -28,7 +27,7 @@ fun DatesListContent(
         else -> {
             LazyColumn(
                 modifier = Modifier
-                    .background(colorResource(id = R.color.blueBackground))
+                    .background(AppColors.BlueBackground)
                     .fillMaxSize()
             ) {
                 items(

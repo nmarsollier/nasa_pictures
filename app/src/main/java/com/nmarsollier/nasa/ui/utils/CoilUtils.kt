@@ -1,4 +1,4 @@
-package com.nmarsollier.nasa.common.ui
+package com.nmarsollier.nasa.ui.utils
 
 import android.content.Context
 import coil3.Bitmap

@@ -17,24 +17,26 @@ import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
-import androidx.compose.runtime.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
-import androidx.compose.ui.res.colorResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil3.Bitmap
-import com.nmarsollier.nasa.R
-import com.nmarsollier.nasa.common.ui.CoilUtils
-import com.nmarsollier.nasa.common.ui.KoinPreview
+import com.nmarsollier.nasa.common.res.AppColors
+import com.nmarsollier.nasa.common.res.AppStrings
 import com.nmarsollier.nasa.models.api.images.ImageValue
-import com.nmarsollier.nasa.models.api.images.Samples
+import com.nmarsollier.nasa.ui.utils.CoilUtils
+import com.nmarsollier.nasa.ui.utils.ImageValueSamples
+import com.nmarsollier.nasa.ui.utils.KoinPreview
 import org.koin.compose.koinInject
 
 @Composable
@@ -53,7 +55,7 @@ fun ImagePreviewContent(
         contentAlignment = Alignment.Center,
         modifier = Modifier
             .fillMaxSize()
-            .background(colorResource(id = R.color.blackBackground))
+            .background(AppColors.BlackBackground)
     ) {
         if (imageBm != null) {
             ZoomableImage(
@@ -65,7 +67,7 @@ fun ImagePreviewContent(
                 modifier = Modifier
                     .size(64.dp)
                     .padding(16.dp),
-                color = colorResource(id = R.color.textWhite)
+                color = AppColors.TextWhite
             )
         }
 
@@ -75,7 +77,7 @@ fun ImagePreviewContent(
                     .align(Alignment.BottomCenter)
                     .height(200.dp)
                     .fillMaxWidth()
-                    .background(colorResource(id = R.color.blueBackground))
+                    .background(AppColors.BlueBackground)
             ) {
                 ImageSheet(image = image.imageValue, reduce)
             }
@@ -96,9 +98,9 @@ fun ImageSheet(image: ImageValue, reduce: (ImagePreviewAction) -> Unit) {
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
-                text = stringResource(id = R.string.image_details),
+                text = AppStrings.imageDetails,
                 fontSize = 20.sp,
-                color = colorResource(id = R.color.textWhite)
+                color = AppColors.TextWhite
             )
             Spacer(Modifier.weight(1f))
             Image(
@@ -108,15 +110,15 @@ fun ImageSheet(image: ImageValue, reduce: (ImagePreviewAction) -> Unit) {
             )
         }
         Text(
-            text = stringResource(id = R.string.image_number),
+            text = AppStrings.imageNumber,
             fontSize = 16.sp,
-            color = colorResource(id = R.color.textColorLightGray),
+            color = AppColors.TextColorLightGray,
             modifier = Modifier.padding(top = 16.dp)
         )
         Text(
             text = image.identifier,
             fontSize = 18.sp,
-            color = colorResource(id = R.color.textWhite),
+            color = AppColors.TextWhite,
             modifier = Modifier.padding(top = 2.dp)
         )
 
@@ -129,45 +131,45 @@ fun ImageSheet(image: ImageValue, reduce: (ImagePreviewAction) -> Unit) {
         ) {
             Column {
                 Text(
-                    text = stringResource(id = R.string.capture),
+                    text = AppStrings.capture,
                     fontSize = 14.sp,
-                    color = colorResource(id = R.color.textColorLightGray)
+                    color = AppColors.TextColorLightGray
                 )
                 Text(
                     text = image.formattedHourMinute,
                     fontSize = 14.sp,
                     fontWeight = FontWeight.Bold,
-                    color = colorResource(id = R.color.textWhite),
+                    color = AppColors.TextWhite,
                     modifier = Modifier.padding(top = 2.dp)
                 )
             }
 
             Column {
                 Text(
-                    text = stringResource(id = R.string.latitude),
+                    text = AppStrings.latitude,
                     fontSize = 14.sp,
-                    color = colorResource(id = R.color.textColorLightGray)
+                    color = AppColors.TextColorLightGray
                 )
                 Text(
                     text = image.coordinates.lat.toString(),
                     fontSize = 14.sp,
                     fontWeight = FontWeight.Bold,
-                    color = colorResource(id = R.color.textWhite),
+                    color = AppColors.TextWhite,
                     modifier = Modifier.padding(top = 2.dp)
                 )
             }
 
             Column {
                 Text(
-                    text = stringResource(id = R.string.longitude),
+                    text = AppStrings.longitude,
                     fontSize = 14.sp,
-                    color = colorResource(id = R.color.textColorLightGray)
+                    color = AppColors.TextColorLightGray
                 )
                 Text(
                     text = image.coordinates.lon.toString(),
                     fontSize = 14.sp,
                     fontWeight = FontWeight.Bold,
-                    color = colorResource(id = R.color.textWhite),
+                    color = AppColors.TextWhite,
                     modifier = Modifier.padding(top = 2.dp)
                 )
             }
@@ -183,7 +185,7 @@ fun OptionsViewPreview() {
         Column {
             ImagePreviewContent(
                 ImagePreviewState.Ready(
-                    imageValue = ImageValue.Samples.simpleImageValeSample,
+                    imageValue = ImageValueSamples.simpleImageValeSample,
                     showDetails = false
                 )
             ) { }

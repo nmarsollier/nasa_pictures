@@ -8,12 +8,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.colorResource
 import androidx.lifecycle.viewModelScope
-import com.nmarsollier.nasa.R
 import com.nmarsollier.nasa.common.navigation.AppNavActions
-import com.nmarsollier.nasa.common.ui.ErrorView
-import com.nmarsollier.nasa.common.ui.LoadingView
+import com.nmarsollier.nasa.common.res.AppColors
+import com.nmarsollier.nasa.ui.utils.ErrorView
+import com.nmarsollier.nasa.ui.utils.LoadingView
 import org.koin.androidx.compose.koinViewModel
 import org.koin.compose.koinInject
 
@@ -33,7 +32,7 @@ fun HomeScreen(
     Scaffold(
         topBar = {
             HomeMenu()
-        }, modifier = Modifier.background(colorResource(id = R.color.blueBackground))
+        }, modifier = Modifier.background(AppColors.BlueBackground)
     ) {
         Box(Modifier.padding(it)) {
             when (val st = state) {

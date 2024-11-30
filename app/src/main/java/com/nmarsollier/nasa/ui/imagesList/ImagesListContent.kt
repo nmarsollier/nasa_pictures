@@ -11,15 +11,12 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.nmarsollier.nasa.R
-import com.nmarsollier.nasa.common.ui.KoinPreview
-import com.nmarsollier.nasa.common.utils.Samples
-import com.nmarsollier.nasa.models.api.images.ImageValue
-import com.nmarsollier.nasa.models.api.images.Samples
-import com.nmarsollier.nasa.models.extendedDate.ExtendedDateValue
+import com.nmarsollier.nasa.common.res.AppColors
+import com.nmarsollier.nasa.ui.utils.ExtendedDateValueSamples
+import com.nmarsollier.nasa.ui.utils.ImageValueSamples
+import com.nmarsollier.nasa.ui.utils.KoinPreview
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -28,7 +25,7 @@ fun ImagesListContent(
     imagesReducer: (event: ImagesListAction) -> Unit,
 ) {
     Column(
-        modifier = Modifier.background(colorResource(id = R.color.blueBackground))
+        modifier = Modifier.background(AppColors.BlueBackground)
     ) {
         HeaderButton(state, imagesReducer)
 
@@ -53,8 +50,8 @@ fun ImagesListViewPreview() {
         ImagesListContent(
             ImagesListState.Ready(
                 images = listOf(
-                    ImageValue.Samples.simpleImageValeSample
-                ), date = ExtendedDateValue.Samples.fullyLoadedExtendedDateValueSample
+                    ImageValueSamples.simpleImageValeSample
+                ), date = ExtendedDateValueSamples.fullyLoadedExtendedDateValueSample
             ),
         ) {}
     }

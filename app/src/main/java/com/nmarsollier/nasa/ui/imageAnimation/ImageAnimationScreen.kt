@@ -20,15 +20,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.asImageBitmap
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewModelScope
-import com.nmarsollier.nasa.R
-import com.nmarsollier.nasa.common.ui.EmptyView
-import com.nmarsollier.nasa.common.ui.KoinPreview
-import com.nmarsollier.nasa.common.ui.LoadingView
+import com.nmarsollier.nasa.common.res.AppColors
 import com.nmarsollier.nasa.models.extendedDate.ExtendedDateValue
+import com.nmarsollier.nasa.ui.utils.EmptyView
+import com.nmarsollier.nasa.ui.utils.KoinPreview
+import com.nmarsollier.nasa.ui.utils.LoadingView
 import kotlinx.coroutines.delay
 import org.koin.androidx.compose.koinViewModel
 
@@ -46,9 +45,7 @@ fun ImageAnimationScreen(
 
     Column(
         modifier = Modifier
-            .background(
-                colorResource(id = R.color.blueBackground)
-            )
+            .background(AppColors.BlueBackground)
             .fillMaxSize()
     ) {
         when (val st = state) {
@@ -75,7 +72,7 @@ fun AnimatedPreviewContent(state: ImageAnimationState.Ready, frameDuration: Long
         contentAlignment = Alignment.Center,
         modifier = Modifier
             .fillMaxSize()
-            .background(colorResource(id = R.color.blackBackground))
+            .background(AppColors.BlackBackground)
     ) {
         Canvas(modifier = Modifier.size(600.px, 600.px)) {
             drawImage(image = state.bitmaps[currentFrame].asImageBitmap(), topLeft = Offset.Zero)

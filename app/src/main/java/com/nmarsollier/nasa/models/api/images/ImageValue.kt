@@ -50,6 +50,4 @@ data class ImageValue(
             lon = this.coordinates.lon
         )
     }
-
-    companion object
 }

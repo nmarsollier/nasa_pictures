@@ -10,11 +10,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.colorResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.nmarsollier.nasa.R
+import com.nmarsollier.nasa.common.res.AppColors
+import com.nmarsollier.nasa.common.res.AppStrings
 
 @Composable
 fun HomeMenu(
@@ -24,16 +23,16 @@ fun HomeMenu(
             .background(
                 Brush.verticalGradient(
                     colors = listOf(
-                        colorResource(id = R.color.lightBlueBackground),
-                        colorResource(id = R.color.blueBackground)
+                        AppColors.LightBlueBackground,
+                        AppColors.BlueBackground
                     )
                 )
             )
             .padding(top = 24.dp),
         elevation = 0.dp,
-        title = { Text(stringResource(R.string.app_name)) },
+        title = { Text(AppStrings.appName) },
         backgroundColor = Color.Transparent,
-        contentColor = colorResource(id = R.color.textWhite),
+        contentColor = AppColors.TextWhite,
     )
 }
 

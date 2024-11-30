@@ -1,6 +1,6 @@
 package com.nmarsollier.nasa.models.api.dates
 
-import com.nmarsollier.nasa.common.ui.CoilUtils
+import com.nmarsollier.nasa.ui.utils.CoilUtils
 import com.nmarsollier.nasa.models.database.dates.DatesEntity
 import com.nmarsollier.nasa.models.extendedDate.ExtendedDateValue
 import kotlinx.datetime.LocalDate

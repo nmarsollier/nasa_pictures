@@ -23,15 +23,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.nmarsollier.nasa.R
-import com.nmarsollier.nasa.common.ui.KoinPreview
-import com.nmarsollier.nasa.common.utils.Samples
+import com.nmarsollier.nasa.common.res.AppColors
 import com.nmarsollier.nasa.models.extendedDate.ExtendedDateValue
+import com.nmarsollier.nasa.ui.utils.ExtendedDateValueSamples
+import com.nmarsollier.nasa.ui.utils.KoinPreview
 
 @Composable
 @ExperimentalFoundationApi
@@ -51,14 +50,15 @@ fun DateItemView(date: ExtendedDateValue, reduce: (MainAction) -> Unit) {
     }
     val color = remember(date) {
         when {
-            date.isLoading -> R.color.textColorYellow
-            !date.needsLoad -> R.color.textColorGreen
-            else -> R.color.textColorLightGray
+            date.isLoading -> AppColors.TextColorYellow
+            !date.needsLoad -> AppColors.TextColorGreen
+            else -> AppColors.TextColorLightGray
         }
     }
 
-    Card(shape = RoundedCornerShape(10.dp),
-        backgroundColor = (colorResource(id = R.color.blueCardBackground)),
+    Card(
+        shape = RoundedCornerShape(10.dp),
+        backgroundColor = (AppColors.BlueCardBackground),
         modifier = Modifier
             .padding(start = 16.dp, end = 16.dp, top = 10.dp)
             .fillMaxWidth()
@@ -69,19 +69,19 @@ fun DateItemView(date: ExtendedDateValue, reduce: (MainAction) -> Unit) {
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(start = 16.dp, end = 16.dp, top = 10.dp, bottom = 10.dp)
-                .background(colorResource(id = R.color.blueCardBackground))
+                .background(AppColors.BlueCardBackground)
         ) {
             Column {
                 Text(
                     text = date.formattedDayString,
                     fontSize = 21.sp,
                     fontWeight = FontWeight.Bold,
-                    color = colorResource(id = R.color.textWhite)
+                    color = AppColors.TextWhite
                 )
                 Text(
                     text = date.formattedDateString,
                     fontSize = 14.sp,
-                    color = colorResource(id = R.color.textColorLightGray)
+                    color = AppColors.TextColorLightGray
                 )
             }
             Spacer(Modifier.weight(1f))
@@ -94,18 +94,18 @@ fun DateItemView(date: ExtendedDateValue, reduce: (MainAction) -> Unit) {
                         it,
                         contentDescription = "",
                         modifier = Modifier.size(16.dp),
-                        tint = colorResource(id = color)
+                        tint = color
                     )
                 }
 
                 Text(
-                    text = text, fontSize = 14.sp, color = colorResource(id = color)
+                    text = text, fontSize = 14.sp, color = color
                 )
 
                 Icon(
                     imageVector = Icons.AutoMirrored.Default.KeyboardArrowRight,
                     contentDescription = "",
-                    tint = colorResource(id = R.color.textColorLightGray),
+                    tint = AppColors.TextColorLightGray
                 )
             }
         }
@@ -119,13 +119,13 @@ fun DateItemViewPreview() {
     KoinPreview {
         Column {
             DateItemView(
-                ExtendedDateValue.Samples.partialLoadedExtendedDateValueSample
+                ExtendedDateValueSamples.partialLoadedExtendedDateValueSample
             ) {}
             DateItemView(
-                ExtendedDateValue.Samples.fullyLoadedExtendedDateValueSample
+                ExtendedDateValueSamples.fullyLoadedExtendedDateValueSample
             ) {}
             DateItemView(
-                ExtendedDateValue.Samples.unloadedLoadedExtendedDateValueSample
+                ExtendedDateValueSamples.unloadedLoadedExtendedDateValueSample
             ) {}
         }
     }

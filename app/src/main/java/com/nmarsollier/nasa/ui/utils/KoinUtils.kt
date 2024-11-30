@@ -1,4 +1,4 @@
-package com.nmarsollier.nasa.common.ui
+package com.nmarsollier.nasa.ui.utils
 
 import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable

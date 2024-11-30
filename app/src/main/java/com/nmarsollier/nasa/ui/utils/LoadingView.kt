@@ -1,4 +1,4 @@
-package com.nmarsollier.nasa.common.ui
+package com.nmarsollier.nasa.ui.utils
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -9,10 +9,9 @@ import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.nmarsollier.nasa.R
+import com.nmarsollier.nasa.common.res.AppColors
 
 @Composable
 fun LoadingView() {
@@ -20,12 +19,12 @@ fun LoadingView() {
         contentAlignment = Alignment.Center,
         modifier = Modifier
             .fillMaxSize()
-            .background(colorResource(id = R.color.blueBackground))
+            .background(AppColors.BlueBackground)
             .padding(bottom = 120.dp)
     ) {
         CircularProgressIndicator(
             modifier = Modifier.width(120.dp),
-            color = colorResource(id = R.color.colorPrimary),
+            color = AppColors.Primary,
             strokeWidth = 12.dp
         )
     }

@@ -18,14 +18,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.nmarsollier.nasa.R
 import com.nmarsollier.nasa.common.navigation.AppNavActions
-import com.nmarsollier.nasa.common.utils.Samples
+import com.nmarsollier.nasa.common.res.AppColors
 import com.nmarsollier.nasa.models.extendedDate.ExtendedDateValue
+import com.nmarsollier.nasa.ui.utils.ExtendedDateValueSamples
 import org.koin.compose.koinInject
 
 @Composable
@@ -34,19 +33,20 @@ fun ImagesListMenu(
     navActions: AppNavActions = koinInject(),
     onClose: () -> Unit,
 ) {
-    TopAppBar(modifier = Modifier
-        .background(
-            Brush.verticalGradient(
-                colors = listOf(
-                    colorResource(id = R.color.lightBlueBackground),
-                    colorResource(id = R.color.blueBackground)
+    TopAppBar(
+        modifier = Modifier
+            .background(
+                Brush.verticalGradient(
+                    colors = listOf(
+                        AppColors.LightBlueBackground,
+                        AppColors.BlueBackground
+                    )
                 )
             )
-        )
-        .padding(top = 24.dp),
+            .padding(top = 24.dp),
         elevation = 0.dp,
         backgroundColor = Color.Transparent,
-        contentColor = colorResource(id = R.color.textWhite),
+        contentColor = AppColors.TextWhite,
         title = {
             Row(
                 horizontalArrangement = Arrangement.spacedBy(16.dp),
@@ -55,12 +55,12 @@ fun ImagesListMenu(
                 Text(
                     text = date.formattedDayString,
                     fontSize = 21.sp,
-                    color = colorResource(id = R.color.textWhite)
+                    color = AppColors.TextWhite
                 )
                 Text(
                     text = date.formattedDateString,
                     fontSize = 14.sp,
-                    color = colorResource(id = R.color.textWhite)
+                    color = AppColors.TextWhite
                 )
             }
         },
@@ -79,7 +79,7 @@ fun ImagesListMenu(
 fun ImagesMenuPreview() {
     MaterialTheme {
         Column {
-            ImagesListMenu(date = ExtendedDateValue.Samples.fullyLoadedExtendedDateValueSample) {}
+            ImagesListMenu(date = ExtendedDateValueSamples.fullyLoadedExtendedDateValueSample) {}
         }
     }
 }
